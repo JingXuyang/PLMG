@@ -25,6 +25,7 @@ def main():
         kwargs = dict()
         kwargs["sw_path"] = info_data["exe"]
         kwargs["extra_envs"] = info_data["env"]
+        kwargs["project"] = project
         deploy.launch(**kwargs)
 
 

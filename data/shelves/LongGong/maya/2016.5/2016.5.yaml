@@ -1,0 +1,124 @@
+
+- name: workfile_manager
+  type: tool
+  version: 0
+  tool: open
+
+- name: workfile_manager
+  type: tool
+  version: 0
+  tool: save
+
+- name: workfile_manager
+  type: tool
+  version: 0
+  tool: saveas
+
+- name: workfile_manager
+  type: tool
+  version: 0
+  tool: versionup
+
+- name: workfile_manager
+  type: tool
+  version: 0
+  tool: submit_workfile
+
+- type: line
+
+- name: loader
+  type: tool
+  version: 0
+  tool: asset
+
+- name: loader
+  type: tool
+  version: 0
+  tool: shot
+
+- name: loader
+  type: tool
+  version: 0
+  tool: assembly
+
+- name: loader
+  type: tool
+  version: 0
+  tool: reference
+
+- type: line
+
+- name: publisher
+  type: tool
+  version: 0
+  tool: playblast2
+
+- name: publisher
+  type: tool
+  version: 0
+  tool: playblast3
+
+- type: line
+
+- name: Magic Hill Studio
+  type: shelf
+  tools:
+    - name: publisher
+      type: tool
+      version: 0
+      tool: ExportAni
+      
+    - name: publisher
+      type: tool
+      version: 0
+      tool: ImportAni
+    
+    - type: line
+    
+    - name: publisher
+      type: tool
+      version: 0
+      tool: Studiolibrary
+    
+    - type: line
+    
+    - name: publisher
+      type: tool
+      version: 0
+      tool: uploadSelPose
+      
+    - name: publisher
+      type: tool
+      version: 0
+      tool: uploadAllPose
+      
+    - name: publisher
+      type: tool
+      version: 0
+      tool: downloadPoses
+      
+    - type: line
+      
+    - name: publisher
+      type: tool
+      version: 0
+      tool: Download Files
+      
+    - name: publisher
+      type: tool
+      version: 0
+      tool: Upload Files
+
+- type: line
+
+- name: publisher
+  type: tool
+  version: 0
+  tool: checking
+
+- name: publisher
+  type: tool
+  version: 0
+  tool: plugin
+
+ 
