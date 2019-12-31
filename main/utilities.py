@@ -1,6 +1,6 @@
 # ==============================================================
-# !/usr/bin/env python
 # -*- coding: utf-8 -*-
+# !/usr/bin/env python
 #
 #  @Version: 
 #  @Author: RunningMan
@@ -24,7 +24,7 @@ def handle_error(func):
 
 
 # @handle_error
-def load_yaml_file(path):
+def load_yaml(path):
     '''
     Return data of the yaml file.
     '''
@@ -37,4 +37,4 @@ def load_yaml_file(path):
 
 
 if __name__ == '__main__':
-    print load_yaml_file(r"E:\LongGong\XXYH\packages\maya\2016.5\info.yaml")
+    print load_yaml(r"E:\LongGong\XXYH\packages\maya\2016.5\info.yaml")

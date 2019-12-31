@@ -1,6 +1,6 @@
 # ==============================================================
-# !/usr/bin/env python
 # -*- coding: utf-8 -*-
+# !/usr/bin/env python
 #
 #  @Author: RunningMan
 #  @File: deploy.py
@@ -11,6 +11,8 @@ __version__ = '1.0'
 
 import os
 import subprocess
+
+import sfmg
 
 
 def set_env(env_ls):
