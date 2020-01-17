@@ -1,0 +1,26 @@
+menu_name: XSYH Toolkit
+items:
+  - name: publisher
+    label: "publish"
+    type: item
+    icon: ""
+    tool: aa
+
+  - type: line
+    label: "line"
+
+  - name: publisher
+    label: "publish"
+    type: item
+    icon: "{IMAGE_PATH}/cloud.png"
+    tool: aa
+
+  - name: publisher
+    type: subitem
+    icon: ""
+    label: "aaa"
+    items:
+      - name: publisher
+        type: item
+        label: "bbb"
+        tool: bb
