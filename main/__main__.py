@@ -28,16 +28,24 @@ def main():
         # loading project
         project = sys.argv[3]
 
-        package_path = os.path.join(os.path.dirname(main_path), "packages", sw, sw_version, "info.yaml")
-        info_data = utilities.load_yaml(package_path)
+        PACKAGE_PATH = os.path.join(os.environ["XSYH_ROOT_PATH"], "packages", sw, sw_version)
+
+        info_data = utilities.load_yaml(PACKAGE_PATH + "/info.yaml")
         kwargs = dict()
         kwargs["software"] = sw
+        kwargs["sw_version"] = sw_version
         kwargs["sw_path"] = info_data["exe"]
+        kwargs["sw_tools"] = info_data["tools"]
         kwargs["extra_envs"] = info_data["env"]
+        kwargs["package"] = PACKAGE_PATH
         kwargs["project"] = project
-        print kwargs
-        # launch software
-        # deploy.launch(**kwargs)
+        kwargs["global_config"] = ""
+        kwargs["pack_path"] = ""
+        kwargs["data_path"] = os.path.join(os.environ["XSYH_ROOT_PATH"], "data")
+
+        # pass the sys argv to the deploy
+        deploy.launch(**kwargs)
+
     else:
         print("参数有误")
 

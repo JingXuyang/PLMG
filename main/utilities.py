@@ -10,7 +10,7 @@
 
 import os
 import sys
-sys.path.append(r"E:\LongGong\XXYH\test\pltk\thirdparty")
+import json
 import yaml
 
 
@@ -23,18 +23,41 @@ def handle_error(func):
     return run
 
 
+def write_json(path, data):
+    if os.path.splitext(path)[-1] == ".json":
+        with open(path, "w") as f:
+            f.write(json.dumps(data, indent=4))
+        return True
+
+
+def load_json(path):
+    if os.path.exists(path) and os.path.splitext(path)[-1] == ".json":
+        with open(path, "r") as f:
+            data = json.load(f)
+        return data
+
+    return False
+
+
+def write_yaml(path, data):
+    if os.path.exists(path):
+        with open(path, "w") as f:
+            f.write(yaml.dumps(data))
+        return True
+
+
 # @handle_error
 def load_yaml(path):
     '''
     Return data of the yaml file.
     '''
     if os.path.exists(path) and os.path.splitext(path)[-1] == ".yaml":
-        with open(path) as f:
+        with open(path, "r") as f:
             data = yaml.load(f)
         return data
-    else:
-        return False
+
+    return False
 
 
 if __name__ == '__main__':
-    print load_yaml(r"E:\LongGong\XXYH\packages\maya\2016.5\info.yaml")
+    print(load_json(r"E:\LongGong\XXYH\data\maya_env.json"))
