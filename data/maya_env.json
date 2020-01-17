@@ -1,0 +1,33 @@
+{
+    "sw_version": "2016.5", 
+    "package": "E:\\LongGong\\XXYH\\packages\\maya\\2016.5", 
+    "pack_path": "", 
+    "data_path": "E:\\LongGong\\XXYH\\data", 
+    "global_config": "", 
+    "project": "LongGong", 
+    "sw_tools": "C:/Program Files/Autodesk/Maya2016.5/bin/mayapy.exe", 
+    "extra_envs": [
+        {
+            "name": "MAYA_UI_LANGUAGE", 
+            "value": "en_US", 
+            "mode": "over"
+        }, 
+        {
+            "name": "PYTHONPATH", 
+            "value": "{XSYH_ROOT_PATH}\\scripts", 
+            "mode": "prefix"
+        }, 
+        {
+            "name": "MAYA_DISABLE_CLIC_IPM", 
+            "value": "1", 
+            "mode": "over"
+        }, 
+        {
+            "name": "MAYA_SCRIPT_PATH", 
+            "value": "{XSYH_PACKAGE_PATH}/scripts", 
+            "mode": "prefix"
+        }
+    ], 
+    "sw_path": "C:/Program Files/Autodesk/Maya2016.5/bin/maya.exe", 
+    "software": "maya"
+}
