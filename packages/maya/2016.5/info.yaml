@@ -4,18 +4,20 @@ env:
     value: en_US
     mode: over
 
-  - name: MAYA_SCRIPT_PATH
-    value: '{ROOT}/scripts'
-    mode: prefix
-
   - name: PYTHONPATH
-    value: '{ROOT}/scripts'
+    value: '{XSYH_ROOT_PATH}\scripts'
     mode: prefix
 
   - name: MAYA_DISABLE_CLIC_IPM
     value: "1"
     mode: over
 
+  - name: MAYA_SCRIPT_PATH
+    value: "{XSYH_PACKAGE_PATH}/scripts"
+    mode: prefix
+
 ## Commands for the main exe of the package.
 exe: 'C:/Program Files/Autodesk/Maya2016.5/bin/maya.exe'
+
+tools: 'C:/Program Files/Autodesk/Maya2016.5/bin/mayapy.exe'
 
