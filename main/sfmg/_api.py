@@ -7,45 +7,44 @@
 #  @File: __api.py
 #  @Create Time: 2019/12/31 14:15
 # ==============================================================
+import os
+import utilities
 
 
-def get_shelf_set_from_env(**package):
-    """
-    package = {'software': 'maya',
-              'project': 'LongGong',
-              'extra_envs': [{'name': 'MAYA_UI_LANGUAGE', 'value': 'en_US', 'mode': 'over'},]
-              'sw_path': 'C:/Program Files/Autodesk/Maya2016.5/bin/maya.exe'}
-    @return:
-    """
-    set_sw_env(package["software"])
+IMAGE_PATH = os.path.join(os.environ.get("XSYH_ROOT_PATH"), "data", "images").replace("\\", "/")
 
 
-def set_sw_env(sw):
-    if sw == "maya":
-        build_maya_shelf()
-    elif sw == "houdini":
-        pass
-    elif sw == "nuke":
-        pass
+def createMayaItem(item_dic, parent=""):
+    '''
+    :item_dic: {'tool': 'aa', 'label': 'publish', 'type': 'item', 'name': 'publisher', 'icon': ''}
+    '''
+    item_type = item_dic.get("type")
+    if item_type != "subitem":
+        kwargs = {
+            "divider": True if item_type == "line" else False,
+            "label": item_dic.get("label"),
+            "image": item_dic.get("icon", "").format(IMAGE_PATH=IMAGE_PATH),
+            "p": parent
+        }
+        cmds.menuItem(**kwargs)
+
+    # create submenu item
+    else:
+        item = cmds.menuItem(label=item_dic.get("label"), subMenu=True, p=parent)
+        for sub_item_dic in item_dic.get("items"):
+            createMayaItem(sub_item_dic, parent=item)
 
 
-def build_maya_shelf():
+def build_maya_shelf(shelve_dic):
     import maya.cmds as cmds
-    import pymel.core as pm
-    main_win = pm.language.melGlobals['gMainWindow']
-    menu_obj = "XSYHToolMenu"
-    menu_label = "XSYH Toolkit"
-
-    if cmds.menu(menu_obj, label=menu_label, exists=True, parent=main_win):
-        cmds.deleteUI(cmds.menu(menu_obj, e=True, deleteAllItems=True))
-
-
-if __name__ == '__main__':
-    kwargs = {'project': 'LongGong',
-              'extra_envs': [{'name': 'MAYA_UI_LANGUAGE', 'value': 'en_US', 'mode': 'over'},
-                             {'name': 'MAYA_SCRIPT_PATH', 'value': '{ROOT}/scripts',
-                              'mode': 'prefix'},
-                             {'name': 'PYTHONPATH', 'value': '{ROOT}/scripts', 'mode': 'prefix'},
-                             {'name': 'MAYA_DISABLE_CLIC_IPM', 'value': '1', 'mode': 'over'}],
-              'sw_path': 'C:/Program Files/Autodesk/Maya2016.5/bin/maya.exe'}
-    get_shelf_set_from_env(**kwargs)
+    import maya.mel as mel
+    global cmds
+    # main_win = pm.language.melGlobals['gMainWindow']
+    # get maya main window
+    gMainWindow = mel.eval('$tmpVar=$gMainWindow')
+    # create menu
+    menu_name = shelve_dic.get("menu_name") or "Test"
+    deafult_menu = cmds.menu(menu_name, label=menu_name, tearOff=True, parent=gMainWindow)
+    # create item
+    for item_dic in shelve_dic.get("items"):
+        createMayaItem(item_dic, parent=deafult_menu)

@@ -7,26 +7,14 @@
 #  @File: __init__.py
 #  @Create Time: 2019/12/31 14:14
 # ==============================================================
+import os
+import functools
 
-
-__version__ = '0.1.0'
-
+import utilities
 import _api
-
 reload(_api)
 
-
-def get_shelf_set_from_env(package):
-    '''
-    Gets package shelf set from system env.
-
-    We will use env below:
-        PKMG_PACKAGE_VERSION
-            Current app version
-        PKMG_PROJECT
-            Current project
-    '''
-    return _api.get_shelf_set_from_env(package)
+DATA_PATH = os.path.join(os.environ.get('XSYH_ROOT_PATH'), "data")
 
 
 def build_maya_shelf():
@@ -42,7 +30,20 @@ def build_maya_shelf():
         import maya.utils as utils
         utils.executeDeferred(buildMayaShelf)
     '''
-    _api.build_maya_shelf()
+    # get the env data
+    kwargs = utilities.load_json(os.path.join(DATA_PATH, "maya_env.json"))
+    # ../../../data/shelves/{proj}/{sw}/{version}.yaml
+    shelve_yaml_path = os.path.join(
+        kwargs.get("data_path"),
+        "shelves",
+        kwargs.get("project"),
+        kwargs.get("software"),
+        "{0}.yaml".format(kwargs.get("sw_version"))
+    )
+    shelve_data = utilities.load_yaml(shelve_yaml_path)
+    build_maya_shelf = functools.partial(_api.build_maya_shelf, shelve_data)
+    build_maya_shelf()
+    # _api.build_maya_shelf(shelve_data)
 
 
 def build_houdini_shelf():
