@@ -52,10 +52,12 @@ def set_env(kwargs):
                 name = env.get("name")
                 if env["mode"] == "over":
                     new_envs[name] = value
+
                 elif env["mode"] == "prefix":
-                    new_envs[name] = new_envs.get(name) + value
+                    new_envs[name] = "{0};{1}".format(new_envs.get(name, ""), value)
+
                 elif env["mode"] == "suffix":
-                    new_envs[name] = value + ";" + new_envs.get(name)
+                    new_envs[name] = "{0};{1}".format(value, new_envs.get(name, ""))
 
             # 添加 ../scripts到 "PYTHONPATH", 能够自动运行userSetup.py
             new_envs["PYTHONPATH"] = new_envs.get("PYTHONPATH")+";"+os.path.join(kwargs["package"], "scripts")
