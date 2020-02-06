@@ -14,7 +14,7 @@ import subprocess
 import utilities
 
 
-env_config = ""
+env_config = {}
 
 
 def save_env():
@@ -35,7 +35,7 @@ def getenv():
 
 def set_env(kwargs):
     '''
-    From "../packages/{software}/{version}"
+    From "../../packages/{software}/{version}"
     @param env_ls:
     @return:
     '''
@@ -61,6 +61,7 @@ def set_env(kwargs):
 
             # 添加 ../scripts到 "PYTHONPATH", 能够自动运行userSetup.py
             new_envs["PYTHONPATH"] = new_envs.get("PYTHONPATH")+";"+os.path.join(kwargs["package"], "scripts")
+            new_envs["XSYH_PACKAGE_PATH"] = os.path.join(os.environ["XSYH_ROOT_PATH"], "packages")
 
             return new_envs
         else:
