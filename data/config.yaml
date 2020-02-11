@@ -1,0 +1,114 @@
+global:
+
+  #--------------------------- Database Fields --------------------
+  project_fields:
+    - {name: entity_type, label: Entity Type, show: false,
+       constant: project}
+    - {name: id, label: ID, show: false}
+    - {name: code, label: Code, show: true}
+    - {name: status, label: Status, show: true}
+    - {name: start_date, label: Start Date, show: false}
+    - {name: end_date, label: End Date, show: false}
+    - {name: image, label: Thumbnail, show: false}
+    - {name: description, label: Description, show: true}
+    - {name: database, label: Database, show: false}
+
+  eps_fields:
+    - {name: entity_type, label: Entity Type, show: false,
+       constant: sequence}
+    - {name: id, label: ID, show: false}
+    - {name: project, label: Project, show: false,
+       cgteamwork: project_code}
+    - {name: code, label: Code, show: true,
+       cgteamwork: eps_name}
+    - {name: description, label: Description, show: true,
+       cgteamwork: project_description}
+
+  shot_fields:
+    - {label: Entity Type, name: entity_type, show: false,
+       constant: shot}
+    - {label: ID, name: id, show: false}
+    - {label: Thumbnail, name: image, show: false}
+    - {label: Project, name: project, show: true,
+       cgteamwork: 'eps.project_code'}
+    - {label: Type, name: type, show: false, constant: shot}
+    - {label: Asset Type, name: sequence, show: true,
+       cgteamwork: 'eps.eps_name'}
+    - {label: Code, name: code, show: true,
+       cgteamwork: shot}
+    - {label: Status, name: status, show: true}
+    - {label: First Frame, name: first_frame, show: true,
+       type: int}
+    - {label: Last Frame, name: last_frame, show: true,
+       type: int}
+
+  asset_fields:
+    - {label: Entity Type, name: entity_type, show: false,
+       constant: asset}
+    - {label: ID, name: id, show: false}
+    - {label: Thumbnail, name: image, show: false}
+    - {label: Project, name: project, show: true,
+       cgteamwork: 'eps.project_code'}
+    - {label: Type, name: type, show: false, constant: asset}
+    - {label: Asset Type, name: sequence, show: true,
+       cgteamwork: type_name}
+    - {label: Code, name: code, show: true, cgteamwork: asset_name}
+    - {label: Chinese Name, name: cn_name, show: true}
+
+  task_fields:
+    - {label: Entity Type, name: entity_type, show: false,
+       constant: asset}
+    - {label: ID, name: id, show: false}
+    - {label: Project, name: project, show: true,
+       cgteamwork: 'eps.project_code'}
+    - {label: Type, name: type, show: true,
+       constant: {asset: asset, shot: shot}}
+    - {label: Sequence/Asset Type, name: sequence, show: true,
+       cgteamwork: {asset: 'asset.type_name', shot: 'eps.eps_name'}}
+    - {label: Link, name: shot, show: true,
+       cgteamwork: {asset: 'asset.asset_name', shot: 'shot.shot'}}
+    - {label: Link ID, name: shot_id, show: false,
+       cgteamwork: {asset: 'asset.id', shot: 'shot.id'}}
+    - {label: Chinese Name, name: shot_cn_name, show: true,
+       cgteamwork: {asset: 'asset.cn_name'}}
+    - {label: Step, name: step, show: true,
+       cgteamwork: pipeline}
+    - {label: Code, name: code, show: true,
+       cgteamwork: task_name}
+    - {label: Status, name: status, show: true}
+    - {label: Artist, name: artist, show: false}
+    - {label: Start Date, name: start_date, show: true}
+    - {label: End Date, name: end_date, show: true}
+    - {label: First Frame, name: first_frame, show: true,
+       cgteamwork: {shot: 'shot.first_frame'}, type: int}
+    - {label: Last Frame, name: last_frame, show: true,
+       cgteamwork: {shot: 'shot.last_frame'}, type: int}
+
+  version_fields:
+    - {label: Entity Type, name: entity_type, show: false,
+       constant: version}
+    - {label: ID, name: id, show: false}
+    - {label: Project, name: project, show: true}
+    - {label: Type, name: type, show: true}
+    - {label: Pipeline Type, name: pipeline_type, show: true}
+    - {label: Sequence, name: sequence, show: false}
+    - {label: Shot, name: shot, show: false}
+    - {label: Asset Type, name: asset_type, show: false}
+    - {label: Asset, name: asset, show: false}
+    - {label: Episode, name: episode, show: false}
+    - {label: Step, name: step, show: false}
+    - {label: Task, name: task, show: false}
+    - {label: Task ID, name: task_id, show: false}
+    - {label: Status, name: status, show: false}
+    - {label: Name, name: name, show: true}
+    - {label: Version Type, name: version_type, show: false}
+    - {label: Thumbnail, name: thumbnail, show: false,
+       type: json}
+    - {label: Version, name: version, show: true}
+    - {label: Part, name: part, show: true}
+    - {label: Level, name: level, show: true}
+    - {label: Artist, name: artist, show: true}
+    - {label: Description, name: description, show: true}
+    - {label: Path, name: path, show: false}
+    - {label: Files, name: files, show: false,
+       type: json}
