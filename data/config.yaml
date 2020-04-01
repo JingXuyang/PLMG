@@ -9,7 +9,7 @@ global:
     - {name: status, label: Status, show: true}
     - {name: start_date, label: Start Date, show: false}
     - {name: end_date, label: End Date, show: false}
-    - {name: image, label: Thumbnail, show: false}
+    - {name: image, label: Thumbnail, show: true}
     - {name: description, label: Description, show: true}
     - {name: database, label: Database, show: false}
 
@@ -23,6 +23,16 @@ global:
        cgteamwork: eps_name}
     - {name: description, label: Description, show: true,
        cgteamwork: project_description}
+
+  shot_load:
+    - {label: sequence, sign: "shot.eps_name", show: true}
+    - {label: shot_name, sign: "shot.shot", show: true}
+    - {label: step, sign: "task.pipeline", show: true}
+    - {label: task_name, sign: "task.task_name", show: true}
+    - {label: artist, sign: "task.artist", show: true}
+    - {label: account, sign: "task.account", show: true}
+    - {label: status, sign: "task.status", show: true}
+    - {label: start_time, sign: "task.assign_time", show: true}
 
   shot_fields:
     - {label: Entity Type, name: entity_type, show: false,
@@ -42,6 +52,17 @@ global:
     - {label: Last Frame, name: last_frame, show: true,
        type: int}
 
+  asset_load:
+    - {label: asset_name, sign: "asset.asset_name", show: true}
+    - {label: step, sign: "task.pipeline", show: true}
+    - {label: task_name, sign: "task.task_name", show: true}
+    - {label: artist, sign: "task.artist", show: true}
+    - {label: account, sign: "task.account", show: true}
+    - {label: chinese_name, sign: "asset.cn_name", show: true}
+    - {label: task_status, sign: "task.status", show: true}
+    - {label: start_time, sign: "task.assign_time", show: true}
+    - {label: description, sign: "asset.asset", show: true}
+
   asset_fields:
     - {label: Entity Type, name: entity_type, show: false,
        constant: asset}
@@ -54,6 +75,19 @@ global:
        cgteamwork: type_name}
     - {label: Code, name: code, show: true, cgteamwork: asset_name}
     - {label: Chinese Name, name: cn_name, show: true}
+
+  task_load:
+    - {label: project, show: true}
+    - {label: type, sign: "asset.cn_name", show: true}
+    - {label: sequence, sign: "task.pipeline", show: true}
+    - {label: shot, sign: "task.pipeline", show: true}
+    - {label: chinese_name, sign: "task.pipeline", show: true}
+    - {label: step, sign: "task.status", show: true}
+    - {label: task_name, sign: "task.create_time", show: true}
+    - {label: status, sign: "asset.asset", show: true}
+    - {label: start_data, sign: "asset.asset", show: true}
+    - {label: first_frame, sign: "asset.asset", show: true}
+    - {label: last_frame, sign: "asset.asset", show: true}
 
   task_fields:
     - {label: Entity Type, name: entity_type, show: false,
@@ -112,3 +146,213 @@ global:
     - {label: Path, name: path, show: false}
     - {label: Files, name: files, show: false,
        type: json}
+
+  workfile_format:
+    nuke: nk
+    houdini: hip
+    maya:
+        - mb
+        - ma
+
+Model:
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
+
+
+Texture:
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
+
+
+charEffects:
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
+
+
+nHair:
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
+
+
+nCloth:
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
+
+
+Previs:
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
+
+
+Animation:
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
+
+
+BG_Characters:
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
+
+
+VFX:
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
+
+
+Assembling:
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
+
+
+shotFinaling:
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
+
+
+Lighting:
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
