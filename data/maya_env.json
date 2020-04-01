@@ -1,8 +1,8 @@
 {
     "sw_version": "2016.5", 
-    "package": "E:\\LongGong\\XXYH\\packages\\maya\\2016.5", 
+    "package": "E:\\LongGong\\XSYH\\packages\\maya\\2016.5", 
     "pack_path": "", 
-    "data_path": "E:\\LongGong\\XXYH\\data", 
+    "data_path": "E:\\LongGong\\XSYH\\data", 
     "global_config": "", 
     "project": "LongGong", 
     "sw_tools": "C:/Program Files/Autodesk/Maya2016.5/bin/mayapy.exe", 
