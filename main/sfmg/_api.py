@@ -16,7 +16,7 @@ PACKAGE_PATH = os.environ.get("XSYH_PACKAGE_PATH")
 
 
 # ------------------------------- Function -------------------------------
-def refreshMenu(shelve_dic, name):
+def refreshMenu(shelve_path, name):
     '''
     刷新工具架，先删除，再重新读取添加
     @param shelve_dic:  data of the shelve yaml
@@ -27,7 +27,7 @@ def refreshMenu(shelve_dic, name):
         cmds.deleteUI(cmds.menu(name))
         cmds.deleteUI(name)
     cmds.refresh()
-    build_maya_shelf(shelve_dic)
+    build_shelf(shelve_path)
 
 
 def itemCommand(name, tool_name):
@@ -78,18 +78,22 @@ def createMayaItem(item_dic, parent=""):
             createMayaItem(sub_item_dic, parent=item)
 
 
-def build_maya_shelf(shelve_dic):
+def build_shelf(shelve_path):
     import maya.cmds as cmds
     import maya.mel as mel
     global cmds
     # main_win = pm.language.melGlobals['gMainWindow']
     # get maya main window
     gMainWindow = mel.eval('$tmpVar=$gMainWindow')
-    # create menu
-    menu_name = shelve_dic.get("menu_name", "Test")
-    deafult_menu = cmds.menu(menu_name, label=menu_name, tearOff=True, parent=gMainWindow)
+
     # create refresh item
-    cmds.menuItem(label="Refresh", parent=deafult_menu, command=lambda *args: refreshMenu(shelve_dic, deafult_menu))
+    shelve_data = utilities.load_yaml(shelve_path)
+
+    # create menu
+    menu_name = shelve_data.get("menu_name", "Test")
+    deafult_menu = cmds.menu(menu_name, label=menu_name, tearOff=True, parent=gMainWindow)
+    cmds.menuItem(label="Refresh", parent=deafult_menu, command=lambda *args: refreshMenu(shelve_path, deafult_menu))
+
     # create item
-    for item_dic in shelve_dic.get("items"):
+    for item_dic in shelve_data.get("items"):
         createMayaItem(item_dic, parent=deafult_menu)

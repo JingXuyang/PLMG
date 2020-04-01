@@ -1,10 +1,13 @@
 menu_name: XSYH Toolkit
 items:
+  - type: line
+    label: "line"
+
   - name: publisher
-    label: "publish"
+    label: "Open File"
     type: item
     icon: ""
-    tool: aa
+    tool: open file
 
   - type: line
     label: "line"

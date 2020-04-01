@@ -40,10 +40,7 @@ def build_maya_shelf():
         kwargs.get("software"),
         "{0}.yaml".format(kwargs.get("sw_version"))
     )
-    shelve_data = utilities.load_yaml(shelve_yaml_path)
-    build_maya_shelf = functools.partial(_api.build_maya_shelf, shelve_data)
-    build_maya_shelf()
-    # _api.build_maya_shelf(shelve_data)
+    _api.build_shelf(shelve_yaml_path)
 
 
 def build_houdini_shelf():

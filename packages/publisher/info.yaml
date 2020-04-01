@@ -1,5 +1,9 @@
-aa: |
-  print "jingxuyang jis "
+open file: |
+  import qtlb
+  reload(qtlb)
+  from qtlb import LoadWindow
+  win = LoadWindow()
+  win.show()
 
 bb: |
   print "bb"
