@@ -10,5 +10,7 @@
 from PySide import QtGui
 from PySide import QtCore
 
+import window
+reload(window)
 
-from widget import TaskWidget
+from window import *
