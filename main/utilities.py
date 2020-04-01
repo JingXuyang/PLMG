@@ -59,5 +59,19 @@ def load_yaml(path):
     return False
 
 
+def get_inherit(cls):
+    '''
+    返回所有继承cls的子类
+    @param cls: 父类
+    @return: dict
+    {
+        'B': <class '__main__.B'>,
+        'C': <class '__main__.C'>
+    }
+    '''
+    sub_cls = {sub_cls.__name__: sub_cls for sub_cls in cls.__subclasses__()}
+    return sub_cls
+
+
 if __name__ == '__main__':
     print(load_json(r"E:\LongGong\XXYH\data\maya_env.json"))
