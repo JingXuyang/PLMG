@@ -1,8 +1,8 @@
 open file: |
   import qtlb
   reload(qtlb)
-  from qtlb import LoadWindow
-  win = LoadWindow()
+  from qtlb import TaskLoadWindow
+  win = TaskLoadWindow()
   win.show()
 
 bb: |

@@ -118,6 +118,15 @@ global:
     - {label: Last Frame, name: last_frame, show: true,
        cgteamwork: {shot: 'shot.last_frame'}, type: int}
 
+  workfile_fields:
+    - {label: file_name, show: true}
+    - {label: file_type, show: true}
+    - {label: artist, show: false}
+    - {label: size, name: size, show: true}
+    - {label: modified_Time, show: true}
+    - {label: path, name: path, show: true}
+    - {label: description, show: true}
+
   version_fields:
     - {label: Entity Type, name: entity_type, show: false,
        constant: version}
@@ -153,8 +162,14 @@ global:
     maya:
         - mb
         - ma
+        - abc
 
 Model:
+
+  filename_pattern: '{shot}_{GetTaskName}_{description}_{step}_{description}_v###.{workfile_format}'
+
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
 
   workfile_save_actions:
     - name: workfile_root
@@ -173,6 +188,29 @@ Model:
 
 Texture:
 
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
+
+
+Rig:
+
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
+
   workfile_save_actions:
     - name: workfile_root
       type: GetPathFromTag
@@ -189,6 +227,9 @@ Texture:
 
 
 charEffects:
+
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
 
   workfile_save_actions:
     - name: workfile_root
@@ -207,6 +248,9 @@ charEffects:
 
 nHair:
 
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
+
   workfile_save_actions:
     - name: workfile_root
       type: GetPathFromTag
@@ -223,6 +267,9 @@ nHair:
 
 
 nCloth:
+
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
 
   workfile_save_actions:
     - name: workfile_root
@@ -241,6 +288,9 @@ nCloth:
 
 Previs:
 
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
+
   workfile_save_actions:
     - name: workfile_root
       type: GetPathFromTag
@@ -257,6 +307,9 @@ Previs:
 
 
 Animation:
+
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
 
   workfile_save_actions:
     - name: workfile_root
@@ -275,6 +328,9 @@ Animation:
 
 BG_Characters:
 
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
+
   workfile_save_actions:
     - name: workfile_root
       type: GetPathFromTag
@@ -291,6 +347,9 @@ BG_Characters:
 
 
 VFX:
+
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
 
   workfile_save_actions:
     - name: workfile_root

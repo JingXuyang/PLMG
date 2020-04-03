@@ -20,8 +20,6 @@ class MyTreeWidget(QtGui.QTreeWidget):
         super(MyTreeWidget, self).__init__(parent)
         # self.setStyleSheet("QTreeWidget::item{height:40px;}")
 
-        # -------------------------- 信号 --------------------------
-
     def setHeaderLabs(self, labels):
         self.setHeaderLabels(labels)
 
@@ -93,6 +91,20 @@ class MyTreeWidget(QtGui.QTreeWidget):
                 return i
 
         return None
+
+    def selectionInfo(self):
+        '''
+        得到选择的信息。
+        '''
+        item = self.currentItem()
+        if item:
+            result = {}
+            for i in range(self.columnCount()):
+                header_label = self.headerItem().text(i)
+                result[header_label] = item.text(i)
+            return result
+        else:
+            return False
 
 
 if __name__ == '__main__':

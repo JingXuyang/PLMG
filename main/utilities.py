@@ -11,7 +11,10 @@
 import os
 import sys
 import json
+import getpass
 import yaml
+import time
+import shutil
 
 
 def handle_error(func):
@@ -59,18 +62,123 @@ def load_yaml(path):
     return False
 
 
-def get_inherit(cls):
+def setEnv(dicts):
     '''
-    返回所有继承cls的子类
-    @param cls: 父类
-    @return: dict
-    {
-        'B': <class '__main__.B'>,
-        'C': <class '__main__.C'>
-    }
+    设置环境变量
+    @param dicts: 环境变量字典
     '''
-    sub_cls = {sub_cls.__name__: sub_cls for sub_cls in cls.__subclasses__()}
-    return sub_cls
+    for key, val in dicts.iteritems():
+        os.environ[key] = val
+
+
+def filterType(path, file_typ=""):
+    '''
+    :param path: 路径
+    :return: file_typ，返回扩展名, 否则为Folse
+    '''
+    if os.path.isfile(path):
+        ext = os.path.splitext(path)[1]
+        if ext in file_typ:
+            return ext
+        else:
+            return False
+
+
+def getUser():
+    '''
+    返回当前系统的用户名
+    '''
+    return getpass.getuser()
+
+
+def getFoldersInPath(path):
+    '''
+    返回path下边所有的文件夹列表
+    '''
+    if os.path.exists(path):
+        folder = []
+        lst = os.listdir(path)  # 列出文件夹下所有的目录
+        for i in range(0, len(lst)):
+            temp = os.path.join(path, lst[i])
+            if os.path.isdir(temp):
+                folder.append(lst[i])
+        return folder
+    else:
+        return []
+
+
+def getFilesInFolder(path):
+    '''
+    返回 path下边所有的文件列表
+    '''
+    if os.path.exists(path):
+        files = []
+        list = os.listdir(path)  # 列出文件夹下所有的文件
+        for i in range(0, len(list)):
+            temp = os.path.join(path, list[i])
+            if os.path.isfile(temp):
+                files.append(list[i])
+        return files
+    else:
+        return []
+
+
+def getBaseName(path):
+    '''
+    得到文件名字
+    '''
+    if os.path.exists(path):
+        return os.path.basename(path)
+    else:
+        return ""
+
+
+def makeFolder(path):
+    '''
+    创建文件夹
+    '''
+    folder = os.path.dirname(path)
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
+
+
+def copyFile(src, dst):
+    '''
+    拷贝文件
+    '''
+    src = src.replace('\\', '/')
+    dst = dst.replace('\\', '/')
+    if os.path.exists(src) and src != dst:
+        shutil.copyfile(src, dst)
+
+
+def timeStampToTime(timestamp):
+    '''
+    把时间戳转化为时间: 1479264792 to 2016-11-16 10:53:12
+    '''
+    timeStruct = time.localtime(timestamp)
+    return time.strftime('%Y-%m-%d %H:%M:%S', timeStruct)
+
+
+def getFileSize(path):
+    '''
+    获取文件的大小,结果保留两位小数，单位为MB
+    '''
+    fsize = os.path.getsize(path)
+    fsize1 = fsize / float(1024 * 1024)
+    if fsize1 > 1:
+        return str(round(fsize1, 1)) + "MB"
+    else:
+        fsize1 = fsize / float(1024)
+        return str(round(fsize1, 1)) + "KB"
+
+
+def getFileModifyTime(path):
+    '''
+    获取文件的修改时间
+    '''
+    t = os.path.getmtime(path)
+    return timeStampToTime(t)
 
 
 if __name__ == '__main__':

@@ -8,6 +8,4 @@
 
 import _cgteamwork
 reload(_cgteamwork)
-from _cgteamwork import CGT
-
-database = CGT()
+from _cgteamwork import *

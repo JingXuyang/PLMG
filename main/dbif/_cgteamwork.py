@@ -12,24 +12,25 @@ import os
 import sys
 
 sys.path.append("C:/cgteamwork/bin/base")
-import engine
 import cgtw
 import cgtw2
 
+
 # ================================= Global variable =================================
-config_data = engine.getConfigs()
 
 
 # ================================= Class =================================
 class CGT(object):
 
-    def __init__(self, proj_name=os.environ.get('XSYH_PROJECT')):
+    def __init__(self, proj_name=os.environ.get('XSYH_PROJECT'), config_data=""):
         self.tw = cgtw.tw()
         self.tw2 = cgtw2.tw()
         self.proj_name = proj_name
+        self.config_data = config_data
         self.database = self.getDataBase(self.proj_name)
 
-    def islogind(self):
+    @classmethod
+    def islogind(cls):
         '''
         检查是否打开了cgteamwork客户端，成功返回True, 否则返回False
         @return: bool
@@ -81,28 +82,30 @@ class CGT(object):
 
         return list(result)
 
-    def getInfoId(self, seq, shot, model="shot"):
+    def getInfoId(self, sequence, shot, model="shot"):
         if model == "shot":
             t_id_list = self.tw2.info.get_id(
-                self.database, model, [['shot.eps_name', '=', seq], 'and', ["shot.shot", "=", shot]]
+                self.database, model, [['shot.eps_name', '=', sequence], 'and', ["shot.shot", "=", shot]]
             )
         else:
             t_id_list = self.tw2.info.get_id(
-                self.database, "asset", [['asset.type_name', '=', seq], 'and', ["asset.asset_name", "=", shot]]
+                self.database, "asset", [['asset.type_name', '=', sequence], 'and', ["asset.asset_name", "=", shot]]
             )
         if t_id_list:
             return t_id_list[0]
 
-    def getTaskId(self, seq='', shot='', step='', task='', model="shot"):
+    def getTaskId(self, sequence='', shot='', step='', task='', model="shot"):
         if model == "shot":
             t_id_list = self.tw2.task.get_id(
                 self.database, model,
-                [['shot.eps_name', '=', seq], 'and', ["shot.shot", "=", shot], 'and', ["task.task_name", "=", task]]
+                [['shot.eps_name', '=', sequence], 'and', ["shot.shot", "=", shot], 'and',
+                 ["task.task_name", "=", task]]
             )
         else:
             t_id_list = self.tw2.task.get_id(
-                self.database, "asset", [['asset.type_name', '=', seq], 'and', ["asset.asset_name", "=", shot], 'and',
-                                         ["task.task_name", "=", task], 'and', ["task.pipeline", "=", step]]
+                self.database, "asset",
+                [['asset.type_name', '=', sequence], 'and', ["asset.asset_name", "=", shot], 'and',
+                 ["task.task_name", "=", task], 'and', ["task.pipeline", "=", step]]
             )
 
         if t_id_list:
@@ -141,7 +144,7 @@ class CGT(object):
         '''
         extend_filters = ['task.pipeline', 'task.task_name', 'asset.type_name', 'asset.asset_name', 'task.artist',
                           'task.account']
-        filters = [i.get("sign") for i in config_data.get("global").get("asset_load")]
+        filters = [i.get("sign") for i in self.config_data.get("global").get("asset_load")]
         filters.extend(extend_filters)
         t_id_list = self.tw2.task.get_id(
             self.database, 'asset', [['asset.type_name', '=', asset_type], 'and', ["asset.asset_name", "=", asset_name]]
@@ -158,7 +161,7 @@ class CGT(object):
             for task_dic in new_task_data:
                 for sign in task_dic.keys():
                     # asset_load: [{label: asset name, sign: "asset.asset_name", show: true}, {...}]
-                    asset_load = config_data.get("global").get("asset_load")
+                    asset_load = self.config_data.get("global").get("asset_load")
                     for i in asset_load:
                         if i.get("sign") == sign:
                             task_dic[sign] = (task_dic.get(sign), i.get("label"))
@@ -176,26 +179,26 @@ class CGT(object):
 
         return sorted([i['eps.eps_name'] for i in t_data])
 
-    def getShots(self, seq):
+    def getShots(self, sequence):
         '''
         得到场次的所有镜头号：[u'Shot010', u'Shot020', u'Shot030']
-        @param seq: 场次
+        @param sequence: 场次
         @return: list
         '''
-        if seq:
-            t_id_list = self.tw2.info.get_id(self.database, 'shot', [["eps.eps_name", "=", seq]])
+        if sequence:
+            t_id_list = self.tw2.info.get_id(self.database, 'shot', [["eps.eps_name", "=", sequence]])
             shot_list = self.tw2.info.get(self.database, 'shot', t_id_list, ['shot.shot'])
             return sorted([i["shot.shot"] for i in shot_list])
         else:
             return False
 
-    def getShotTask(self, seq, shot, load_label=False):
+    def getShotTask(self, sequence, shot, load_label=False):
         extend_filters = ['task.pipeline', 'task.task_name', 'shot.eps_name', 'shot.shot', 'task.artist',
                           'task.account']
-        filters = [i.get("sign") for i in config_data.get("global").get("shot_load")]
+        filters = [i.get("sign") for i in self.config_data.get("global").get("shot_load")]
         filters.extend(extend_filters)
         t_id_list = self.tw2.task.get_id(
-            self.database, 'shot', [['shot.eps_name', '=', seq], 'and', ["shot.shot", "=", shot]]
+            self.database, 'shot', [['shot.eps_name', '=', sequence], 'and', ["shot.shot", "=", shot]]
         )
         task_data = self.tw2.task.get(self.database, "shot", t_id_list, filters)
 
@@ -207,17 +210,28 @@ class CGT(object):
             task_data = []
             for task_dic in new_task_data:
                 for sign in task_dic.keys():
-                    shot_load = config_data.get("global").get("shot_load")
+                    shot_load = self.config_data.get("global").get("shot_load")
                     for i in shot_load:
                         if i.get("sign") == sign:
                             task_dic[sign] = (task_dic.get(sign), i.get("label"))
                 task_data.append(task_dic)
             return task_data
 
+    def getPathFromTag(self, type="", sequence="", shot="", tag=""):
+        if type == "shot":
+            id_list = self.tw2.info.get_id(self.database, type,
+                                           [["shot.shot", "=", shot], 'and', ['shot.eps_name', '=', sequence]])
+        else:
+            id_list = self.tw2.info.get_id(self.database, type,
+                                           [["asset.asset_name", "=", shot], 'and', ['asset.type_name', '=', sequence]])
+        if id_list:
+            return self.tw2.info.get_dir(self.database, type, id_list, [tag])[0][tag]
+        else:
+            return None
+
 
 if __name__ == '__main__':
-    from pprint import pprint
-
     cgt = CGT("LongGong")
     # pprint(cgt.getShotTask("Seq001", "Shot010", load_label=True))
     # pprint(cgt.getAssetTask("char", "charHei"))
+    cgt.getPathFromTag("shot", "Seq001", "Shot002", "Animation_publish")
