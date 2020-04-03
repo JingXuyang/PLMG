@@ -1,0 +1,70 @@
+//Code by sunyefei 20190506
+global proc SYF_Xgen_Tools()
+{
+
+
+if (`window -exists syfXgenToolsSet`) deleteUI syfXgenToolsSet;
+	if(`windowPref -exists syfXgenToolsSet`==1)
+        windowPref -r syfXgenToolsSet;
+window
+	-rtf 1
+	-s 1
+	-wh 400 350
+	-title "MH XGen Tool Sets"
+syfXgenToolsSet;
+	
+//-------------------------------------------------------------------------------
+	columnLayout -adjustableColumn true	-columnAlign "center";
+	float $rrr = rand(1);
+	float $ggg = rand(1);
+	float $bbb = rand(1);
+	button -label "automatic Assgin Xgen" -h 50 -bgc $rrr $ggg $bbb -c "automatic_Assgin_Xgen_btn_proc()";
+	separator -height 10 -style "in";
+	$rrr = rand(1);
+	$ggg = rand(1);
+	$bbb = rand(1);
+	button -label "nHair Assign PaintEffect Brush" -h 50 -bgc $rrr $ggg $bbb -c "nHair_Assign_peBrush_btn_proc()";
+    separator -height 10 -style "in";
+	$rrr = rand(1);
+	$ggg = rand(1);
+	$bbb = rand(1);
+	button -label "xgen Batch Modify Attribute" -h 50 -bgc $rrr $ggg $bbb -c "xgen_Batch_Modify_Attribute()";
+	separator -height 10 -style "in";
+	$rrr = rand(1);
+	$ggg = rand(1);
+	$bbb = rand(1);
+	button -label "Xgen_Export_Patchs_Tool" -h 50 -bgc $rrr $ggg $bbb -c "Xgen_Export_Patchs_Tool()";
+
+
+//-----------------------------------------------------------------------------10
+	
+showWindow syfXgenToolsSet;
+window -edit -widthHeight 480 300 syfXgenToolsSet;
+	
+}
+SYF_Xgen_Tools();
+
+
+
+global proc automatic_Assgin_Xgen_btn_proc()
+{
+    //python("import runpy;import('Z:/LongGong/users/sunyefei/Scripts/Automatic_Assgin_Xgen.py');runpy.run_path('Z:/LongGong/users/sunyefei/Scripts/Automatic_Assgin_Xgen.py')");
+    //python("import sys;sys.path.append('Z:/LongGong/users/sunyefei/Scripts');import Automatic_Assgin_Xgen;reload(Automatic_Assgin_Xgen);Automatic_Assgin_Xgen.xsyh_xgen_auto_assgin()");
+    source "Z:/bin/script/automatic_Assgin_Xgen.mel";
+}
+global proc nHair_Assign_peBrush_btn_proc()
+{
+    source "Z:/bin/script/syf_nHair_Assign_peBrush_tool.mel";//nHair Setup
+}
+
+
+global proc xgen_Batch_Modify_Attribute()
+{
+    source "Z:/bin/script/xgen_Batch_Modify_Attribute_Tools.mel";
+}
+
+//    source "Z:/LongGong/users/sunyefei/Scripts/SYF_Xgen_Tools.mel"
+global proc Xgen_Export_Patchs_Tool()
+{
+    source "Z:/bin/script/SYF_Xgen_Export_Patchs_Tools.mel";
+}

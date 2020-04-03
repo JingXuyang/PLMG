@@ -1,0 +1,128 @@
+global proc CBdeleteConnection( string $destName )
+
+//
+
+// If the specified name is the destination of a connection,
+
+// then delete that connection.
+
+//
+
+{
+
+	if ( `connectionInfo -isDestination $destName` ){
+
+		string $destination = `connectionInfo -getExactDestination $destName`;
+
+		// When deleting a src connection from a character, you must remove
+
+		// the item from the character set or the character will no longer
+
+		// work consistently: bug 127212
+
+		//
+		string $srcConn[] = `listConnections -s 1 -d 0 -type character $destination`;
+
+		if (size($srcConn)) {
+
+			string $warnMsg = ("Removed \'"+$destination+"\' from character \'"+$srcConn[0]+"\'.");
+
+			warning($warnMsg);
+
+			character -e -rm $srcConn[0] $destination;
+
+		}
+		
+		// delete -icn doesn't work if destination attr is readOnly 
+
+		// so use disconnectAttr in this case
+
+		//
+
+		string $sArr[1] = `ls -ro $destination`;
+
+		if (size($sArr)) {
+
+			string $src = `connectionInfo -sourceFromDestination $destination`;
+
+			disconnectAttr $src $destination;
+
+		} else {
+
+			delete -icn $destination;
+
+		}
+
+	}
+}
+
+
+
+global proc Lighting_Tools()
+{
+	string $layout = getOptionBox();
+	setParent $layout;
+	waitCursor -state 1;
+	
+	string $parent = `columnLayout -adjustableColumn 1`;
+//-------------------------------------------------------------------------------
+	columnLayout;
+	button -w 300 -h 60 -l "Matte Off" -c "turnoffmatte_proc()";
+	separator -h 10 ;
+	button -w 300 -h 60 -l "Primary Visibility On" -c "turnonprimaryvis_proc()";
+
+//-----------------------------------------------------------------------------
+	setParent ..;
+	setParent -menu ..;
+	waitCursor -state 0;
+	setUITemplate -popTemplate;
+	string $applyBtn = getOptionBoxApplyBtn();
+	button -edit 
+		-label "Apply"
+		-command ("") 
+		$applyBtn;
+	string $applyAndCloseBtn = getOptionBoxApplyAndCloseBtn();
+	button -edit 
+		-label "Apply and Close"
+		-command("")
+		$applyAndCloseBtn;
+	string $saveBtn = getOptionBoxSaveBtn();
+	button -edit 
+		-command ("")
+		$saveBtn;
+	string $resetBtn = getOptionBoxResetBtn();
+	button -edit 
+		-command ("")
+		$resetBtn;
+
+	setOptionBoxTitle("Lighting Tools");
+    
+	showOptionBox();
+	window -e -w 300 -h 200 OptionBoxWindow;
+}
+
+global proc turnoffmatte_proc()
+{
+    string $sel[] = `ls -sl`;
+    for($s in $sel)
+    {
+        string $shape[] = `ls -dag -s -o $s`;
+        CBdeleteConnection ($s+".aiMatte");
+        setAttr ($s+".aiMatte") 0;
+    }
+    
+    
+}
+global proc turnonprimaryvis_proc()
+{
+    string $sel[] = `ls -sl`;
+    for($s in $sel)
+    {
+        string $shape[] = `ls -dag -s -o $s`;
+        CBdeleteConnection ($s+".primaryVisibility");
+        setAttr ($s+".primaryVisibility") 1;
+    }
+    
+}
+
+Lighting_Tools();

@@ -1,0 +1,115 @@
+global proc syf_random_rename_Objects()
+{
+    string $resultt = `confirmDialog -title "Rename Confirm" -message "Selected Objects or All Objects"
+    -button "All" -button "Selected" -button "Cancel"-defaultButton "Cancel"
+    -cancelButton "Cancel" `;
+    string $sel[]={};
+    string $sel_long[] = {};
+    string $nurbsCurve[]={};
+    string $nurbsCurve_long[]={};
+    string $trans[] = {};
+    string $trans_long[] = {};
+    int $transform_count=0;
+    int $shape_count=0;
+    if($resultt=="Selected"){
+        $sel = `ls -sl`;
+        $sel_long = `ls -sl -l`;
+    }
+    if($resultt=="All")
+    {
+        $sel = `ls -typ "mesh"`;
+        $nurbsCurve = `ls -typ "nurbsCurve"`;
+        $sel = stringArrayCatenate($sel, $nurbsCurve);
+
+        $sel_long = `ls -l -typ "mesh" `;
+        $nurbsCurve_long = `ls -l -typ "nurbsCurve"`;
+        $sel_long = stringArrayCatenate($sel_long, $nurbsCurve_long);         
+    }
+    
+    
+    if($resultt!="Cancel")//process mesh and nurbsCurve Shapes
+    {
+        int $i=0;
+        int $size = `size $sel`;
+      
+        //********************************************
+        float $amount=0;
+	     progressWindow
+	     -title "Renaming Nodes"
+	     -progress $amount
+	     -status "  Completed:%0                                                        "
+	     -isInterruptable false;
+        //********************************************
+        for(;$i<$size;$i++)
+        {      
+        
+            if($resultt=="Selected"){
+                $sel = `ls -sl `;
+                $sel_long = `ls -sl -l`;
+            }
+            if($resultt=="All")
+            {
+                $sel = `ls -typ "mesh"`;
+                $nurbsCurve = `ls -typ "nurbsCurve"`;
+                $sel = stringArrayCatenate($sel, $nurbsCurve);
+        
+                $sel_long = `ls -l -typ "mesh" `;
+                $nurbsCurve_long = `ls -l -typ "nurbsCurve"`;
+                $sel_long = stringArrayCatenate($sel_long, $nurbsCurve_long);         
+            }
+        
+        
+        
+                      
+            string $name_sep[] = stringToStringArray($sel[$i],"|");//select -r $sel_long[$i]
+            if(  (`size $name_sep`>1)   )
+            {
+                //print $sel_long[$i];print "\n";
+                string $ss = python("import time;import math;str(int(math.floor(time.time()*1000)))[-5:]")+floor(rand(9999));
+                rename -is $sel_long[$i] ($name_sep[`size $name_sep`-1]+$ss);//print $name_sep[`size $name_sep`-1]
+                string $parent = firstParentOf ($name_sep[`size $name_sep`-1]+$ss);
+                string $name_sepp[] = stringToStringArray($parent,"|");
+                $shape_count++;
+                if(`size $name_sepp`>1)
+                {
+                    rename -is $parent ($name_sep[`size $name_sep`-1]+$ss+"_trans");
+                    $shape_count++;
+                }
+
+            }
+            //*********************************************************************************************
+    
+            $amount=(int)(((float)$i/(float)$size)*100);
+            progressWindow -edit
+            -progress $amount
+            -status("  Completed: "+$amount+"%                                                        ");
+            
+                   //************************************************************************************************
+        }
+            $amount=100;
+            progressWindow -edit
+            -progress $amount
+            -status("  Completed: "+$amount+"%                                                        ");
+            pause -seconds 1;
+            progressWindow -endProgress; 
+   
+
+   
+    confirmDialog -title "Rename Information" 
+    -message ("Renamed----------"+$shape_count+"----------Shape and Transform Node") 
+    -button "OK" ;    
+    }   
+}
+syf_random_rename_Objects();
+
+//    source "Z:/LongGong/users/sunyefei/Scripts/syf_random_rename_objects.mel";
+  
+//   size `listTransforms -geometry`          1995  
+//   size `listTransforms "-type nurbsCurve"`; 519
+//   size `listTransforms "-type mesh"`;       1450
+//   size `listTransforms "-type nurbsSurface"`   15
+
+
+
+
+

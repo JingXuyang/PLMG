@@ -1,0 +1,11 @@
+﻿Render setup去rs_前缀
+python("from PreRender import *;import PreRender;PreRender.PreRender()");
+
+
+
+Clear Node Tool
+source syf_Clear_Node_Tool.mel
+
+
+
+

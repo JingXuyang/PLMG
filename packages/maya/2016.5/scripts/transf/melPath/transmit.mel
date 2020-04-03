@@ -1,0 +1,9 @@
+python "print '----------- start -----------'";
+python "import sys";
+python "import subprocess";
+python "parms = sys.argv[3:]";
+python "sys.path.append(r'Z:/bin/pltk/packages/maya/2016.5/scripts/transf')";
+python "import melPath";
+python "reload(melPath)";
+python "melPath.main(parms)";
+python "print '-----------  end  -----------'";
