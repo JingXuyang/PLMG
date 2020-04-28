@@ -2241,14 +2241,13 @@ class charEffectsNclothTag(Action):
 
         kwargs = {}
         typ = task.get('type')
-        kwargs['project'] = self.database().getDataBase()
         kwargs['type'] = typ
         kwargs['sequence'] = task.get('sequence')
         kwargs['shot'] = task.get('shot')
         kwargs['step'] = self.step()
         kwargs['tag'] = 'charEffects_cloth_work'
 
-        r = self.database().getPathFromTag(**kwargs)
+        r = self.database().getTaskFromTag(**kwargs)
 
         if r:
             return r
@@ -2267,14 +2266,13 @@ class charEffectsNhairTag(Action):
 
         kwargs = {}
         typ = task.get('type')
-        kwargs['project'] = self.database().getDataBase()
         kwargs['type'] = typ
         kwargs['sequence'] = task.get('sequence')
         kwargs['shot'] = task.get('shot')
         kwargs['step'] = self.step()
         kwargs['tag'] = 'charEffects_hair_work'
 
-        r = self.database().getPathFromTag(**kwargs)
+        r = self.database().getTaskFromTag(**kwargs)
 
         if r:
             return r
