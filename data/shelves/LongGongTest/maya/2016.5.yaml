@@ -1,0 +1,252 @@
+menu_name: MagicHill Toolkit
+items:
+  # 提交和发布
+  - type: line
+    label: "files"
+
+  - name: publisher
+    label: "Open File"
+    type: item
+    icon: "{IMAGE_PATH}/folder.png"
+    tool: open file
+
+  - name: publisher
+    label: "Submit File"
+    type: item
+    icon: "{IMAGE_PATH}/submit.png"
+    tool: submit file
+
+  - name: publisher
+    label: "Publish File"
+    type: item
+    icon: "{IMAGE_PATH}/publish.png"
+    tool: publish file
+
+  # 流程插件
+  - type: line
+    label: "plugin"
+
+  - name: publisher
+    label: "Clear Before Publish"
+    type: item
+    icon: "{IMAGE_PATH}/clear.png"
+    tool: check_and_fix
+
+  - name: publisher
+    label: "Asset Loader"
+    type: item
+    icon: "{IMAGE_PATH}/loader.png"
+    tool: Asset Loader
+
+  - name: publisher
+    label: "Scene Assembly"
+    type: item
+    icon: "{IMAGE_PATH}/assembly.png"
+    tool: Scene Assembly
+
+  - name: publisher
+    label: "Playblast With Banner"
+    type: item
+    icon: "{IMAGE_PATH}/video.png"
+    tool: playblast with banner
+
+  - name: publisher
+    label: "Publish Camera"
+    type: item
+    icon: ""
+    tool: publish camera
+
+  - name: publisher
+    type: item
+    label: "Export Seq Camera"
+    tool: export_all_camera
+
+  # 工具
+  - type: line
+    label: "tools"
+
+  - name: publisher
+    label: "Clear Scene"
+    type: item
+    icon: "{IMAGE_PATH}/clear.png"
+    tool: clear scene
+
+  # animation tools
+  - name: publisher
+    type: subitem
+    icon: "{IMAGE_PATH}/walk.png"
+    label: "Animation Tools"
+    items:
+      - name: publisher
+        type: item
+        label: "bbb"
+        tool: bb
+
+  # character tools
+  - name: publisher
+    type: subitem
+    icon: "{IMAGE_PATH}/character.png"
+    label: "CFX Tools"
+    items:
+      - name: publisher
+        type: item
+        label: djRivert
+        tool: djRivert
+
+      - name: publisher
+        type: item
+        label: rivet
+        tool: rivet
+
+      - name: publisher
+        type: item
+        label: time_scale
+        tool: time_scale
+
+      - name: publisher
+        type: item
+        label: weiyi
+        tool: weiyi
+
+      - name: publisher
+        type: item
+        label: curve_blend_gradient
+        tool: curve_blend_gradient
+
+      - name: publisher
+        type: item
+        label: lcaCfxBlendtool
+        tool: lcaCfxBlendtool
+
+      - name: publisher
+        type: item
+        label: IKhandle
+        tool: IKhandle
+
+      - name: publisher
+        type: item
+        label: nHairTools
+        tool: nHairTools
+
+      - name: publisher
+        type: item
+        label: XgenCache
+        tool: XgenCache
+
+      - name: publisher
+        type: item
+        label: softSelectToCluster
+        tool: softSelectToCluster
+
+  # light tools
+  - name: publisher
+    type: subitem
+    icon: "{IMAGE_PATH}/light.png"
+    label: "LGT Tools"
+    items:
+        
+      - name: publisher
+        type: item
+        label: aiOpaque_off
+        tool: aiOpaque_off
+
+      - name: publisher
+        type: item
+        label: ar_sub
+        tool: ar_sub
+
+      - name: publisher
+        type: item
+        label: MH_CheckOverName
+        tool: MH_CheckOverName
+
+      # - name: publisher
+      # type: item
+      # label:
+      # tool: nHair_Assign_peBrush_tool
+
+      - name: publisher
+        type: item
+        label: Random_Rename_Objects
+        tool: Random_Rename_Objects
+
+      - name: publisher
+        type: item
+        label: TurnOffMatte_TurnOffPrimaryVis
+        tool: TurnOffMatte_TurnOffPrimaryVis
+
+      - name: publisher
+        type: item
+        label: Xgen_Tools
+        tool: Xgen_Tools
+
+      - name: publisher
+        type: item
+        label: Render_setup_delete_rs_prefix
+        tool: Render_setup_delete_rs_prefix
+
+      - name: publisher
+        type: item
+        label: Clear_Node_Tool
+        tool: Clear_Node_Tool
+
+      - name: publisher
+        type: item
+        label: Add_AOV
+        tool: Add_AOV
+
+      - name: publisher
+        type: item
+        label: Delete_charQian_Backface
+        tool: Delete_charQian_Backface
+
+      - name: publisher
+        type: item
+        label: DNoise_Tool
+        tool: DNoise_Tool
+
+  # download tools
+  - name: publisher
+    label: "Upload And Download Files"
+    type: subitem
+    icon: "{IMAGE_PATH}/cloud_download.png"
+    items:
+      - type: line
+        label: "Pose"
+
+      - name: publisher
+        type: item
+        label: Upload Selection Pose
+        tool: uploadSelPose
+
+      - name: publisher
+        type: item
+        label: Upload All Pose
+        tool: uploadAllPose
+
+      - name: publisher
+        type: item
+        label: Download Poses
+        tool: downloadPoses
+
+      - type: line
+
+      - name: publisher
+        type: item
+        label: Download Files From CGT
+        tool: Download Files
+
+      - name: publisher
+        type: item
+        label: Upload Files to CGT
+        tool: Upload Files
+
+  # 关于
+  - type: line
+    label: "about"
+
+  - name: publisher
+    label: "About"
+    type: item
+    icon: "{IMAGE_PATH}/about.png"
+    tool: aa
