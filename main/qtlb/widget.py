@@ -202,6 +202,9 @@ class MyTableWidget(QtWidgets.QTableWidget):
         self.customStyle()
 
     def customStyle(self):
+        '''
+        自定义窗口风格化
+        '''
         self.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)  # 设置只可以单选，可以使用ExtendedSelection进行多选
         self.setSortingEnabled(True)  # 设置表头可以自动排序
         self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)  # 设置不可编辑
@@ -209,12 +212,23 @@ class MyTableWidget(QtWidgets.QTableWidget):
         self.setFrameStyle(QtWidgets.QFrame.NoFrame)
 
     def getItem(self, row='', column=0):
+        '''
+        返回指定的 行和列的item
+        @param row: 行数
+        @param column: 列数
+        @return: QTableWidgetItem
+        '''
         row_count = self.rowCount()
         for _row in range(row_count):
             if _row == row:
                 return self.item(_row, column)
 
     def getAllRows(self, column):
+        '''
+        返回指定列数的所有item
+        @param column: 列数
+        @return: QTableWidgetItem
+        '''
         result = list()
         row_count = self.rowCount()
         for _row in range(row_count):
@@ -222,6 +236,10 @@ class MyTableWidget(QtWidgets.QTableWidget):
         return result
 
     def getRowState(self):
+        '''
+        范湖第一列单元格的所有勾选状态
+        @return: QTableWidgetItem
+        '''
         result = list()
         row_count = self.rowCount()
         for _row in range(row_count):
@@ -229,7 +247,7 @@ class MyTableWidget(QtWidgets.QTableWidget):
         return result
 
 
-if __name__ == '__main__':
+def test():
     data = {
         "header_label": ["Seq", "Shot", "Step", "Task", "User"],
         "proj_name": "LongGong",
@@ -241,3 +259,7 @@ if __name__ == '__main__':
     win = MyTreeWidget(data)
     win.show()
     sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    test()

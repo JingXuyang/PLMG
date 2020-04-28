@@ -7,21 +7,22 @@
 #  @Create Time: 2019/12/30 15:15
 #  @Description: 调用widget.py中的基本部件，创建最终显示的窗口。
 # ==============================================================
-import os, re, sys
+import glob
+import os
+import re
+
 import widget
+
 reload(widget)
 from widget import *
 
-sys.path.append(r"E:\LongGong\XSYH\main")
-import utilities
+# sys.path.append(r"E:\LongGong\XSYH\main")
 import dbif
 import swif
 from nodes import engine
 from nodes.engines import subengine
-reload(utilities)
+
 reload(dbif)
-reload(swif)
-reload(engine)
 reload(subengine)
 
 # ================================= Global variable =================================
@@ -48,7 +49,6 @@ def createIter(iter_data):
 
 # ================================= Class =================================
 class ActionThread(QtCore.QThread):
-
     start = QtCore.Signal(object)
     finished = QtCore.Signal(object)
 
@@ -61,6 +61,53 @@ class ActionThread(QtCore.QThread):
         self.start.emit(show_step)
         self.cls().run()
         self.finished.emit('finished')
+
+
+class ShotsWidget(QtWidgets.QWidget):
+    def __init__(self, engine, parent=None):
+        super(ShotsWidget, self).__init__(parent)
+        self._engine = engine
+        self.data = config_data.get("global").get("shot_load")
+
+        self._init_wgt()
+
+    def _init_wgt(self):
+        '''
+        初始化 tree widget
+        '''
+        # -------------------------- widget --------------------------
+        self.task_widget = MyTreeWidget()
+        self.task_widget.setHeaderStyle()
+        labels = ['sequence', 'status']
+        self.task_widget.setHeaderLabs(labels)
+
+        # 创建根节点为项目名
+        root = self.task_widget.createItem(data=self._engine.project())
+        root.setExpanded(True)
+        self.task_widget.createItem(parent_item=root, data=database.getSeqs(), expand=True)
+
+        # -------------------------- layout --------------------------
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.addWidget(self.task_widget)
+
+        # -------------------------- single --------------------------
+        self.task_widget.itemExpanded.connect(self._update_items)
+
+    def _update_items(self, item):
+        '''
+        添加 Item 的子项
+        '''
+
+        level = self.task_widget.getItemLevel(item)
+        if level == 1:
+            shot_ls = database.getShots(item.text(0))
+            self.task_widget.createItem(parent_item=item, data=shot_ls, expand=True)
+
+        elif level == 2:
+            shot = item.text(0)
+            sequence = item.parent().text(0)
+            shot_task = database.getShotTask(sequence=sequence, shot=shot, load_label=True)
+            self.task_widget.createItem(parent_item=item, data=shot_task, expand=False)
 
 
 class TaskWidget(QtWidgets.QWidget):
@@ -273,6 +320,7 @@ class FileWidget(QtWidgets.QWidget):
     '''
     用来显示文件列表的窗口
     '''
+
     def __init__(self, parent=None):
         super(FileWidget, self).__init__(parent)
 
@@ -309,9 +357,9 @@ class FileWidget(QtWidgets.QWidget):
                     for index in range(self.file_widget.columnCount()):
                         header_label = self.file_widget.headerItem().text(index)
                         root.setText(index, file_dic.get(header_label, ""))
-                        root.setTextAlignment(index+1, QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter)
+                        root.setTextAlignment(index + 1, QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter)
                         if header_label == 'artist':
-                            item_data['name'] = file_dic['file_name']+'.{0}'.format(file_dic['file_type'])
+                            item_data['name'] = file_dic['file_name'] + '.{0}'.format(file_dic['file_type'])
                             root.setText(index, database.getVersion(item_data, 'artist') or '')
 
     def getSelection(self):
@@ -366,9 +414,9 @@ class SelectTaskWindow(QtWidgets.QDialog):
 
         # -------------------------------- create widget --------------------------------
         # 任务预览窗口
-        self.task_widget = self.create_task_wgt()
-        self.asset_widget = self.create_asset_wgt()
-        self.shot_widget = self.create_shot_wgt()
+        self.task_widget = self._createTaskWgt()
+        self.asset_widget = self._createAssetWgt()
+        self.shot_widget = self._createShotWgt()
         self.tab_widget = QtWidgets.QTabWidget()
         self.tab_widget.addTab(self.task_widget, "My Task")
         self.tab_widget.addTab(self.asset_widget, "Asset Task")
@@ -436,7 +484,7 @@ class SelectTaskWindow(QtWidgets.QDialog):
         self.rf_btn.clicked.connect(self._reference_file)
         self.open_btn.clicked.connect(self._open_file)
 
-    def create_task_wgt(self):
+    def _createTaskWgt(self):
         '''
         创建个人任务窗口
         @return:
@@ -450,7 +498,7 @@ class SelectTaskWindow(QtWidgets.QDialog):
         task_widget = MyTaskWidget(kwargs)
         return task_widget
 
-    def create_asset_wgt(self):
+    def _createAssetWgt(self):
         '''
         创建资产任务窗口
         @return:
@@ -465,7 +513,7 @@ class SelectTaskWindow(QtWidgets.QDialog):
         asset_widget = TaskWidget(kwargs)
         return asset_widget
 
-    def create_shot_wgt(self):
+    def _createShotWgt(self):
         '''
         创建镜头任务窗口
         @return:
@@ -550,6 +598,7 @@ class CommentWidget(QtWidgets.QDialog):
     '''
     添加描述的窗口
     '''
+
     def __init__(self, _engine, title, parent=None):
         super(CommentWidget, self).__init__(parent)
         self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)  # 窗口置顶
@@ -589,8 +638,8 @@ class CommentWidget(QtWidgets.QDialog):
     def createTextWidget(self):
         frm = QtWidgets.QFrame()
         self._step_lab = QtWidgets.QLabel('{0}/{1}/{2}'.format(self._engine.task().get('sequence'),
-                                                           self._engine.task().get('shot'),
-                                                           self._engine.task().get('step')))
+                                                               self._engine.task().get('shot'),
+                                                               self._engine.task().get('step')))
         self._step_lab.setFont(QtGui.QFont("Timers", 15))
         self._comments_lab = QtWidgets.QLabel('Comments:')
         self._comments_text = QtWidgets.QPlainTextEdit()
@@ -613,6 +662,7 @@ class CommentWithSelectAssetWidget(QtWidgets.QDialog):
     '''
     带有可以选择物体的描述窗口
     '''
+
     def __init__(self, _engine, title, parent=None):
         super(CommentWithSelectAssetWidget, self).__init__(parent)
         self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)  # 窗口置顶
@@ -711,7 +761,6 @@ class CommentWithSelectAssetWidget(QtWidgets.QDialog):
             name = item.text(0)
             obj = item.text(1)
             if obj:
-
                 item.setCheckState(0, QtCore.Qt.Unchecked)
 
             it += 1
@@ -729,6 +778,7 @@ class SubmitWidget(QtWidgets.QDialog):
     '''
     提交文件的窗口
     '''
+
     def __init__(self, engine, parent=None):
         super(SubmitWidget, self).__init__(parent)
         self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)  # 窗口置顶
@@ -738,8 +788,8 @@ class SubmitWidget(QtWidgets.QDialog):
         self._engine = engine
 
         self.sel_task_wgt = SelectTaskWindow('')
-        self.asset_widget = self.sel_task_wgt.create_asset_wgt()
-        self.shot_widget = self.sel_task_wgt.create_shot_wgt()
+        self.asset_widget = self.sel_task_wgt._createAssetWgt()
+        self.shot_widget = self.sel_task_wgt._createShotWgt()
         self.tab_widget = QtWidgets.QTabWidget()
         self.tab_widget.addTab(self.asset_widget, "Asset Task")
         self.tab_widget.addTab(self.shot_widget, "Shot Task")
@@ -791,6 +841,7 @@ class PublishWidget(QtWidgets.QDialog):
     '''
     发布文件的窗口
     '''
+
     def __init__(self, engine, parent=None):
         super(PublishWidget, self).__init__(parent)
 
@@ -800,8 +851,8 @@ class PublishWidget(QtWidgets.QDialog):
         self._engine = engine
 
         self.sel_task_wgt = SelectTaskWindow('')
-        self.asset_widget = self.sel_task_wgt.create_asset_wgt()
-        self.shot_widget = self.sel_task_wgt.create_shot_wgt()
+        self.asset_widget = self.sel_task_wgt._createAssetWgt()
+        self.shot_widget = self.sel_task_wgt._createShotWgt()
         self.tab_widget = QtWidgets.QTabWidget()
         self.tab_widget.addTab(self.asset_widget, "Asset Task")
         self.tab_widget.addTab(self.shot_widget, "Shot Task")
@@ -832,6 +883,7 @@ class CheckingWidget(QtWidgets.QDialog):
     '''
     检查窗口
     '''
+
     def __init__(self, _engine, par_engine='', parent=None):
         super(CheckingWidget, self).__init__(parent)
         self.resize(800, 550)
@@ -879,6 +931,7 @@ class SceneAssetWidget(QtWidgets.QWidget):
     '''
     选择场景物体的窗口
     '''
+
     def __init__(self, parent=None):
         super(SceneAssetWidget, self).__init__(parent)
         self._init_wgt()
@@ -891,7 +944,7 @@ class SceneAssetWidget(QtWidgets.QWidget):
     def createDataTree(self):
         _init_Data = sw.getReferenceObjects()
         data_tree = MyTreeWidget()
-        data_tree.setHeaderStyle()
+        data_tree.setHeaderStyle()()
         data_tree.setHeaderLabels(['asset', 'object'])
         if _init_Data:
             for item in _init_Data:
@@ -910,6 +963,412 @@ class SceneAssetWidget(QtWidgets.QWidget):
 
     def getCheckedItems(self):
         return self._data_tree.getCheckedItems()
+
+
+class AssemblyDataWidget(QtWidgets.QWidget):
+    def __init__(self, engine, parent=None):
+        super(AssemblyDataWidget, self).__init__(parent)
+
+        self._engine = engine
+        self.task = engine.task()
+        self.database = engine.database()
+
+        self._init_wgt()
+
+    def _init_wgt(self):
+        self.dataTree = MyTreeWidget()
+        self.dataTree.setHeaderStyle()
+
+        self.headerLabel = ['asset_type', 'asset_name', 'abc_name', 'mat_name', 'mat_path', 'map_name', 'type']
+        self.dataTree.setHeaderLabels(self.headerLabel)
+
+        lay = QtWidgets.QVBoxLayout()
+        lay.addWidget(self.dataTree)
+        self.setLayout(lay)
+
+        # self.allData = self.displayData()
+
+    def getShotLinkedAssets(self, assetType=[]):
+        '''
+        返回到镜头在CGT上link的资产信息
+        @param assetType:
+        @return:
+        '''
+        shotInfo = {
+            'id': self.task['shot_id'],
+            'project': self._engine.project()
+        }
+
+        assetInfo = self.database.getShotLinkedAssets(shotInfo)
+        if assetType:
+            lis = []
+            for astInfo in assetInfo:
+                if astInfo['sequence'] in assetType:
+                    lis.append(astInfo)
+            return lis
+        return assetInfo
+
+    def getCameraCahe(self, seq, shot):
+        '''
+        得到相机缓存文件
+        '''
+        result = []
+        cameraPath = 'Z:/LongGong/sequences/{seq}/{shot}/camera/approved/{seq}_{shot}_camera.abc'.format(seq=seq,
+                                                                                                         shot=shot)
+        asset_type = 'camera'
+        asset_name = 'camera'
+
+        if not os.path.exists(cameraPath):
+            abc_path = ''
+            abc_name = ''
+        else:
+            abc_path = cameraPath
+            abc_name = os.path.basename(cameraPath)
+
+        info = {'asset_type': asset_type,
+                'asset_name': asset_name,
+                'abc_path': abc_path,
+                'abc_name': abc_name,
+                'type': 'Camera'}
+
+        result.append(info)
+        return result
+
+    def splitFileName(self, file_name):
+        asset_re = re.search('.*(\\prop[A-Za-z]+)|(\\set[A-Za-z]+)|(\\char[A-Za-z]+)', file_name)
+        if asset_re:
+            if asset_re.groups()[0]:
+                asset_name = asset_re.groups()[0]
+                asset_type = 'prop'
+            elif asset_re.groups()[1]:
+                asset_name = asset_re.groups()[1]
+                asset_type = 'set'
+            elif asset_re.groups()[2]:
+                asset_name = asset_re.groups()[2]
+                asset_type = 'char'
+            else:
+                asset_name = ''
+                asset_type = ''
+            return asset_name, asset_type
+
+        return '', ''
+
+    def getSetCache1(self, seq):
+        '''
+        拿到Z:/LongGong/assets/set/{asset}/model/cache文件夹下"{asset}_nCloth.abc"文件
+        '''
+        result = []
+
+        # 镜头所link的资产
+        abc_path = "Z:/LongGong/sequences/{0}/nCloth/cache/{1}_prop*_nCloth*.abc"
+        mapping_path_format = "Z:/LongGong/assets/{0}/{1}/surface/approved/{2}_tex_highTex_mapping.json"
+
+        shot_info = {
+            'id': self.task['shot_id'],
+            'project': self._engine.project()
+        }
+        asset_info = self.database.getShotLinkedAssets(shot_info)
+
+        _set = [x['name'] for x in asset_info if x['type_name'] == "set"]
+        for i in _set:
+            allAbc2 = glob.glob(abc_path.format(seq, i))
+            for abc_path in allAbc2:
+                abc_path = abc_path.replace('\\', '/')
+                abc_name = os.path.basename(abc_path)
+
+                file_name = os.path.basename(abc_path).split('.')[0]
+                asset_task_name = "_".join(file_name.split('_')[1:-1])
+                asset_name = asset_task_name.split("_")[0]
+                num = re.findall(r'\d+$', asset_task_name)
+
+                if num:
+                    l = len(num[0])
+                    asset_task_name = asset_task_name[:-l]
+
+                if asset_task_name.startswith('char'):
+                    asset_type = 'char'
+                elif asset_task_name.startswith('set'):
+                    asset_type = 'set'
+                elif asset_task_name.startswith('prop'):
+                    asset_type = 'prop'
+                else:
+                    asset_type = ''
+
+                mapping_path = mapping_path_format.format(asset_type, asset_name, asset_task_name)
+                mapping_name = os.path.basename(mapping_path)
+                if not os.path.exists(mapping_path):
+                    mapping_path = ''
+                    mapping_name = ''
+
+                mat_path = mapping_path.replace('_mapping.json', '.ma')
+                mat_name = os.path.basename(mapping_path)
+                if not os.path.exists(mat_path):
+                    mat_path = ''
+                    mat_name = ''
+
+                info = {'abc_path': abc_path,
+                        'abc_name': abc_name,
+                        'asset_type': asset_type,
+                        'asset_name': asset_name,
+                        'map_path': mapping_path,
+                        'map_name': mapping_name,
+                        'mat_path': mat_path,
+                        'mat_name': mat_name,
+                        'type': 'nCloth'}
+                result.append(info)
+
+        return result
+
+    def getSetCache(self, seq):
+        result = []
+        lighting_rig_path = 'Z:/LongGong/sequences/{sequence}/lightingRig/approved/scenes/{sequence}_*_lighting_rig.mb'.format(
+            sequence=seq)
+        getFiles = glob.glob(lighting_rig_path)
+        if not getFiles:
+            return []
+
+        for f in getFiles:
+            light_set_path = f.replace('\\', '/')
+
+            abc_path = light_set_path
+            abc_name = os.path.basename(light_set_path)
+
+            setType = abc_name.split('_')[1]
+
+            info = {'abc_path': abc_path,
+                    'abc_name': abc_name,
+                    'asset_type': 'set',
+                    'asset_name': 'Not Link',
+                    'map_path': 'Not Link',
+                    'map_name': 'Not Link',
+                    'mat_path': 'Not Link',
+                    'mat_name': 'Not Link',
+                    'type': 'LightingRig',
+                    'setType': setType}
+
+            result.append(info)
+
+        return result
+
+    def getNClothCache(self, seq, shot):
+        result = []
+        cache_path = 'Z:/LongGong/sequences/{seq}/{shot}/Cache/nCloth/approved/*.abc'.format(seq=seq, shot=shot)
+        mapping_path_format = "Z:/LongGong/assets/{asset_type}/{asset_name}/surface/approved/{asset_name}_tex_highTex_mapping.json"
+        all_abc = glob.glob(cache_path)
+        for abc_path in all_abc:
+            abc_path = abc_path.replace('\\', '/')
+            abc_name = os.path.basename(abc_path)
+
+            file_name = os.path.basename(abc_path).split('.')[0]
+            asset_name, asset_type = self.splitFileName(file_name)
+            mapping_path = mapping_path_format.format(asset_type=asset_type, asset_name=asset_name)
+            mapping_name = os.path.basename(mapping_path)
+            if not os.path.exists(mapping_path):
+                mapping_path = ''
+                mapping_name = ''
+
+            mat_path = mapping_path.replace('_mapping.json', '.ma')
+            mat_name = os.path.basename(mat_path)
+            if not os.path.exists(mat_path):
+                mat_path = ''
+                mat_name = ''
+
+            info = {'abc_path': abc_path,
+                    'abc_name': abc_name,
+                    'asset_type': asset_type,
+                    'asset_name': asset_name,
+                    'map_path': mapping_path,
+                    'map_name': mapping_name,
+                    'mat_path': mat_path,
+                    'mat_name': mat_name,
+                    'type': 'nCloth'}
+
+            result.append(info)
+
+        return result
+
+    def getshotFinalCache(self, seq, shot):
+        result = []
+        module_path = 'Z:/LongGong/sequences/{seq}/{shot}/Cache/shotFinaling/approved/*.abc'.format(seq=seq, shot=shot)
+        mapping_path_format = "Z:/LongGong/assets/{asset_type}/{asset_name}/surface/approved/{asset_name}_tex_highTex_mapping.json"
+        allAbc2 = glob.glob(module_path)
+
+        for abc_path in allAbc2:
+            abc_path = abc_path.replace('\\', '/')
+            abc_name = os.path.basename(abc_path)
+
+            file_name = os.path.basename(abc_path).split('.')[0]
+            asset_name, asset_type = self.splitFileName(file_name)
+
+            mapping_path = mapping_path_format.format(asset_type=asset_type, asset_name=asset_name)
+            mapping_name = os.path.basename(mapping_path)
+            if not os.path.exists(mapping_path):
+                mapping_path = ''
+                mapping_name = ''
+
+            mat_path = mapping_path.replace('_mapping.json', '.ma')
+            mat_name = os.path.basename(mat_path)
+            if not os.path.exists(mat_path):
+                mat_path = ''
+                mat_name = ''
+
+            info = {'abc_path': abc_path,
+                    'abc_name': abc_name,
+                    'asset_type': asset_type,
+                    'asset_name': asset_name,
+                    'map_path': mapping_path,
+                    'map_name': mapping_name,
+                    'mat_path': mat_path,
+                    'mat_name': mat_name,
+                    'type': 'SF'}
+
+            result.append(info)
+
+        return result
+
+    def getSeqNclothCache(self, seq):
+        '''
+        拿到Z:\LongGong\sequences\{Seq}\nCloth\cache文件夹下".abc"文件
+        '''
+        result = []
+        module_path = 'Z:/LongGong/sequences/{seq}/nCloth/cache/*.abc'.format(seq=seq)
+        mapping_path_format = "Z:/LongGong/assets/{asset_type}/{asset_name}/surface/approved/{asset_name}_tex_highTex_mapping.json"
+        allAbc = glob.glob(module_path)
+
+        for abc_path in allAbc:
+            abc_path = abc_path.replace('\\', '/')
+            abc_name = os.path.basename(abc_path)
+
+            file_name = os.path.basename(abc_path).split('.')[0]
+            asset_name, asset_type = self.splitFileName(file_name)
+
+            mapping_path = mapping_path_format.format(asset_type=asset_type, asset_name=asset_name).replace("//", "/")
+            mapping_name = os.path.basename(mapping_path)
+            if not os.path.exists(mapping_path):
+                mapping_path = ''
+                mapping_name = ''
+
+            mat_path = mapping_path.replace('_mapping.json', '.ma')
+            mat_name = os.path.basename(mat_path)
+            if not os.path.exists(mat_path):
+                mat_path = ''
+                mat_name = ''
+
+            info = {'abc_path': abc_path,
+                    'abc_name': abc_name,
+                    'asset_type': asset_type,
+                    'asset_name': asset_name,
+                    'map_path': mapping_path,
+                    'map_name': mapping_name,
+                    'mat_path': mat_path,
+                    'mat_name': mat_name,
+                    'type': 'nCloth'}
+
+            result.append(info)
+
+        return result
+
+    def getAssemblyData(self):
+        seq = self.task['sequence']
+        shot = self.task['shot']
+
+        # camera abc
+        cameraInfo = self.getCameraCahe(seq, shot)
+
+        # nCloth abc
+        nClothInfo = self.getNClothCache(seq, shot)
+
+        # shot final abc
+        sFInfo = self.getshotFinalCache(seq, shot)
+
+        # set abc
+        setInfo = self.getSetCache(seq)
+
+        # set nCloth abc
+        setInfo1 = self.getSetCache1(seq)
+
+        # set Sequence nCloth abc
+        setInfo2 = self.getSeqNclothCache(seq)
+
+        return cameraInfo + nClothInfo + setInfo + sFInfo + setInfo1 + setInfo2
+
+    def displayData(self):
+        self.dataTree.clear()
+        data = self.getAssemblyData()
+        self.allItem = []
+        for inf in data:
+            item = QtWidgets.QTreeWidgetItem(self.dataTree)
+
+            for i in xrange(len(self.headerLabel)):
+                label = self.headerLabel[i]
+
+                if inf['asset_type'] == 'camera':
+                    item.setText(i, inf.get(label))
+                else:
+                    item.setText(i, inf.get(label, '------'))
+                item.setSizeHint(i, QtCore.QSize(500, 25))
+
+            item.setCheckState(0, QtCore.Qt.Checked)
+            item.info = inf
+            self.allItem.append(item)
+
+        return data
+
+    def getSelectData(self):
+        data = []
+        for item in self.allItem:
+            if item.checkState(0) == QtCore.Qt.Checked:
+                data.append(item.info)
+        return data
+
+
+class SceneAssembly(QtWidgets.QDialog):
+
+    def __init__(self, engine, parent=None):
+        super(SceneAssembly, self).__init__(parent)
+        self.resize(800, 550)
+        self.setWindowTitle('Assembly Scene')
+        self._engine = engine
+
+        self._init_wgt()
+
+    def _init_wgt(self):
+        self.shot_wgt = ShotsWidget(self._engine)
+        self.dataWidget = AssemblyDataWidget(self._engine)
+
+        assemble_btn = QtWidgets.QPushButton('Assembly')
+        assemble_btn.clicked.connect(self.assembly)
+
+        btnLay  = QtWidgets.QHBoxLayout()
+        btnLay.addStretch(1)
+        btnLay.addWidget(assemble_btn)
+
+        lay = QtWidgets.QVBoxLayout(self)
+        lay.addWidget(self.shot_wgt)
+        lay.addWidget(self.dataWidget)
+        lay.addLayout(btnLay)
+
+        self.setLayout(lay)
+
+        self.shot_wgt.task_widget.item.clicked.connect(lambda: self.shot_wgt.task_widget.displayData(data))
+
+    def _selectShot(self, info):
+        if info:
+            # self.engine.setParm('shot',info)
+            self.engine.setExtraContext(info)
+            info['shot_id'] = info['id']
+            info['shot'] = info['code']
+            self.dataWidget.task = info
+            self.dataWidget.displayData()
+
+            info['step'] = os.environ['PKMG_STEP']
+            # plcr.setEnv(info)
+
+    def assembly(self):
+        allData = self.dataWidget.getSelectData()
+        self.engine.assemble(allData)
+
+        QtWidgets.QMessageBox(QtWidgets.QMessageBox.Information, 'Message', 'Assembly Finished !').exec_()
 
 
 if __name__ == '__main__':
