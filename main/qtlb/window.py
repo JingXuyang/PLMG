@@ -7,24 +7,22 @@
 #  @Create Time: 2019/12/30 15:15
 #  @Description: 调用widget.py中的基本部件，创建最终显示的窗口。
 # ==============================================================
-import os
-
+import os, re, sys
 import widget
-
 reload(widget)
 from widget import *
 
 sys.path.append(r"E:\LongGong\XSYH\main")
 import utilities
-import engine
-import nodes
 import dbif
 import swif
+from nodes import engine
+from nodes.engines import subengine
 reload(utilities)
-reload(engine)
-reload(nodes)
 reload(dbif)
 reload(swif)
+reload(engine)
+reload(subengine)
 
 # ================================= Global variable =================================
 config_data = engine.getConfigs()
@@ -39,10 +37,35 @@ def refreshData():
     config_data = engine.relaodConfigs()
 
 
-# ================================= Class =================================
-class TaskWidget(QtGui.QWidget):
+def createIter(iter_data):
     '''
-    选择任务的界面
+    创建一个迭代对象
+    @param iter_data: 列表
+    @return: list iterator
+    '''
+    return iter(sorted(iter_data))
+
+
+# ================================= Class =================================
+class ActionThread(QtCore.QThread):
+
+    start = QtCore.Signal(object)
+    finished = QtCore.Signal(object)
+
+    def __init__(self, cls, parent=None):
+        super(ActionThread, self).__init__(parent)
+        self.cls = cls
+
+    def run(self):
+        show_step = self.cls.progressText
+        self.start.emit(show_step)
+        self.cls().run()
+        self.finished.emit('finished')
+
+
+class TaskWidget(QtWidgets.QWidget):
+    '''
+    用来显示任务的窗口
     '''
 
     def __init__(self, data, parent=None):
@@ -54,7 +77,7 @@ class TaskWidget(QtGui.QWidget):
         self._init_wgt()
 
         # -------------------------- layout --------------------------
-        layout = QtGui.QVBoxLayout(self)
+        layout = QtWidgets.QVBoxLayout(self)
         layout.addWidget(self.task_widget)
 
         # -------------------------- single --------------------------
@@ -65,9 +88,7 @@ class TaskWidget(QtGui.QWidget):
         '''
         初始化 tree widget
         '''
-        self.task_widget.header().setResizeMode(QtGui.QHeaderView.ResizeToContents)
-        self.task_widget.setSortingEnabled(True)
-        self.task_widget.sortItems(0, QtCore.Qt.AscendingOrder)
+        self.task_widget.setHeaderStyle()
 
         # 设置header label
         labels = [i.get("label") for i in self.data.get("data") if i.get("show")]
@@ -78,23 +99,13 @@ class TaskWidget(QtGui.QWidget):
         root.setExpanded(True)
         self.task_widget.createItem(parent_item=root, data=self.data.get("sequence"), expand=True)
 
-    def __set_task_env(self):
+    def __set_task_env(self, item):
         '''
         set the task environment
         '''
-        _data = self.getSelection()
-        kwargs = {
-            "XSYH_PROJECT": os.environ.get("XSYH_PROJECT") or "",
-            "XSYH_SEQUENCE": _data.get("sequence") or "",
-            "XSYH_SHOT": _data.get("shot") or "",
-            "XSYH_TYPE": _data.get("type") or "",
-            "XSYH_STEP": _data.get("step") or "",
-            "XSYH_TASK": _data.get("task_name") or "",
-            "XSYH_TASK_STATUS": _data.get("status") or "",
-            "XSYH_ARTIST": _data.get("account") or "",
-            "XSYH_TASK_ID": _data.get("task_id") or "",
-        }
-        utilities.setEnv(kwargs)
+        if not item.childCount():
+            _data = self.getSelection()
+            engine.setTaskEnv(_data)
 
     def _update_items(self, item):
         '''
@@ -151,7 +162,7 @@ class TaskWidget(QtGui.QWidget):
         @return: dict
         '''
         item = self.task_widget.currentItem()
-        if not item.childCount():
+        if item and not item.childCount():
             result = self.task_widget.selectionInfo()
             result[u'sequence'] = item.parent().parent().text(0)
             result[u'shot'] = item.parent().text(0)
@@ -159,7 +170,7 @@ class TaskWidget(QtGui.QWidget):
                 'sequence': result[u'sequence'],
                 'shot': result[u'shot'],
                 'step': result[u'step'],
-                'task': result[u'task_name'],
+                'task_name': result[u'task_name'],
             }
 
             if self.data.get("type") == "asset":
@@ -179,12 +190,89 @@ class TaskWidget(QtGui.QWidget):
 
         return dict()
 
-    def updateFileWgt(self):
-        pass
+
+class MyTaskWidget(QtWidgets.QWidget):
+    '''
+    用来显示任务的窗口
+    '''
+
+    def __init__(self, data, parent=None):
+        super(MyTaskWidget, self).__init__(parent)
+        self.data = data
+
+        # -------------------------- widget --------------------------
+        self.task_widget = MyTreeWidget()
+        self._init_wgt()
+
+        # -------------------------- layout --------------------------
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.addWidget(self.task_widget)
+
+        # -------------------------- single --------------------------
+        self.task_widget.itemExpanded.connect(self._update_items)
+        self.task_widget.itemClicked.connect(self.__set_task_env)
+
+    def _init_wgt(self):
+        '''
+        初始化 tree widget
+        '''
+        self.task_widget.setHeaderStyle()
+
+        # 设置header label
+        labels = [i.get("label") for i in self.data.get("data") if i.get("show")]
+        self.task_widget.setHeaderLabs(labels)
+
+        self._update_items()
+
+    def _update_items(self):
+        '''
+        加载任务窗口的信息
+        '''
+        task_ls = database.userTaskInfo()
+        self.task_widget.createItem(data=task_ls)
+
+    def __set_task_env(self, item):
+        '''
+        set the task environment
+        '''
+        if not item.childCount():
+            _data = self.getSelection()
+            engine.setTaskEnv(_data)
+
+    def getSelection(self):
+        '''
+        @return: dict
+        '''
+        item = self.task_widget.currentItem()
+        if item:
+            result = self.task_widget.selectionInfo()
+
+            task_kwargs = {
+                'sequence': result.get(u'sequence'),
+                'shot': result.get(u'shot'),
+                'step': result.get(u'step'),
+                'task_name': result.get(u'task_name'),
+            }
+
+            if result.get("type") == "asset":
+                task_id = database.getTaskId(model="asset", **task_kwargs)
+                result[u'task_id'] = task_id
+                result[u'asset_type'] = result.get('type')
+                result[u'shot_id'] = database.getInfoId(result.get(u'sequence'), result.get(u'shot'), model="asset")
+            else:
+                task_id = database.getTaskId(**task_kwargs)
+                result[u'task_id'] = task_id
+                result[u'shot_id'] = database.getInfoId(result.get(u'sequence'), result.get(u'shot'))
+
+            return result
+
+        return dict()
 
 
-class FileWidget(QtGui.QWidget):
-
+class FileWidget(QtWidgets.QWidget):
+    '''
+    用来显示文件列表的窗口
+    '''
     def __init__(self, parent=None):
         super(FileWidget, self).__init__(parent)
 
@@ -193,16 +281,14 @@ class FileWidget(QtGui.QWidget):
         self._init_wgt()
 
         # -------------------------- layout --------------------------
-        layout = QtGui.QVBoxLayout(self)
+        layout = QtWidgets.QVBoxLayout(self)
         layout.addWidget(self.file_widget)
 
         # -------------------------- single --------------------------
         # self.file_widget.itemClicked.connect(self.__set_task_env)
 
     def _init_wgt(self):
-        self.file_widget.header().setResizeMode(QtGui.QHeaderView.ResizeToContents)
-        self.file_widget.setSortingEnabled(True)
-        self.file_widget.sortItems(0, QtCore.Qt.AscendingOrder)
+        self.file_widget.setHeaderStyle()
 
         config = config_data.get("global").get("workfile_fields")
 
@@ -210,99 +296,161 @@ class FileWidget(QtGui.QWidget):
         self.header_labs = [i.get("label") for i in config if i.get("show")]
         self.file_widget.setHeaderLabs(self.header_labs)
 
-    def _update_items(self, item_data):
+    def _update_items(self, item_data, work=True):
         '''
         添加item
-        @param item_data:
         '''
-        self.file_widget.clear()
-        file_data = engine.toShowFileMsg(item_data)
-        for file_dic in file_data:
-            root = QtGui.QTreeWidgetItem(self.file_widget)
-            for index in range(self.file_widget.columnCount()):
-                header_label = self.file_widget.headerItem().text(index)
-                root.setText(index, file_dic.get(header_label, ""))
+        if item_data:
+            self.file_widget.clear()
+            file_data = engine.toShowFileMsg(item_data, work)
+            if file_data:
+                for file_dic in file_data:
+                    root = QtWidgets.QTreeWidgetItem(self.file_widget)
+                    for index in range(self.file_widget.columnCount()):
+                        header_label = self.file_widget.headerItem().text(index)
+                        root.setText(index, file_dic.get(header_label, ""))
+                        root.setTextAlignment(index+1, QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter)
+                        if header_label == 'artist':
+                            item_data['name'] = file_dic['file_name']+'.{0}'.format(file_dic['file_type'])
+                            root.setText(index, database.getVersion(item_data, 'artist') or '')
 
     def getSelection(self):
         '''
-        得到选择的任务信息。
+        得到选择的文件信息。
         @return:
         '''
         sl_info = self.file_widget.selectionInfo()
-        sl_info['full_path'] = "{0}/{1}.{2}".format(sl_info['path'], sl_info['file_name'], sl_info['file_type'])
-        return sl_info
+        if sl_info:
+            sl_info['full_path'] = "{0}/{1}.{2}".format(sl_info['path'], sl_info['file_name'], sl_info['file_type'])
+            return sl_info
+        else:
+            return False
 
 
-class TaskLoadWindow(QtGui.QDialog):
+class DescriptionWidget(QtWidgets.QComboBox):
+    '''
+    用来显示文件描述窗口
+    '''
+
+    def __init__(self, _engine, parent=None):
+        super(DescriptionWidget, self).__init__(parent)
+        self._engine = _engine
+        self.updateItems()
+
+    def updateItems(self):
+        '''更新文件描述的下拉窗口'''
+        self.addItems(engine.descriptionItem(self._engine.getStepConfig()))
+
+    def getSelection(self):
+        '''得到当前的选择'''
+        return self.currentText()
+
+
+class SelectTaskWindow(QtWidgets.QDialog):
     '''
     读取界面，包括 选择任务窗口 和 打开文件窗口。
     '''
 
-    def __init__(self, parent=None):
-        super(TaskLoadWindow, self).__init__(parent)
+    # if sw.app() == "maya":
+    #     parent_win = sw.getMayaWindow()
+    # else:
+    #     parent_win = None
 
-        self.setWindowTitle("Load Window")
+    def __init__(self, _engine, parent=None):
+        super(SelectTaskWindow, self).__init__(parent)
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)  # 窗口置顶
+        self.setWindowTitle("Select Task Window")
         self.resize(850, 680)
 
+        self._engine = _engine
+
         # -------------------------------- create widget --------------------------------
-        self.task_widget = self._create_task_wgt()
-        self.asset_widget = self._create_asset_wgt()
-        self.shot_widget = self._create_shot_wgt()
-        self.tab_widget = QtGui.QTabWidget()
-        # self.tab_widget.addTab(self.task_widget, "My Task")
+        # 任务预览窗口
+        self.task_widget = self.create_task_wgt()
+        self.asset_widget = self.create_asset_wgt()
+        self.shot_widget = self.create_shot_wgt()
+        self.tab_widget = QtWidgets.QTabWidget()
+        self.tab_widget.addTab(self.task_widget, "My Task")
         self.tab_widget.addTab(self.asset_widget, "Asset Task")
         self.tab_widget.addTab(self.shot_widget, "Shot Task")
 
-        self.file_widget = self._create_file_wgt()
+        # 文件预览窗口
+        self.submit_file_widget = self.create_file_wgt()
+        self.publish_file_widget = self.create_file_wgt()
+        self.tab_widget1 = QtWidgets.QTabWidget()
+        self.tab_widget1.addTab(self.submit_file_widget, "Submit File")
+        self.tab_widget1.addTab(self.publish_file_widget, "Publish File")
 
-        self.rf_comb = QtGui.QComboBox()
-        self.load_set_lab = QtGui.QLabel("Loading settings:")
+        # 底部控件
+        self.new_btn = QtWidgets.QPushButton('New Scene')
+        self.apply_btn = QtWidgets.QPushButton('Apply Materials')
+        self.apply_btn.setVisible(False)
+        self.rf_comb = QtWidgets.QComboBox()
+        self.load_set_lab = QtWidgets.QLabel("Loading settings:")
         self.rf_comb.addItems(["all", "none", "topOnly"])
         self.rf_comb.setMaximumWidth(70)
-        self.rf_btn = QtGui.QPushButton("reference")
-        self.open_btn = QtGui.QPushButton("open")
+        self.rf_btn = QtWidgets.QPushButton("Reference")
+        self.open_btn = QtWidgets.QPushButton("Open")
+
+        # 垂直分割窗口
+        ver_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        ver_splitter.addWidget(self.tab_widget)
+        ver_splitter.addWidget(self.tab_widget1)
+        ver_splitter.setStretchFactor(0, 1)
+        ver_splitter.setStretchFactor(1, 1)
 
         # -------------------------------- layout --------------------------------
-        main_lay = QtGui.QVBoxLayout()
-        main_lay.addWidget(self.tab_widget)
-        main_lay.addWidget(self.file_widget)
+        self.main_lay = QtWidgets.QVBoxLayout(self)
+        self.main_lay.addWidget(ver_splitter)
 
-        bottom_lay = QtGui.QHBoxLayout()
-        bottom_lay.addStretch()
-        bottom_lay.addWidget(self.load_set_lab)
-        bottom_lay.addWidget(self.rf_comb)
-        bottom_lay.addWidget(self.rf_btn)
-        bottom_lay.addWidget(self.open_btn)
-        main_lay.addLayout(bottom_lay)
-
-        self.setLayout(main_lay)
+        self.bottom_lay = QtWidgets.QHBoxLayout()
+        self.bottom_lay.addWidget(self.new_btn)
+        self.bottom_lay.addWidget(self.apply_btn)
+        self.bottom_lay.addStretch()
+        self.bottom_lay.addWidget(self.load_set_lab)
+        self.bottom_lay.addWidget(self.rf_comb)
+        self.bottom_lay.addWidget(self.rf_btn)
+        self.bottom_lay.addWidget(self.open_btn)
+        self.main_lay.addLayout(self.bottom_lay)
 
         # -------------------------------- signal --------------------------------
         self.task_widget.task_widget.itemClicked.connect(
-            lambda: self.file_widget._update_items(self.tab_widget.currentWidget().getSelection()))
-        self.shot_widget.task_widget.itemClicked.connect(
-            lambda: self.file_widget._update_items(self.tab_widget.currentWidget().getSelection()))
+            lambda: self.submit_file_widget._update_items(self.task_widget.getSelection()))
+        self.task_widget.task_widget.itemClicked.connect(
+            lambda: self.publish_file_widget._update_items(self.task_widget.getSelection(), work=False))
+
         self.asset_widget.task_widget.itemClicked.connect(
-            lambda: self.file_widget._update_items(self.tab_widget.currentWidget().getSelection()))
+            lambda: self.submit_file_widget._update_items(self.asset_widget.getSelection()))
+        self.asset_widget.task_widget.itemClicked.connect(
+            lambda: self.publish_file_widget._update_items(self.asset_widget.getSelection(), work=False))
+
+        self.shot_widget.task_widget.itemClicked.connect(
+            lambda: self.submit_file_widget._update_items(self.shot_widget.getSelection()))
+        self.shot_widget.task_widget.itemClicked.connect(
+            lambda: self.publish_file_widget._update_items(self.shot_widget.getSelection(), work=False))
+
+        self.publish_file_widget.file_widget.itemClicked.connect(self.showApplyBtn)
+
+        self.new_btn.clicked.connect(self._new_scene)
+        self.apply_btn.clicked.connect(self.applyMaterials)
         self.rf_btn.clicked.connect(self._reference_file)
         self.open_btn.clicked.connect(self._open_file)
 
-    def _create_task_wgt(self):
+    def create_task_wgt(self):
         '''
         创建个人任务窗口
         @return:
         '''
         data = config_data.get("global").get("task_load")
         kwargs = {
-            "sequence": database.assetTypes(),
             'project': prj_name,
             "type": "asset",
             "data": data
         }
-        task_widget = TaskWidget(kwargs)
+        task_widget = MyTaskWidget(kwargs)
         return task_widget
 
-    def _create_asset_wgt(self):
+    def create_asset_wgt(self):
         '''
         创建资产任务窗口
         @return:
@@ -317,7 +465,7 @@ class TaskLoadWindow(QtGui.QDialog):
         asset_widget = TaskWidget(kwargs)
         return asset_widget
 
-    def _create_shot_wgt(self):
+    def create_shot_wgt(self):
         '''
         创建镜头任务窗口
         @return:
@@ -332,32 +480,440 @@ class TaskLoadWindow(QtGui.QDialog):
         shot_widget = TaskWidget(kwargs)
         return shot_widget
 
-    def _create_file_wgt(self):
+    def create_file_wgt(self):
         '''
         创建制作文件窗口
         @return:
         '''
         return FileWidget()
 
-    def _open_file(self):
-        file_sl = self.file_widget.getSelection()
+    def getTaskSelectionInfo(self):
+        file_sl = self.tab_widget.currentWidget().getSelection()
         if file_sl:
-            # print file_sl
-            sw.open(file_sl['full_path'])
+            return file_sl
+
+        return None
+
+    def getTaskCurrentTab(self):
+        return self.tab_widget.currentIndex()
+
+    def getFileSelectionInfo(self):
+        file_sl = self.tab_widget1.currentWidget().getSelection()
+        if file_sl:
+            return file_sl
+
+        return None
+
+    def getFileCurrentTab(self):
+        return self.tab_widget1.currentIndex()
+
+    def _new_scene(self):
+        '''
+        新建场景，初始化一些设置
+        '''
+        if self.getTaskSelectionInfo():
+            engine.WorkfileManager('workfile_new')
+        self.close()
+
+    def _open_file(self):
+        file_sl = self.getFileSelectionInfo()
+        if file_sl:
+            # engine.WorkfileManager('workfile_new')
+            sw.open(file_sl['full_path'], loadReferenceDepth=self.rf_comb.currentText(), force=True)
+            self.close()
         else:
             print u"请选择"
 
     def _reference_file(self):
-        file_sl = self.file_widget.getSelection()
+        file_sl = self.tab_widget1.currentWidget().getSelection()
         if file_sl:
-            # print file_sl
-            sw.reference(file_sl['full_path'])
+            sw.reference(file_sl['full_path'], loadReferenceDepth=self.rf_comb.currentText())
+            self.close()
         else:
             print u"请选择"
 
+    def showApplyBtn(self):
+        if self.getFileCurrentTab() == 1:
+            sel_info = self.getTaskSelectionInfo()
+            if sel_info.get('step') == 'Texture':
+                self.apply_btn.setVisible(True)
+        else:
+            self.apply_btn.setVisible(False)
+
+    def applyMaterials(self):
+        if self.getFileCurrentTab() == 1:
+            sel_info = self.getFileSelectionInfo()
+            engine.applyMaterials(sel_info)
+
+
+class CommentWidget(QtWidgets.QDialog):
+    '''
+    添加描述的窗口
+    '''
+    def __init__(self, _engine, title, parent=None):
+        super(CommentWidget, self).__init__(parent)
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)  # 窗口置顶
+        self.setWindowTitle('{} File'.format(title))
+        self.resize(300, 400)
+
+        self._engine = _engine
+
+        elements_frm = self.createTextWidget()
+        self._publishBtn = QtWidgets.QPushButton(title)
+        self._publishBtn.setDisabled(True)
+
+        line = QtWidgets.QFrame()
+        line.setFrameShape(QtWidgets.QFrame.HLine)
+        self._progressLab = QtWidgets.QLabel('Progress')
+        self._progressBar = QtWidgets.QProgressBar()
+        self._progressBar.setRange(0, 100)
+        self._lay1 = QtWidgets.QHBoxLayout()
+        self._lay1.addStretch(1)
+        self._lay1.addWidget(self._publishBtn)
+
+        splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        splitter.addWidget(elements_frm)
+
+        self._lay = QtWidgets.QVBoxLayout()
+        self._lay.addWidget(splitter)
+        self._lay.addLayout(self._lay1)
+        self._lay.addWidget(line)
+        self._lay.addWidget(self._progressLab)
+        self._lay.addWidget(self._progressBar)
+
+        self.setLayout(self._lay)
+
+        self._comments_text.textChanged.connect(lambda: self._publishBtn.setDisabled(False))
+        self._publishBtn.clicked.connect(self.publish)
+
+    def createTextWidget(self):
+        frm = QtWidgets.QFrame()
+        self._step_lab = QtWidgets.QLabel('{0}/{1}/{2}'.format(self._engine.task().get('sequence'),
+                                                           self._engine.task().get('shot'),
+                                                           self._engine.task().get('step')))
+        self._step_lab.setFont(QtGui.QFont("Timers", 15))
+        self._comments_lab = QtWidgets.QLabel('Comments:')
+        self._comments_text = QtWidgets.QPlainTextEdit()
+        lay = QtWidgets.QVBoxLayout()
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(self._step_lab)
+        lay.addWidget(self._comments_lab)
+        lay.addWidget(self._comments_text)
+        frm.setLayout(lay)
+        return frm
+
+    def publish(self):
+        comments = self._comments_text.toPlainText()
+        self._engine.description = comments  # 添加 description 属性
+        self._engine().bindAttr()
+        self.close()
+
+
+class CommentWithSelectAssetWidget(QtWidgets.QDialog):
+    '''
+    带有可以选择物体的描述窗口
+    '''
+    def __init__(self, _engine, title, parent=None):
+        super(CommentWithSelectAssetWidget, self).__init__(parent)
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)  # 窗口置顶
+        self.setWindowTitle('{} File'.format(title))
+        self.resize(500, 600)
+
+        self._engine = _engine
+
+        elements_lay = self._createTextWidget()
+        line = QtWidgets.QFrame()
+        line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.sel_char_ckb = QtWidgets.QCheckBox("Select Character")
+        self.sel_char_ckb.stateChanged.connect(self.selectChar)
+        self.sel_none_ckb = QtWidgets.QCheckBox("Deselect")
+        self.sel_none_ckb.stateChanged.connect(self.deselect)
+        self._publishBtn = QtWidgets.QPushButton(title)
+        self._publishBtn.setDisabled(True)
+        self._progressLab = QtWidgets.QLabel('Progress')
+        self._progressBar = QtWidgets.QProgressBar()
+        self._progressBar.setRange(0, 100)
+
+        self._lay1 = QtWidgets.QHBoxLayout()
+        self._lay1.addStretch(1)
+        self._lay1.addWidget(self._publishBtn)
+        check_lay = QtWidgets.QHBoxLayout()
+        check_lay.addWidget(self.sel_char_ckb)
+        check_lay.addWidget(self.sel_none_ckb)
+        check_lay.addStretch(1)
+        self._lay = QtWidgets.QVBoxLayout(self)
+        self._lay.addLayout(elements_lay)
+        self._lay.addLayout(check_lay)
+        self._lay.addLayout(self._lay1)
+        self._lay.addWidget(line)
+        self._lay.addWidget(self._progressLab)
+        self._lay.addWidget(self._progressBar)
+
+        self._comments_text.textChanged.connect(lambda: self._publishBtn.setDisabled(False))
+        self._publishBtn.clicked.connect(self.publish)
+
+    def _createTextWidget(self):
+        self._step_lab = QtWidgets.QLabel('{0}/{1}/{2}'.format(self._engine.task().get('sequence', ''),
+                                                               self._engine.task().get('shot', ''),
+                                                               self._engine.task().get('step', '')))
+        self._step_lab.setFont(QtGui.QFont("Timers", 15))
+        self.asset_win = SceneAssetWidget()
+
+        self._comments_lab = QtWidgets.QLabel('Comments:')
+        self._comments_text = QtWidgets.QPlainTextEdit()
+        _comment_wgt = QtWidgets.QWidget()
+        lay1 = QtWidgets.QVBoxLayout()
+        lay1.addWidget(self._comments_lab)
+        lay1.addWidget(self._comments_text)
+        _comment_wgt.setLayout(lay1)
+
+        splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        splitter.addWidget(self.asset_win)
+        splitter.addWidget(_comment_wgt)
+        splitter.setStretchFactor(0, 2)
+        splitter.setStretchFactor(1, 1)
+
+        lay = QtWidgets.QVBoxLayout()
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(self._step_lab)
+        lay.addWidget(splitter)
+        return lay
+
+    def selectChar(self):
+        it = QtWidgets.QTreeWidgetItemIterator(self.asset_win._data_tree)
+
+        while it:
+            item = it.value()
+            if not item:
+                break
+
+            name = item.text(0)
+            obj = item.text(1)
+            if obj:
+                if name.startswith('char'):
+                    if self.sel_char_ckb.isChecked():
+                        item.setCheckState(0, QtCore.Qt.Checked)
+                    else:
+                        item.setCheckState(0, QtCore.Qt.Unchecked)
+                else:
+                    item.setCheckState(0, QtCore.Qt.Unchecked)
+
+            it += 1
+
+    def deselect(self):
+        it = QtWidgets.QTreeWidgetItemIterator(self.asset_win._data_tree)
+
+        while it:
+            item = it.value()
+            if not item:
+                break
+
+            name = item.text(0)
+            obj = item.text(1)
+            if obj:
+
+                item.setCheckState(0, QtCore.Qt.Unchecked)
+
+            it += 1
+
+    def publish(self):
+        comments = self._comments_text.toPlainText()
+        # self._engine.description = comments  # 添加 description 属性
+        self._engine.setParm('description', comments)  # 添加 description 属性
+        self._engine.setParm('objects', [i.text(1) for i in self.asset_win.getCheckedItems()])  # 添加选择的物体属性
+        self._engine().bindAttr()
+        self.close()
+
+
+class SubmitWidget(QtWidgets.QDialog):
+    '''
+    提交文件的窗口
+    '''
+    def __init__(self, engine, parent=None):
+        super(SubmitWidget, self).__init__(parent)
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)  # 窗口置顶
+        self.setWindowTitle("Submit File")
+        self.resize(850, 500)
+
+        self._engine = engine
+
+        self.sel_task_wgt = SelectTaskWindow('')
+        self.asset_widget = self.sel_task_wgt.create_asset_wgt()
+        self.shot_widget = self.sel_task_wgt.create_shot_wgt()
+        self.tab_widget = QtWidgets.QTabWidget()
+        self.tab_widget.addTab(self.asset_widget, "Asset Task")
+        self.tab_widget.addTab(self.shot_widget, "Shot Task")
+
+        self.next_btn = QtWidgets.QPushButton('Submit')
+        self.btn_lay = QtWidgets.QHBoxLayout()
+        self.btn_lay.addStretch()
+        self.btn_lay.addWidget(self.next_btn)
+
+        lay = QtWidgets.QVBoxLayout(self)
+        lay.addWidget(self.tab_widget)
+        lay.addLayout(self.btn_lay)
+
+        self.asset_widget.task_widget.itemClicked.connect(self.changeDesItem)
+        self.shot_widget.task_widget.itemClicked.connect(self.changeDesItem)
+        self.next_btn.clicked.connect(self.next)
+
+    def changeDesItem(self, item):
+        '''
+        更新文件描述下拉窗口
+        '''
+        if engine.descriptionItem(self._engine.getStepConfig()):
+            if not hasattr(self, 'des_comp'):
+                if not item.childCount():
+                    self.des_lab = QtWidgets.QLabel('File description:')
+                    self.des_comp = DescriptionWidget(self._engine)
+                    self.des_comp.setMinimumWidth(50)
+                    self.des_comp.setMinimumHeight(25)
+                    self.btn_lay.insertWidget(0, self.des_lab)
+                    self.btn_lay.insertWidget(1, self.des_comp)
+            else:
+                self.des_comp.clear()
+                self.des_comp.updateItems()
+
+    def next(self):
+        sel_info = self.tab_widget.currentWidget().getSelection()
+        if sel_info:
+            if hasattr(self, 'des_comp'):
+                self._engine.file_description = self.des_comp.currentText()  # 添加 file_description
+            self.close()
+            # 打开检查窗口
+            s = CheckingWidget(subengine.CheckingEngine, self._engine, self)
+            s.show()
+        else:
+            print u'请选择环节'
+
+
+class PublishWidget(QtWidgets.QDialog):
+    '''
+    发布文件的窗口
+    '''
+    def __init__(self, engine, parent=None):
+        super(PublishWidget, self).__init__(parent)
+
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)  # 窗口置顶
+        self.setWindowTitle("Publish File")
+        self.resize(850, 500)
+        self._engine = engine
+
+        self.sel_task_wgt = SelectTaskWindow('')
+        self.asset_widget = self.sel_task_wgt.create_asset_wgt()
+        self.shot_widget = self.sel_task_wgt.create_shot_wgt()
+        self.tab_widget = QtWidgets.QTabWidget()
+        self.tab_widget.addTab(self.asset_widget, "Asset Task")
+        self.tab_widget.addTab(self.shot_widget, "Shot Task")
+
+        self.next_btn = QtWidgets.QPushButton('Publish')
+        self.btn_lay = QtWidgets.QHBoxLayout()
+        self.btn_lay.addStretch()
+        self.btn_lay.addWidget(self.next_btn)
+
+        lay = QtWidgets.QVBoxLayout(self)
+        lay.addWidget(self.tab_widget)
+        lay.addLayout(self.btn_lay)
+
+        self.next_btn.clicked.connect(self.next)
+
+    def next(self):
+        sel_info = self.tab_widget.currentWidget().getSelection()
+        if sel_info:
+            self.close()
+            # 打开检查窗口
+            s = CheckingWidget(subengine.CheckingEngine, self._engine, self)
+            s.show()
+        else:
+            print u'请选择环节'
+
+
+class CheckingWidget(QtWidgets.QDialog):
+    '''
+    检查窗口
+    '''
+    def __init__(self, _engine, par_engine='', parent=None):
+        super(CheckingWidget, self).__init__(parent)
+        self.resize(800, 550)
+        self._engine = _engine
+        self._par_engine = par_engine
+        self.setWindowTitle("check and fix >>> {}".format(self._engine.task().get('step')))
+
+        self._init_ui()
+
+    def _init_ui(self):
+        # create check widget
+        import check_widget
+        reload(check_widget)
+        from check_widget import CheckWidget
+        self.check_win = CheckWidget(self._engine, self)
+        self.next_btn = QtWidgets.QPushButton('Next')
+        self.next_btn.setEnabled(False)
+
+        # create layout
+        lay2 = QtWidgets.QHBoxLayout()
+        lay2.addStretch()
+        lay2.addWidget(self.next_btn)
+        main_lay = QtWidgets.QVBoxLayout(self)
+        main_lay.addWidget(self.check_win)
+        main_lay.addLayout(lay2)
+
+        self.next_btn.clicked.connect(self.nextAction)
+
+    def nextAction(self):
+        self.close()
+        # 打开提交窗口
+        if self._par_engine.__name__ == 'SubmitEngine':
+            wgt_name = self._par_engine.getStepConfig().get('submit_widget', 'CommentWidget')
+            this_module = sys.modules[__name__]  # __name__表示当前文件
+            print getattr(this_module, wgt_name)
+            s = getattr(this_module, wgt_name)(self._par_engine, 'Submit')
+        else:
+            wgt_name = self._par_engine.getStepConfig().get('publisher_widget', 'CommentWidget')
+            this_module = sys.modules[__name__]  # __name__表示当前文件
+            s = getattr(this_module, wgt_name)(self._par_engine, 'Publish')
+        s.show()
+
+
+class SceneAssetWidget(QtWidgets.QWidget):
+    '''
+    选择场景物体的窗口
+    '''
+    def __init__(self, parent=None):
+        super(SceneAssetWidget, self).__init__(parent)
+        self._init_wgt()
+
+    def _init_wgt(self):
+        self._data_tree = self.createDataTree()
+        lay = QtWidgets.QVBoxLayout(self)
+        lay.addWidget(self._data_tree)
+
+    def createDataTree(self):
+        _init_Data = sw.getReferenceObjects()
+        data_tree = MyTreeWidget()
+        data_tree.setHeaderStyle()
+        data_tree.setHeaderLabels(['asset', 'object'])
+        if _init_Data:
+            for item in _init_Data:
+                first_root = QtWidgets.QTreeWidgetItem(data_tree)
+                first_root.setExpanded(True)
+                duplicate_num = re.findall(r'\d', item.get('namespace'))
+                if duplicate_num:
+                    first_root.setText(0, item.get('name').split('_')[0] + str(duplicate_num[0]))
+                else:
+                    first_root.setText(0, item.get('name').split('_')[0])
+                second_root = QtWidgets.QTreeWidgetItem(first_root)
+                second_root.setCheckState(0, QtCore.Qt.Checked)
+                second_root.setText(0, item.get('name'))
+                second_root.setText(1, item.get('full_name'))
+        return data_tree
+
+    def getCheckedItems(self):
+        return self._data_tree.getCheckedItems()
+
 
 if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
-    win = TaskLoadWindow()
+    app = QtWidgets.QAPPliction([])
+    win = SceneAssetWidget()
     win.show()
-    sys.exit(app.exec_())
+    app.exec_()

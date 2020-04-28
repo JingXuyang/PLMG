@@ -62,15 +62,6 @@ def load_yaml(path):
     return False
 
 
-def setEnv(dicts):
-    '''
-    设置环境变量
-    @param dicts: 环境变量字典
-    '''
-    for key, val in dicts.iteritems():
-        os.environ[key] = val
-
-
 def filterType(path, file_typ=""):
     '''
     :param path: 路径
@@ -137,9 +128,8 @@ def makeFolder(path):
     '''
     创建文件夹
     '''
-    folder = os.path.dirname(path)
-    if not os.path.isdir(folder):
-        os.makedirs(folder)
+    if not os.path.exists(path):
+        os.makedirs(path)
 
 
 def copyFile(src, dst):

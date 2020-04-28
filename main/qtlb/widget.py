@@ -9,19 +9,32 @@
 import sys
 from functools import partial
 
-import engine
-from PySide import QtGui
-from PySide import QtCore
+from Qt import QtGui
+from Qt import QtWidgets
+from Qt import QtCore
 
 
-class MyTreeWidget(QtGui.QTreeWidget):
+class MyTreeWidget(QtWidgets.QTreeWidget):
 
     def __init__(self, parent=None):
         super(MyTreeWidget, self).__init__(parent)
-        # self.setStyleSheet("QTreeWidget::item{height:40px;}")
+        self.customStyle()
+
+    def customStyle(self, size=9, item_h=15):
+        '''设置字体样式'''
+        font = QtGui.QFont()
+        font.setPointSize(size)
+        self.setFont(font)
+        self.setStyleSheet("QTreeWidget::item{height:%spx;}" % (item_h))
 
     def setHeaderLabs(self, labels):
+        '''设置表头'''
         self.setHeaderLabels(labels)
+
+    def setHeaderStyle(self):
+        self.header().setResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+        self.setSortingEnabled(True)
+        self.sortItems(0, QtCore.Qt.AscendingOrder)
 
     def createItem(self, parent_item="", data="", expand=False):
         '''
@@ -39,34 +52,55 @@ class MyTreeWidget(QtGui.QTreeWidget):
         @return: class item
         '''
         data = data if isinstance(data, list) else [data]
+
         if parent_item:
             parent_item.takeChildren()
             for each in data:
+                root = QtWidgets.QTreeWidgetItem(parent_item)
                 if isinstance(each, dict):
-                    root = QtGui.QTreeWidgetItem(parent_item)
+                    index = 1
                     for sign, text in each.items():
+                        root.setTextAlignment(index, QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter)
                         if isinstance(text, tuple):
-                            root.setText(self.getHeaderIndex(text[1]), text[0])
+                            header_index = self.getHeaderIndex(text[1])
+                            if header_index >= 0:
+                                root.setText(header_index, text[0])
                         else:
-                            if self.getHeaderIndex(text):
-                                root.setText(self.getHeaderIndex(text), text)
+                            header_index = self.getHeaderIndex(sign)
+                            if header_index >= 0:
+                                root.setText(header_index, text)
+                        index += 1
                 else:
-                    root = QtGui.QTreeWidgetItem(parent_item)
                     root.setText(0, each)
                     if expand:
-                        QtGui.QTreeWidgetItem(root)
+                        QtWidgets.QTreeWidgetItem(root)
             return root
+
         else:
-            for text in data:
-                root = QtGui.QTreeWidgetItem(self)
-                root.setText(0, text)
-                if expand:
-                    QtGui.QTreeWidgetItem(root)
+            for each in data:
+                root = QtWidgets.QTreeWidgetItem(self)
+                if isinstance(each, dict):
+                    index = 1
+                    for sign, text in each.items():
+                        root.setTextAlignment(index, QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter)
+                        if isinstance(text, tuple):
+                            header_index = self.getHeaderIndex(text[1])
+                            if header_index >= 0:
+                                root.setText(header_index, text[0])
+                        else:
+                            header_index = self.getHeaderIndex(sign)
+                            if header_index >= 0:
+                                root.setText(header_index, text)
+                        index += 1
+                else:
+                    root.setText(0, each)
+                    if expand:
+                        QtWidgets.QTreeWidgetItem(root)
             return root
 
     def getItemLevel(self, item):
         '''
-        得到item的层级
+        得到item所在的层级
         @param item: item object
         @return: int
         '''
@@ -81,7 +115,7 @@ class MyTreeWidget(QtGui.QTreeWidget):
 
     def getHeaderIndex(self, header_name):
         '''
-        返回 header_name 在表头的位置
+        返回 header_name 在表头的序号
         @param header_name: text
         @return: int
         '''
@@ -106,6 +140,94 @@ class MyTreeWidget(QtGui.QTreeWidget):
         else:
             return False
 
+    def getCheckedItems(self):
+        child_root = []
+        it = QtWidgets.QTreeWidgetItemIterator(self)
+        while it:
+            item = it.value()
+            if not item:
+                break
+            if not item.childCount() and item.checkState(0).name == 'Checked':
+                child_root.append(item)
+            it += 1
+        return child_root
+
+    def getParentList(self, child_root, result):
+        '''
+        根据子节点查找父节点
+        '''
+        result.append(child_root.text(0))
+        par_root = child_root.parent()
+        if par_root:
+            self.getParentList(par_root, result)
+
+    def getRootLevel(self):
+        '''
+        得到所有子节点的全部层级:
+        例如树：
+            a
+            |__b
+               |__c
+               |__b
+        返回：
+            [
+                ['a', 'b', 'c'],
+                ['a, 'b', 'b']
+            ]
+        @return: list
+        '''
+        child_root = []
+        it = QtWidgets.QTreeWidgetItemIterator(self)
+        while it:
+            item = it.value()
+            if not item:
+                break
+            if not item.childCount():
+                child_root.append(item)
+            it += 1
+
+        result = []
+        for i in child_root:
+            temp = []
+            self.getParentList(i, temp)
+            result.append(temp[::-1])
+        return result
+
+
+class MyTableWidget(QtWidgets.QTableWidget):
+
+    def __init__(self, parent=None):
+        super(MyTableWidget, self).__init__(parent)
+
+        self.customStyle()
+
+    def customStyle(self):
+        self.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)  # 设置只可以单选，可以使用ExtendedSelection进行多选
+        self.setSortingEnabled(True)  # 设置表头可以自动排序
+        self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)  # 设置不可编辑
+        self.setAlternatingRowColors(True)
+        self.setFrameStyle(QtWidgets.QFrame.NoFrame)
+
+    def getItem(self, row='', column=0):
+        row_count = self.rowCount()
+        for _row in range(row_count):
+            if _row == row:
+                return self.item(_row, column)
+
+    def getAllRows(self, column):
+        result = list()
+        row_count = self.rowCount()
+        for _row in range(row_count):
+            result.append(self.item(_row, column))
+        return result
+
+    def getRowState(self):
+        result = list()
+        row_count = self.rowCount()
+        for _row in range(row_count):
+            result.append((self.item(_row, 0), self.item(_row, 0).checkState().name))
+        return result
+
 
 if __name__ == '__main__':
     data = {
@@ -115,7 +237,7 @@ if __name__ == '__main__':
 
     }
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     win = MyTreeWidget(data)
     win.show()
     sys.exit(app.exec_())

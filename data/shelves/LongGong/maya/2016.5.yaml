@@ -1,4 +1,4 @@
-menu_name: XSYH Toolkit
+menu_name: MagicHill Toolkit
 items:
   - type: line
     label: "line"
@@ -8,6 +8,18 @@ items:
     type: item
     icon: ""
     tool: open file
+
+  - name: publisher
+    label: "Submit"
+    type: item
+    icon: ""
+    tool: submit file
+
+  - name: publisher
+    label: "Publish"
+    type: item
+    icon: ""
+    tool: publish file
 
   - type: line
     label: "line"

@@ -26,7 +26,7 @@ global:
 
   shot_load:
     - {label: sequence, sign: "shot.eps_name", show: true}
-    - {label: shot_name, sign: "shot.shot", show: true}
+    - {label: shot, sign: "shot.shot", show: true}
     - {label: step, sign: "task.pipeline", show: true}
     - {label: task_name, sign: "task.task_name", show: true}
     - {label: artist, sign: "task.artist", show: true}
@@ -57,6 +57,7 @@ global:
     - {label: step, sign: "task.pipeline", show: true}
     - {label: task_name, sign: "task.task_name", show: true}
     - {label: artist, sign: "task.artist", show: true}
+    - {label: asset_typ, sign: "asset.type_name", show: false}
     - {label: account, sign: "task.account", show: true}
     - {label: chinese_name, sign: "asset.cn_name", show: true}
     - {label: task_status, sign: "task.status", show: true}
@@ -78,16 +79,17 @@ global:
 
   task_load:
     - {label: project, show: true}
-    - {label: type, sign: "asset.cn_name", show: true}
-    - {label: sequence, sign: "task.pipeline", show: true}
-    - {label: shot, sign: "task.pipeline", show: true}
-    - {label: chinese_name, sign: "task.pipeline", show: true}
-    - {label: step, sign: "task.status", show: true}
-    - {label: task_name, sign: "task.create_time", show: true}
-    - {label: status, sign: "asset.asset", show: true}
-    - {label: start_data, sign: "asset.asset", show: true}
-    - {label: first_frame, sign: "asset.asset", show: true}
-    - {label: last_frame, sign: "asset.asset", show: true}
+    - {label: type, show: true}
+    - {label: sequence, sign: "shot.eps_name", show: true}
+    - {label: shot, sign: "shot.shot", show: true}
+    - {label: chinese_name, sign: "asset.cn_name", show: true}
+    - {label: step, sign: "task.pipeline", show: true}
+    - {label: task_name, sign: "task.task_name", show: true}
+    - {label: status, sign: "task.status", show: true}
+    - {label: start_time, sign: "task.assign_time", show: true}
+    - {label: asset_name, sign: "asset.asset_name", show: false}
+    - {label: asset_typ, sign: "asset.type_name", show: false}
+    - {label: description, sign: "asset.asset", show: true}
 
   task_fields:
     - {label: Entity Type, name: entity_type, show: false,
@@ -121,11 +123,11 @@ global:
   workfile_fields:
     - {label: file_name, show: true}
     - {label: file_type, show: true}
-    - {label: artist, show: false}
-    - {label: size, name: size, show: true}
-    - {label: modified_Time, show: true}
-    - {label: path, name: path, show: true}
+    - {label: artist, show: true}
     - {label: description, show: true}
+    - {label: modified_Time, show: true}
+    - {label: size, name: size, show: true}
+    - {label: path, name: path, show: true}
 
   version_fields:
     - {label: Entity Type, name: entity_type, show: false,
@@ -156,34 +158,396 @@ global:
     - {label: Files, name: files, show: false,
        type: json}
 
+  unit: centimeter
+  first_frame: 101
+  fps: 24
+  resolution:
+    - 1920
+    - 818
+
   workfile_format:
     nuke: nk
     houdini: hip
     maya:
-        - mb
-        - ma
-        - abc
+      - mb
+      - ma
+
+  workfile_new_actions:
+    - type: NewScene
+
+    - type: SetSceneFrameRange
+#
+    - type: SetSceneResolution
+#
+    - type: CreateSceneHierachy
+
+  workfile_open_actions:
+    - type: SetEnvContext
+
+    - type: OpenScene
+      parms:
+        input: '{engine_parm_filepath}'
+
+    - type: MakeFileOpenRecord
+
 
 Model:
 
-  filename_pattern: '{shot}_{GetTaskName}_{description}_{step}_{description}_v###.{workfile_format}'
-
   work_path: '{step}_work'
   publish_path: '{step}_publish'
+
+  submit_widget: CommentWidget
+  publisher_widget: CommentWidget
+
+  workfile_filename_description_items:
+    - name: HighResolution
+      short_name: high
+    - name: ENVIR
+      short_name: ENVIR
+    - name: LowResolution
+      short_name: low
+    - name: MidResolution
+      short_name: mid
+
+  hierachy:
+    - name: '{shot}*GRP'
+      subs:
+        - name: model_grp
+
+  workfile_pattern: '{shot}_{GetTaskName}_{step}_{file_description}_v###.mb'
+
+  checking_items:
+    - name: RenameDuplicateShape
+      must: 0
+    - name: DeleteOrig
+      must: 0
+    - name: Hierachy
+      must: 0
+    - name: ExtraNamespaces
+      must: 0
+    - name: Freezed
+      must: 0
+    - name: SceneUnit
+      must: 0
+    - name: CheckUnknown
+      must: 1
+    - name: DelHistory
+      must: 0
+    - name: FreezeTr
+      must: 0
+    - name: CheckUnknownPlugin
+      must: 0
+    - name: NonManifoldPolys
+      must: 0
+    - name: CheckAovs
+      must: 0
+    - name: CheckFacesWithHoles
+      must: 0
+#    - name: CheckTriangleFace
+#      must: 0
+    - name: CleanHistory
+      must: 0
+    - name: DeleteUnlinkedShape
+      must: 0
+    - name: CleanDistanceBetweenNodes
+      must: 0
+    ################# clear Node Tool ####################
+    - name: DeleteTurtleObject
+      must: 0
+    - name: DeleteUselessGroupId
+      must: 0
+    - name: DeleteAiOptions
+      must: 0
+    - name: DeleteAiAOVDriver
+      must: 0
+    - name: DeleteDeleteComponentNode
+      must: 0
+    - name: DeleteUselessXgenNode
+      must: 0
+    - name: DeleteUselessRenderSetupNode
+      must: 0
+    - name: DeleteUselessSGNode
+      must: 0
+    - name: DeleteUselessNodeGraphEditorInfoNode
+      must: 0
+    - name: DeleteUselessMaterialInfoNode
+      must: 0
+    - name: DeleteDataStructure
+      must: 0
+    - name: DeleteHyperLayoutNode
+      must: 0
+    - name: DeleteHyperViewNode
+      must: 0
+    - name: DeleteNodeGraphEditorBookmarkInfoNode
+      must: 0
+    - name: DeleteDataReferenceEditsNode
+      must: 0
+    - name: DeleteUselessReference
+      must: 0
+    - name: DeleteUselessScript
+      must: 0
+    - name: DeleteUselessExpression
+      must: 0
+    - name: DeleteUselessCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnSurfaceInfo
+      must: 0
+    - name: DeleteUselessClosestPointOnSurface
+      must: 0
+    - name: DeleteUselessDistanceBetween
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessPolyUnite
+      must: 0
+    - name: DeleteUselessBlendWeighted
+      must: 0
+    - name: DeleteUselessAnimCurve
+      must: 0
+    - name: DeleteUselessGroupParts
+      must: 0
+    - name: DeleteUselessPartition
+      must: 0
+    - name: DeleteUselessPoseInterpolatorManager
+      must: 0
+    - name: DeleteUselessShapeEditorManager
+      must: 0
+    - name: DeleteUselessTrackInfoManager
+      must: 0
+    - name: DeleteUselessCameraView
+      must: 0
+    - name: DeleteUselessBlindDataTemplate
+      must: 0
+    - name: DeleteUselessConstraint
+      must: 0
+    - name: DeleteUselessObjectSet
+      must: 0
 
   workfile_save_actions:
     - name: workfile_root
       type: GetPathFromTag
       parms:
         input: '{step}_work'
+        output: 'None'
 
     - type: GetFilename
       parms:
         input: '{current_file}'
 
+    - type: DeleteUnknown
+
     - type: SaveAsScene
       parms:
         input: '{workfile_root}/{GetFilename}'
+
+  workfile_saveas_actions:
+    - type: DeleteUnknown
+
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetTaskName
+
+    - type: ModelVersionUp
+      parms:
+        input: '{workfile_root}/{shot}_{GetTaskName}_{step}_v###_{file_description}.{workfile_format}'
+
+    - type: SetModelNotes
+
+    - type: SaveAsScene
+      parms:
+        input: '{ModelVersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        files: '{SaveAsScene}'
+        part: Model
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile
+
+#    - type: SubmitCharVersionDatabase
+#      parms:
+#        input: '{VersionUp}'
+
+  publisher_actions:
+    - type: SetLowViwer
+      parms:
+        wireframe: true
+
+    - type: SaveScene
+      parms:
+        format: '{workfile_format}'
+
+    # Copy to versions folder
+    - type: SetModelNotes
+
+    - name: VersionRoot
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish_versions'
+
+    - name: CopyFile1
+      type: CopyFile
+      parms:
+        input: '{current_file}'
+        output: '{VersionRoot}/{current_file_basename}.mb'
+
+    - name: history_abc_path
+      type: keepName
+      parms:
+        input: '{VersionRoot}/{current_file_basename}.abc'
+
+    - type: GetLayer
+      parms:
+        layer_name: 'model_GRP'
+        json_path: '{VersionRoot}/{current_file_basename}.json'
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{current_file}'
+        pattern: 'v###'
+
+    - name: level
+      type: SplitString
+      parms:
+        input: '{current_file_basename}'
+        splitter: '_'
+        index: 2
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{VersionRoot}/info.json'
+        name: '{GetFilename}'
+        version: '{version}'
+        level: '{level}'
+        part: Model
+        thumbnail: ''
+        description: '{description}'
+        version_type: publish
+
+    # Copy to final folder
+    - name: VersionRoot2
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish'
+
+    - name: new_filename
+      type: GetFileBaseName
+      parms:
+        input: '{current_file}'
+
+    - name: new_basename
+      type: ReplaceString
+      parms:
+        input: '{new_filename}'
+        replace: '_v\d+'
+        to: ''
+
+    - name: CopyFile2
+      type: CopyFile
+      parms:
+        input: '{current_file}'
+        output: '{VersionRoot2}/{new_basename}.mb'
+
+    - type: CopyFile
+      parms:
+        input: '{GetLayer}'
+        output: '{VersionRoot2}/{new_basename}.json'
+
+    - type: ExportAbc
+      parms:
+        input: '{top_level_meshes}'
+        output: '{VersionRoot2}/{new_basename}.abc'
+        single_frame: 1
+
+    - type: CopyFile
+      parms:
+        input: '{ExportAbc}'
+        output: '{history_abc_path}'
+
+    - type: SubmitApprovedDatabase
+      parms:
+        input: '{CopyFile2}'
+
+    - type: SendMessage
+      parms:
+        file_path: '{VersionRoot2}'
+        discription: '{description}'
+
+    - name: PublishRoot
+      type: GetPathFromTag
+      parms:
+        input: '{step}_preview'
+
+    - name: movie_path
+      type: VersionUp
+      parms:
+        input: '{PublishRoot}/{current_file_basename}.mov'
+
+    - type: SetSceneActiveViewAttributes
+      parms:
+        input:
+        # filmPivot: 1
+        # filmOrigin: 1
+        # safeAction: 1
+        # resolution: 1
+        # gateMask: 1
+
+    - type: MakeSceneTurntablePlayblast1
+      parms:
+        output: '{PublishRoot}/{current_file_basename}.mov'
+        scale: 100
+        quality: 100
+        movie_codec: 'Photo - JPEG'
+        frame_range:
+          - 1
+          - 180
+        resolution:
+          - 1920
+          - 818
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{PublishRoot}/{current_file_basename}.mov'
+        pattern: 'v###'
+
+    - name: movie_path
+      type: GetFilename
+      parms:
+        input: '{PublishRoot}/{current_file_basename}.mov'
+
+    - type: SubmitApprovedDatabase
+      parms:
+        input: '{PublishRoot}/{current_file_basename}.mov'
+
+    - type: ChangePublish
+      parms:
+        file_path: '{current_file_basename}'
 
 
 Texture:
@@ -191,6 +555,122 @@ Texture:
   work_path: '{step}_work'
   publish_path: '{step}_publish'
 
+  submit_widget: CommentWidget
+  publisher_widget: CommentWidget
+
+  workfile_filename_description_items:
+    - name: HighResolutionTexture
+      short_name: highTex
+      description: The high res model Material & Texture completed
+    - name: HighResolutionUV
+      short_name: highUV
+      description: The high res model UV completed
+    - name: HighResolutionABC
+      short_name: highABC
+      description: The file containing the alembic link information
+    - name: ENVIR
+      short_name: ENVIR
+
+  checking_items:
+    - name: Hierachy
+      must: 0
+    - name: ExtraNamespaces
+      must: 0
+    - name: Freezed
+      must: 0
+    - name: SceneUnit
+      must: 0
+    - name: CheckLayer
+      must: 0
+    - name: CheckUnknown
+      must: 0
+    - name: CheckUnknownPlugin
+      must: 0
+    - name: DeleteExtraMaterial
+      must: 0
+    - name: CheckAovs
+      must: 0
+    - name: CleanDistanceBetweenNodes
+      must: 0
+    - name: DeleteTurtleObject
+      must: 0
+    - name: DeleteUselessGroupId
+      must: 0
+    - name: DeleteAiOptions
+      must: 0
+    - name: DeleteAiAOVDriver
+      must: 0
+    - name: DeleteDeleteComponentNode
+      must: 0
+    - name: DeleteUselessXgenNode
+      must: 0
+    - name: DeleteUselessRenderSetupNode
+      must: 0
+    - name: DeleteUselessSGNode
+      must: 0
+    - name: DeleteUselessNodeGraphEditorInfoNode
+      must: 0
+    - name: DeleteUselessMaterialInfoNode
+      must: 0
+    - name: DeleteDataStructure
+      must: 0
+    - name: DeleteHyperLayoutNode
+      must: 0
+    - name: DeleteHyperViewNode
+      must: 0
+    - name: DeleteNodeGraphEditorBookmarkInfoNode
+      must: 0
+    - name: DeleteDataReferenceEditsNode
+      must: 0
+    - name: DeleteUselessReference
+      must: 0
+    - name: DeleteRenderLayer
+      must: 0
+    - name: DeleteRenderSetupLayer
+      must: 0
+    - name: DeleteUselessScript
+      must: 0
+    - name: DeleteUselessExpression
+      must: 0
+    - name: DeleteUselessCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnSurfaceInfo
+      must: 0
+    - name: DeleteUselessClosestPointOnSurface
+      must: 0
+    - name: DeleteUselessDistanceBetween
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessPolyUnite
+      must: 0
+    - name: DeleteUselessBlendWeighted
+      must: 0
+    - name: DeleteUselessAnimCurve
+      must: 0
+    - name: DeleteUselessGroupParts
+      must: 0
+    - name: DeleteUselessPartition
+      must: 0
+    - name: DeleteUselessPoseInterpolatorManager
+      must: 0
+    - name: DeleteUselessShapeEditorManager
+      must: 0
+    - name: DeleteUselessTrackInfoManager
+      must: 0
+    - name: DeleteUselessCameraView
+      must: 0
+    - name: DeleteUselessBlindDataTemplate
+      must: 0
+    - name: DeleteUselessConstraint
+      must: 0
+    - name: DeleteUselessObjectSet
+      must: 0
+
   workfile_save_actions:
     - name: workfile_root
       type: GetPathFromTag
@@ -204,6 +684,190 @@ Texture:
     - type: SaveAsScene
       parms:
         input: '{workfile_root}/{GetFilename}'
+
+  workfile_saveas_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetTaskName
+
+    - type: ModelVersionUp
+      parms:
+        input: '{workfile_root}/{shot}_{GetTaskName}_{step}_v###_{file_description}.mb'
+
+    - type: SaveAsScene
+      parms:
+        input: '{ModelVersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        part: Texture
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile
+
+  publisher_actions:
+    - type: SaveScene
+      parms:
+        format: 'mb'
+
+    # Copy to versions folder
+    - name: HistoryPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish_versions'
+
+#    - name: mat_path
+#      type: VersionUp
+#      parms:
+#        input: '{HistoryPath}/{current_file_basename}.ma'
+
+    - name: mat_path
+      type: keep
+      parms:
+        input: '{HistoryPath}/{current_file_basename}.ma'
+
+    - name: target_basename
+      type: GetFileBaseName
+      parms:
+#        input: '{mat_path}'
+        input: '{HistoryPath}/{current_file_basename}.ma'
+
+    - type: GetSceneMaterials
+      parms:
+        remove_namespace: true
+
+    - type: ExportMaterials
+      parms:
+        input: '{current_file}'
+#        output: '{mat_path}'
+        output: '{HistoryPath}/{current_file_basename}.ma'
+        generate_mapping: false
+        materials: '{GetSceneMaterials}'
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+#        input: '{mat_path}'
+        input: '{HistoryPath}/{current_file_basename}.ma'
+        pattern: 'v###'
+
+    - name: level
+      type: SplitString
+      parms:
+        input: '{current_file_basename}'
+        splitter: '_'
+        index: 2
+
+    - type: NewMakePublishInfoFile
+      parms:
+#        output: '{mat_path}'
+        output: '{HistoryPath}/{current_file_basename}.ma'
+        part: Texture
+        description: '{description}'
+        version: '{version}'
+        thumbnail: '{GetSceneMaterials}'
+        name: '{current_filename}'
+        version_type: publish
+
+    # Copy to final folder
+    - name: ApprovedPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish'
+
+    - name: latest_basename
+      type: ReplaceString
+      parms:
+        input: '{current_file_basename}'
+        replace: '_v\d+'
+        to: ''
+
+#    - type: TextureExportArchive
+#      parms:
+#        path: '{ApprovedPath}/{latest_basename}.ma'
+#        exportArchive: '{engine_parm_exportArchive}'
+
+    - type: ExportTextures3
+      parms:
+        output: '{ApprovedPath}/sourceimages'
+
+    - type: replaceTexturePath
+      parms:
+        input: '{ExportTextures3}'
+        replaceTo: 'new'
+
+    - name: ApprovedMa
+      type: ExportMaterials
+      parms:
+        input: '{current_file}'
+        output: '{ApprovedPath}/{latest_basename}.ma'
+        mapping_filename: '{latest_basename}_mapping'
+
+    - type: replaceTexturePath
+      parms:
+        input: '{ExportTextures3}'
+        replaceTo: 'old'
+
+    - name: abc_path
+      type: keepName
+      parms:
+        input: '{ApprovedPath}/{latest_basename}.abc'
+
+    - type: ExportAbc
+      parms:
+        input: '{top_level_meshes}'
+        output: '{abc_path}'
+        single_frame: 1
+
+    - type: TransferUV
+      parms:
+        uv_path: '{abc_path}'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{ApprovedMa}'
+        part: Texture
+        description: '{description}'
+        version: '{version}'
+        thumbnail: '{GetSceneMaterials}'
+        name: '{latest_basename}.ma'
+        version_type: publish
+
+    - type: SubmitApprovedDatabase
+      parms:
+        input: '{ApprovedMa}'
+
+    - type: SendMessage
+      parms:
+        file_path: '{ApprovedMa}'
+        discription: '{engine_parm_description}'
+
+    - type: ChangePublish
+      parms:
+        file_path: '{current_file_basename}'
+
+#    - type: UploadFiles1
+#      parms:
+#        hist_path: '{mat_path}'
+#        appr_path: '{ApprovedMa}'
+#        movie_path: '{ApprovedPath}/{latest_basename}_mapping.json'
 
 
 Rig:
@@ -211,6 +875,124 @@ Rig:
   work_path: '{step}_work'
   publish_path: '{step}_publish'
 
+  submit_widget: CommentWidget
+  publisher_widget: CommentWidget
+
+  workfile_filename_description_items:
+    - name: high
+      short_name: high
+      description: For high
+    - name: low
+      short_name: low
+      description: For low
+    - name: ENVIR
+      short_name: ENVIR
+
+  hierachy:
+    - name: master
+      subs:
+        - name: rig_grp
+        - name: mesh_grp
+
+  checking_items:
+    - name: CheckObjUVs
+      must: 0
+    - name: SceneUnit
+      must: 1
+    - name: CheckLayer
+      must: 0
+    - name: DeleteOrig
+      must: 0
+    - name: ComparePolyInfo
+      must: 0
+    - name: CheckUnknown
+      must: 1
+    - name: CheckAovs
+      must: 0
+    - name: CheckUnknownPlugin
+      must: 0
+    - name: CleanDistanceBetweenNodes
+      must: 0
+    ################# clear Node Tool ####################
+    - name: DeleteTurtleObject
+      must: 0
+    - name: DeleteUselessGroupId
+      must: 0
+    - name: DeleteAiOptions
+      must: 0
+    - name: DeleteAiAOVDriver
+      must: 0
+    - name: DeleteDeleteComponentNode
+      must: 0
+    - name: DeleteUselessXgenNode
+      must: 0
+    - name: DeleteUselessRenderSetupNode
+      must: 0
+    - name: DeleteUselessSGNode
+      must: 0
+    - name: DeleteUselessNodeGraphEditorInfoNode
+      must: 0
+    - name: DeleteUselessMaterialInfoNode
+      must: 0
+    - name: DeleteDataStructure
+      must: 0
+    - name: DeleteHyperLayoutNode
+      must: 0
+    - name: DeleteHyperViewNode
+      must: 0
+    - name: DeleteNodeGraphEditorBookmarkInfoNode
+      must: 0
+    - name: DeleteDataReferenceEditsNode
+      must: 0
+    - name: DeleteUselessReference
+      must: 0
+    - name: DeleteRenderLayer
+      must: 0
+    - name: DeleteRenderSetupLayer
+      must: 0
+    - name: IntermediateObject
+      must: 0
+    - name: DeleteUselessScript
+      must: 0
+    - name: DeleteUselessExpression
+      must: 0
+    - name: DeleteUselessCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnSurfaceInfo
+      must: 0
+    - name: DeleteUselessClosestPointOnSurface
+      must: 0
+    - name: DeleteUselessDistanceBetween
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessPolyUnite
+      must: 0
+    - name: DeleteUselessBlendWeighted
+      must: 0
+    - name: DeleteUselessAnimCurve
+      must: 0
+    - name: DeleteUselessGroupParts
+      must: 0
+    - name: DeleteUselessPartition
+      must: 0
+    - name: DeleteUselessPoseInterpolatorManager
+      must: 0
+    - name: DeleteUselessShapeEditorManager
+      must: 0
+    - name: DeleteUselessTrackInfoManager
+      must: 0
+    - name: DeleteUselessCameraView
+      must: 0
+    - name: DeleteUselessBlindDataTemplate
+      must: 0
+    - name: DeleteUselessConstraint
+      must: 0
+    - name: DeleteUselessObjectSet
+      must: 0
+
   workfile_save_actions:
     - name: workfile_root
       type: GetPathFromTag
@@ -224,6 +1006,140 @@ Rig:
     - type: SaveAsScene
       parms:
         input: '{workfile_root}/{GetFilename}'
+
+  workfile_saveas_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetTaskName
+
+    - type: ModelVersionUp
+      parms:
+        input: '{workfile_root}/{shot}_{GetTaskName}_{step}_v###_{file_description}.mb'
+
+    - type: SaveAsScene
+      parms:
+        input: '{ModelVersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        files: '{SaveAsScene}'
+        part: 'Rig'
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile
+
+  publisher_actions:
+    - type: SetRigNotes
+
+    - type: SaveScene
+      parms:
+        format: 'mb'
+
+    # Copy to final folder
+    - name: ApprovedPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish'
+
+    - name: new_filename
+      type: GetFileBaseName
+      parms:
+        input: '{current_file}'
+
+    - name: new_basename
+      type: ReplaceString
+      parms:
+        input: '{new_filename}'
+        replace: '_v\d+'
+        to: ''
+
+    - name: CopyFile2
+      type: CopyFile
+      parms:
+        input: '{current_file}'
+        output: '{ApprovedPath}/{new_basename}.mb'
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{HistoryPath}/{current_filename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{CopyFile2}'
+        part: 'Rig'
+        description: '{description}'
+        version: '{version}'
+        thumbnail: ''
+        name: '{new_basename}.mb'
+        version_type: publish
+
+    # copy to history
+    - type: DelTweakNode
+
+    - name: HistoryPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish_versions'
+
+    - type: SaveAsScene
+      parms:
+        input: '{HistoryPath}/{current_filename}'
+
+    - name: level
+      type: SplitString
+      parms:
+        input: '{current_file_basename}'
+        splitter: '_'
+        index: 2
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{SaveAsScene}'
+        part: 'Rig'
+        description: '{description}'
+        version: '{version}'
+        thumbnail: ''
+        name: '{current_filename}'
+        version_type: publish
+
+    # change state
+    - type: SubmitApprovedDatabase
+      parms:
+        input: '{CopyFile2}'
+        discription: '{engine_parm_description}'
+
+    - type: SendMessage
+      parms:
+        file_path: '{CopyFile2}'
+        discription: '{engine_parm_description}'
+
+    - type: ChangePublish
+      parms:
+        file_path: '{current_file_basename}'
+
+#    - type: UploadFiles1
+#      parms:
+#        hist_path: '{HistoryPath}/{current_filename}'
+#        appr_path: '{CopyFile2}'
 
 
 charEffects:
@@ -231,6 +1147,110 @@ charEffects:
   work_path: '{step}_work'
   publish_path: '{step}_publish'
 
+  submit_widget: CommentWidget
+  publisher_widget: CommentWidget
+
+  workfile_filename_description_items:
+    - name: ''
+      short_name: ''
+      description: None
+    - name: Hair
+      short_name: fur
+      description: Hair
+    - name: nCloth
+      short_name: cloth
+      description: nCloth
+
+  checking_items:
+    - name: SceneUnit
+      must: 1
+    - name: CheckAovs
+      must: 0
+    - name: CheckUnknownPlugin
+      must: 0
+    - name: CleanDistanceBetweenNodes
+      must: 0
+    ################# clear Node Tool ####################
+    - name: DeleteTurtleObject
+      must: 0
+    - name: DeleteUselessGroupId
+      must: 0
+    - name: DeleteAiOptions
+      must: 0
+    - name: DeleteAiAOVDriver
+      must: 0
+    - name: DeleteDeleteComponentNode
+      must: 0
+    - name: DeleteUselessXgenNode
+      must: 0
+    - name: DeleteUselessRenderSetupNode
+      must: 0
+    - name: DeleteUselessSGNode
+      must: 0
+    - name: DeleteUselessNodeGraphEditorInfoNode
+      must: 0
+    - name: DeleteUselessMaterialInfoNode
+      must: 0
+    - name: DeleteDataStructure
+      must: 0
+    - name: DeleteHyperLayoutNode
+      must: 0
+    - name: DeleteHyperViewNode
+      must: 0
+    - name: DeleteNodeGraphEditorBookmarkInfoNode
+      must: 0
+    - name: DeleteDataReferenceEditsNode
+      must: 0
+    - name: DeleteUselessReference
+      must: 0
+    - name: DeleteRenderLayer
+      must: 0
+    - name: DeleteRenderSetupLayer
+      must: 0
+    # 20190730
+    - name: DeleteUselessScript
+      must: 0
+    - name: DeleteUselessExpression
+      must: 0
+    - name: DeleteUselessCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnSurfaceInfo
+      must: 0
+    - name: DeleteUselessClosestPointOnSurface
+      must: 0
+    - name: DeleteUselessDistanceBetween
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessPolyUnite
+      must: 0
+    - name: DeleteUselessBlendWeighted
+      must: 0
+    - name: DeleteUselessAnimCurve
+      must: 0
+    - name: DeleteUselessGroupParts
+      must: 0
+    - name: DeleteUselessPartition
+      must: 0
+    - name: DeleteUselessPoseInterpolatorManager
+      must: 0
+    - name: DeleteUselessShapeEditorManager
+      must: 0
+    - name: DeleteUselessTrackInfoManager
+      must: 0
+    - name: DeleteUselessCameraView
+      must: 0
+    - name: DeleteUselessBlindDataTemplate
+      must: 0
+    - name: DeleteUselessConstraint
+      must: 0
+    - name: DeleteUselessObjectSet
+      must: 0
+
   workfile_save_actions:
     - name: workfile_root
       type: GetPathFromTag
@@ -244,6 +1264,184 @@ charEffects:
     - type: SaveAsScene
       parms:
         input: '{workfile_root}/{GetFilename}'
+
+  workfile_saveas_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetTaskName
+
+    - type: VersionUp
+      parms:
+        input: '{workfile_root}/{shot}_{GetTaskName}_{step}_v###_{file_description}.mb'
+
+    - type: SaveAsScene
+      parms:
+        input: '{VersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        files: '{SaveAsScene}'
+        part: 'charEffects'
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile
+
+  publisher_actions:
+    #- type: SaveScene
+    #  parms:
+    #    format: '{workfile_format}'
+
+    - name: charEffectsNclothTag
+      type: GetPathFromTag
+      parms:
+        input: '{step}_cloth_publish_preview'
+
+    - name: charEffectsNhairTag
+      type: GetPathFromTag
+      parms:
+        input: '{step}_hair_publish_preview'
+
+    - type: Print
+      parms:
+        input: '---------------------- test0 -----------------------'
+
+    - type: If
+      parms:
+        code:
+          - nCloth
+      subs:
+        - name: VersionRoot
+          type: CreateVar
+          parms:
+            input: '{charEffectsNclothTag}/{shot}_{code}_{engine_parm_file_description}_v###.{workfile_format}'
+          condition:
+            type: asset
+            step: charEffects
+
+        - name: VersionRoot
+          type: CreateVar
+          parms:
+            input: '{charEffectsNhairTag}/{shot}_fur_v###.{workfile_format}'
+          condition:
+            type: asset
+            step: charEffects
+
+    - name: ma_path
+      type: VersionUp
+      parms:
+        input: '{VersionRoot}'
+
+    - type: Print
+      parms:
+        input: '{ma_path}'
+
+    - name: old_path
+      type: CreateVar
+      parms:
+        input: '{current_file}'
+
+    - name: CopyFile1
+      type: SaveAsScene
+      parms:
+        input: '{ma_path}'
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{ma_path}'
+        pattern: 'v###'
+
+    - name: level
+      type: SplitString
+      parms:
+        input: '{current_file_basename}'
+        splitter: '_'
+        index: 1
+
+    - type: MakePublishInfoFile
+      parms:
+        version: '{version}'
+        name: '{current_file_basename}'
+        level: '{level}'
+        output: '{VersionRoot}/info.json'
+        files:
+          - entity_type: published_file
+            filetype: mb
+            path: '{CopyFile1}'
+            part: model
+
+    # Copy to final folder
+    - type: If
+      parms:
+        code:
+          - nCloth
+      subs:
+        - name: VersionRoot2
+          type: GetPathFromTag
+          parms:
+            input: '{step}_cloth_publish'
+
+        - name: VersionRoot2
+          type: GetPathFromTag
+          parms:
+            input: '{step}_hair_publish'
+
+    - name: new_filename
+      type: GetFileBaseName
+      parms:
+        input: '{ma_path}'
+
+    - name: new_basename
+      type: ReplaceString
+      parms:
+        input: '{new_filename}'
+        replace: '_v\d+'
+        to: ''
+
+    - name: CopyFile2
+      type: SaveAsScene
+      parms:
+        input: '{VersionRoot2}/{new_basename}.{workfile_format}'
+
+    - type: CreateLatestVersion
+      parms:
+        path: '{VersionRoot2}'
+        name: '{current_file_basename}'
+        level: '{level}'
+        files:
+          - entity_type: published_file
+            filetype: mb
+            path: '{CopyFile2}'
+            part: model
+
+    - type: SubmitToDatabase
+      parms:
+        input: '{CopyFile2}'
+
+        # - type: UploadFilesToCgtwQueue
+        # parms:
+        # file_path: '{CopyFile2}'
+
+    - type: OpenScene
+      parms:
+        input: '{old_path}'
 
 
 nHair:
@@ -251,6 +1449,109 @@ nHair:
   work_path: '{step}_work'
   publish_path: '{step}_publish'
 
+  submit_widget: CommentWidget
+  publisher_widget: CommentWidget
+
+  workfile_filename_description_items:
+    - name: None
+      short_name: ''
+      description: None
+    - name: nHair
+      short_name: nHair
+      description: nHair
+
+  checking_items:
+    - name: SceneUnit
+      must: 1
+    - name: CheckUnknown
+      must: 1
+    - name: CheckUnknownPlugin
+      must: 0
+    - name: RenameShape1
+      must: 0
+    - name: CleanDistanceBetweenNodes
+      must: 0
+    ################# clear Node Tool ####################
+    - name: DeleteTurtleObject
+      must: 0
+    - name: DeleteUselessGroupId
+      must: 0
+    - name: DeleteAiOptions
+      must: 0
+    - name: DeleteAiAOVDriver
+      must: 0
+    - name: DeleteDeleteComponentNode
+      must: 0
+    - name: DeleteUselessXgenNode
+      must: 0
+    - name: DeleteUselessRenderSetupNode
+      must: 0
+    - name: DeleteUselessSGNode
+      must: 0
+    - name: DeleteUselessNodeGraphEditorInfoNode
+      must: 0
+    - name: DeleteUselessMaterialInfoNode
+      must: 0
+    - name: DeleteDataStructure
+      must: 0
+    - name: DeleteHyperLayoutNode
+      must: 0
+    - name: DeleteHyperViewNode
+      must: 0
+    - name: DeleteNodeGraphEditorBookmarkInfoNode
+      must: 0
+    - name: DeleteDataReferenceEditsNode
+      must: 0
+    - name: DeleteUselessReference
+      must: 0
+    - name: DeleteRenderLayer
+      must: 0
+    - name: DeleteRenderSetupLayer
+      must: 0
+    # 20190730
+    - name: DeleteUselessScript
+      must: 0
+    - name: DeleteUselessExpression
+      must: 0
+    - name: DeleteUselessCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnSurfaceInfo
+      must: 0
+    - name: DeleteUselessClosestPointOnSurface
+      must: 0
+    - name: DeleteUselessDistanceBetween
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessPolyUnite
+      must: 0
+    - name: DeleteUselessBlendWeighted
+      must: 0
+    - name: DeleteUselessAnimCurve
+      must: 0
+    - name: DeleteUselessGroupParts
+      must: 0
+    - name: DeleteUselessPartition
+      must: 0
+    - name: DeleteUselessPoseInterpolatorManager
+      must: 0
+    - name: DeleteUselessShapeEditorManager
+      must: 0
+    - name: DeleteUselessTrackInfoManager
+      must: 0
+    - name: DeleteUselessCameraView
+      must: 0
+    - name: DeleteUselessBlindDataTemplate
+      must: 0
+    - name: DeleteUselessConstraint
+      must: 0
+    - name: DeleteUselessObjectSet
+      must: 0
+
   workfile_save_actions:
     - name: workfile_root
       type: GetPathFromTag
@@ -264,6 +1565,228 @@ nHair:
     - type: SaveAsScene
       parms:
         input: '{workfile_root}/{GetFilename}'
+
+  workfile_saveas_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetTaskName
+
+    - type: VersionUp
+      parms:
+        input: '{workfile_root}/{sequence}_{shot}_{step}_v###.mb'
+
+    - type: SaveAsScene
+      parms:
+        input: '{VersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        files: '{SaveAsScene}'
+        part: 'nHair'
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile
+
+  publisher_actions:
+
+    - name: VersionRoot
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish_versions'
+
+    - name: ma_path
+      type: VersionUp
+      parms:
+        input: '{VersionRoot}/{current_filename}'
+
+    - name: CopyFile1
+      type: CopyFile
+      parms:
+        input: '{current_file}'
+        output: '{ma_path}'
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{ma_path}'
+        pattern: 'v###'
+
+    # Publish ma file to final
+    - name: VersionRoot2
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish'
+
+    - name: new_filename2
+      type: GetFileBaseName
+      parms:
+        input: '{ma_path}'
+
+    - name: new_basename2
+      type: ReplaceString
+      parms:
+        input: '{new_filename2}'
+        replace: '_v\d+'
+        to: ''
+
+    - name: CopyFile3
+      type: CopyFile
+      parms:
+        input: '{ma_path}'
+        output: '{VersionRoot2}/{new_basename2}.mb'
+
+    # Publish abc file
+    - name: abcPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_abc'
+
+    - name: abcHistoryPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_abcH'
+
+    - type: GroupData
+      parms:
+        group_key: 'instance'
+        collapse_key: 'full_path'
+        new_key: 'objects'
+        data: '{engine_parm_objects}'
+
+
+    - type: ForLoop
+      parms:
+        input: '{GroupData}'
+
+      subs:
+        # Publish files to version root
+        - name: abc_path
+          type: VersionUp
+          parms:
+            input: '{abcPath}/{sequence}_{shot}_{short_step}_{instance}_v###.abc'
+
+        - type: HidObject
+          parms:
+            input: '{objects}'
+
+        - type: ExportAbc2
+          parms:
+            input: '{objects}'
+            output: '{abc_path}'
+            single_frame: false
+
+        - name: version
+          type: GetVersionNumber
+          parms:
+            input: '{abc_path}'
+            pattern: 'v###'
+
+        - name: level
+          type: SplitString
+          parms:
+            input: '{current_file_basename}'
+            splitter: '_'
+            index: 3
+
+        - type: MakePublishInfoFile
+          parms:
+            output: '{VersionRoot}/info.json'
+            files:
+              - entity_type: published_file
+                filetype: abc
+                path: '{abc_path}'
+
+            version_type: publish
+            entity_type: version
+            version: '{version}'
+            name: '{sequence}_{shot}_{short_step}_{instance}'
+            asset: '{asset}'
+            part: '{instance}'
+            level: '{level}'
+
+        # Copy to final folder
+        - name: new_filename
+          type: GetFileBaseName
+          parms:
+            input: '{abc_path}'
+
+        - name: new_basename
+          type: ReplaceString
+          parms:
+            input: '{new_filename}'
+            replace: '_v\d+'
+            to: ''
+
+        - name: CopyFile2
+          type: CopyFile
+          parms:
+            input: '{abc_path}'
+            output: '{abcHistoryPath}/{sequence}_{shot}_{short_step}_{instance}.abc'
+
+        - type: CreateLatestVersion
+          parms:
+            path: '{VersionRoot2}'
+            files:
+              - entity_type: published_file
+                filetype: abc
+                path: '{abc_path}'
+            version_type: publish
+            name: '{sequence}_{shot}_{short_step}_{engine_parm_file_description}_{instance}'
+            asset: '{shot}'
+            part: '{instance}'
+            level: '{level}'
+
+
+    - type: SubmitToDatabase
+      parms:
+        input: '{VersionRoot}'
+
+    # playblast_actions:
+    - name: publish_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_preview2'
+
+    - type: SetSceneActiveViewAttributes
+      parms:
+        input:
+        # filmPivot: 1
+        # filmOrigin: 1
+        # safeAction: 1
+        # resolution: 1
+        # gateMask: 1
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{movie_path}'
+        pattern: 'v###'
+
+    - type: MakePublishInfoFile
+      parms:
+        output: '{publish_root}/info.json'
+        version_type: preview
+        version: '{version}'
+        name: '{current_file_basename}'
+        files:
+          - '{movie_path}'
 
 
 nCloth:
@@ -271,6 +1794,115 @@ nCloth:
   work_path: '{step}_work'
   publish_path: '{step}_publish'
 
+  submit_widget: CommentWidget
+  publisher_widget: CommentWidget
+
+  workfile_filename_description_items:
+    - name: high
+      short_name: high
+      description: high
+    - name: low
+      short_name: low
+      description: low
+
+  checking_items:
+    - name: CheckObjUVs
+      must: 0
+    - name: SceneUnit
+      must: 1
+    - name: FrameRange
+      must: 0
+    - name: CheckUnknown
+      must: 1
+    - name: CheckUnknownPlugin
+      must: 0
+    - name: RenameShape1
+      must: 0
+    - name: CleanDistanceBetweenNodes
+      must: 0
+    - name: CheckProxyEyes
+      must: 0
+    ################# clear Node Tool ####################
+    - name: DeleteTurtleObject
+      must: 0
+    - name: DeleteUselessGroupId
+      must: 0
+    - name: DeleteAiOptions
+      must: 0
+    - name: DeleteAiAOVDriver
+      must: 0
+    - name: DeleteDeleteComponentNode
+      must: 0
+    - name: DeleteUselessXgenNode
+      must: 0
+    - name: DeleteUselessRenderSetupNode
+      must: 0
+    - name: DeleteUselessSGNode
+      must: 0
+    - name: DeleteUselessNodeGraphEditorInfoNode
+      must: 0
+    - name: DeleteUselessMaterialInfoNode
+      must: 0
+    - name: DeleteDataStructure
+      must: 0
+    - name: DeleteHyperLayoutNode
+      must: 0
+    - name: DeleteHyperViewNode
+      must: 0
+    - name: DeleteNodeGraphEditorBookmarkInfoNode
+      must: 0
+    - name: DeleteDataReferenceEditsNode
+      must: 0
+    - name: DeleteUselessReference
+      must: 0
+    - name: DeleteRenderLayer
+      must: 0
+    - name: DeleteRenderSetupLayer
+      must: 0
+    # 20190730
+    - name: DeleteUselessScript
+      must: 0
+    - name: DeleteUselessExpression
+      must: 0
+    - name: DeleteUselessCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnSurfaceInfo
+      must: 0
+    - name: DeleteUselessClosestPointOnSurface
+      must: 0
+    - name: DeleteUselessDistanceBetween
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessPolyUnite
+      must: 0
+    - name: DeleteUselessBlendWeighted
+      must: 0
+    - name: DeleteUselessAnimCurve
+      must: 0
+    - name: DeleteUselessGroupParts
+      must: 0
+    - name: DeleteUselessPartition
+      must: 0
+    - name: DeleteUselessPoseInterpolatorManager
+      must: 0
+    - name: DeleteUselessShapeEditorManager
+      must: 0
+    - name: DeleteUselessTrackInfoManager
+      must: 0
+    - name: DeleteUselessCameraView
+      must: 0
+    - name: DeleteUselessBlindDataTemplate
+      must: 0
+    - name: DeleteUselessConstraint
+      must: 0
+    - name: DeleteUselessObjectSet
+      must: 0
+
   workfile_save_actions:
     - name: workfile_root
       type: GetPathFromTag
@@ -284,12 +1916,111 @@ nCloth:
     - type: SaveAsScene
       parms:
         input: '{workfile_root}/{GetFilename}'
+
+  workfile_saveas_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetTaskName
+
+    - type: VersionUp
+      parms:
+        input: '{workfile_root}/{sequence}_{shot}_{step}_v###.mb'
+
+    - type: SaveAsScene
+      parms:
+        input: '{VersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        files: '{SaveAsScene}'
+        part: 'nCloth'
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile
 
 
 Previs:
-
+  short_name: Previs
   work_path: '{step}_work'
   publish_path: '{step}_publish'
+
+  submit_widget: CommentWidget
+  publisher_widget: CommentWidget
+
+  checking_items:
+    - name: checkCGtFrame
+      must: 0
+    - name: changeAniFrame
+      must: 0
+    - name: CheckCamera
+      must: 0
+    - name: CheckUnknown
+      must: 0
+    - name: CheckAovs
+      must: 0
+    - name: CheckObjcetCenter
+      must: 0
+    - name: CheckNameSpace
+      must: 0
+    - name: CheckUnknownPlugin
+      must: 0
+    - name: CheckRigVersion
+      must: 0
+      can_pass: true
+    ################# clear Node Tool ####################
+    - name: DeleteTurtleObject
+      must: 0
+    - name: DeleteUselessGroupId
+      must: 0
+    - name: DeleteAiOptions
+      must: 0
+    - name: DeleteAiAOVDriver
+      must: 0
+    - name: DeleteDeleteComponentNode
+      must: 0
+    - name: DeleteUselessXgenNode
+      must: 0
+    - name: DeleteUselessRenderSetupNode
+      must: 0
+    - name: DeleteUselessSGNode
+      must: 0
+    - name: DeleteUselessNodeGraphEditorInfoNode
+      must: 0
+    - name: DeleteUselessMaterialInfoNode
+      must: 0
+    - name: DeleteDataStructure
+      must: 0
+    - name: DeleteHyperLayoutNode
+      must: 0
+    - name: DeleteHyperViewNode
+      must: 0
+    - name: DeleteNodeGraphEditorBookmarkInfoNode
+      must: 0
+    - name: DeleteDataReferenceEditsNode
+      must: 0
+    - name: DeleteUselessReference
+      must: 0
+    - name: DeleteRenderLayer
+      must: 0
+    - name: DeleteRenderSetupLayer
+      must: 0
 
   workfile_save_actions:
     - name: workfile_root
@@ -304,12 +2035,720 @@ Previs:
     - type: SaveAsScene
       parms:
         input: '{workfile_root}/{GetFilename}'
+
+  workfile_saveas_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetTaskName
+
+    - type: VersionUp
+      parms:
+        input: '{workfile_root}/{sequence}_{shot}_{short_name}_v###.mb'
+
+    - type: SaveAsScene
+      parms:
+        input: '{VersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        files: '{SaveAsScene}'
+        part: 'Previs'
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile
+
+  publisher_actions:
+    - name: current_file_basename2
+      type: KeepName
+      parms:
+        input: '{current_file_basename}'
+
+    - name: current_filename2
+      type: CreateVar
+      parms:
+        input: '{current_file_basename2}.mb'
+
+    - type: SetLowViwer
+      parms:
+        wireframe: false
+
+    - type: SaveScene
+      parms:
+        format: 'mb'
+
+    # ------------------ copy file to history --------------------
+    - name: HistoryPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish_versions'
+
+    - name: HistoryFilePath
+      type: CopyFile
+      parms:
+        input: '{current_file}'
+        output: '{HistoryPath}/{current_filename2}'
+
+    - type: ExportSceneLayout
+      parms:
+        asset_types: set
+        output: '{HistoryPath}/{current_file_basename2}.json'
+
+    - name: vers
+      type: SplitString
+      parms:
+        input: '{current_file_basename2}'
+        splitter: '_'
+        index: 3
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{HistoryPath}/{current_filename2}'
+        pattern: 'v###'
+
+    # ------------------ copy file to approved file --------------------
+    - name: vp_filename
+      type: cutVersion
+      parms:
+        input: '{current_filename2}'
+
+    - name: ApprovedPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish'
+
+    - name: new_filename2
+      type: GetFileBaseName
+      parms:
+        input: '{HistoryPath}/{vp_filename}'
+
+    - name: new_basename2
+      type: ReplaceString
+      parms:
+        input: '{new_filename2}'
+        replace: '_v\d+'
+        to: ''
+
+    - name: ApprovedFile
+      type: CopyFile
+      parms:
+        input: '{HistoryPath}/{current_filename2}'
+        output: '{ApprovedPath}/{vp_filename}'
+
+    - name: layout_approved_path
+      type: CopyFile
+      parms:
+        input: '{HistoryPath}/{current_file_basename2}.json'
+        output: '{ApprovedPath}/{sequence}_{shot}_{short_name}_layout.json'
+
+    - name: level
+      type: SplitString
+      parms:
+        input: '{current_file_basename2}'
+        splitter: '_'
+        index: 3
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{ApprovedPath}'
+        part: 'Previs'
+        description: '{description}'
+        version: '{version}'
+        thumbnail: ''
+        name: '{vp_filename}'
+        version_type: publish
+        level: '{level}'
+
+    - type: SubmitApprovedDatabase
+      parms:
+        input: '{ApprovedFile}'
+        discription: '{description}'
+        state: Publish
+
+    # ------------------ play blast --------------------
+    - name: PublishMoviesPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_previs'
+
+    - name: HistoryMoviesPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_previs_versions'
+
+#    - type: SetSceneActiveViewAttributes
+
+    - type: ClearMoviesBeforeCopy
+      parms:
+        target: '{PublishMoviesPath}'
+
+    - name: PublishMovieFile
+      type: PlayBlastFunc2
+      parms:
+        movPath: '{PublishMoviesPath}/{current_file_basename2}.mov'
+
+    - name: HistoryMoviePath
+      type: CopyFile
+      parms:
+        input: '{PublishMovieFile}'
+        output: '{HistoryMoviesPath}/{current_file_basename2}.mov'
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{PublishMoviesPath}/{current_file_basename2}.mov'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{PublishMoviesPath}'
+        version_type: publish
+        version: '{version}'
+        name: '{current_file_basename2}.mov'
+        part: 'Previs'
+        asset: '{shot}'
+
+    - type: SubmitApprovedDatabase
+      parms:
+        input: '{PublishMoviesPath}/{current_file_basename2}.mov'
+
+    - type: SendMessage
+      parms:
+        file_path: '{PublishMoviesPath}/{current_file_basename2}.mov'
+        discription: '{description}'
+
+    # ------------------ camera abc --------------------
+    - name: cam_approve_path
+      type: GetPathFromTag
+      parms:
+        input: 'cam_approved'
+
+    - name: cam_history_path
+      type: GetPathFromTag
+      parms:
+        input: 'cam_history'
+
+    - type: CameraName
+
+    - name: camera_abc_app
+      type: ExportAbc
+      parms:
+        input: '{CameraName}'
+        output: '{cam_approve_path}/{sequence}_{shot}_camera.abc'
+        single_frame: false
+        deleteArnoldAttr: true
+
+    - name: version_camera_abc
+      type: KeepName
+      parms:
+        input: '{cam_history_path}/{sequence}_{shot}_camera_{version}.abc'
+
+    - name: camera_abc_his
+      type: CopyFile
+      parms:
+        input: '{camera_abc_app}'
+        output: '{version_camera_abc}'
+
+    # ------------------ camera mb --------------------
+    - name: camera_mb_app
+      type: ExportScene
+      parms:
+        object: '{CameraName}'
+        output: '{cam_approve_path}/{sequence}_{shot}_camera.mb'
+
+    - name: version_cam_mb
+      type: KeepName
+      parms:
+        input: '{cam_history_path}/{sequence}_{shot}_camera_{version}.mb'
+
+    - name: camera_mb_his
+      type: CopyFile
+      parms:
+        input: '{camera_mb_app}'
+        output: '{version_cam_mb}'
+
+    - type: ChangePublish
+      parms:
+        file_path: '{current_file_basename2}'
+
+    - type: SetCGTPublishedFileInfo
+      parms:
+        path: '{HistoryPath}/{current_file_basename2}.mov'
+
+
+Layout:
+  short_name: Layout
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
+
+  submit_widget: CommentWidget
+  publisher_widget: CommentWidget
+
+  checking_items:
+    - name: checkCGtFrame
+      must: 0
+    - name: changeAniFrame
+      must: 0
+    - name: CheckUnknown
+      must: 0
+    - name: CheckCharState
+      must: 0
+    - name: CheckReference
+      must: 0
+    - name: CheckAovs
+      must: 0
+    - name: CheckCharState
+      must: 0
+    - name: CleanScene
+      must: 0
+    - name: CheckUnknownPlugin
+      must: 0
+    - name: CheckRigVersion
+      must: 0
+      can_pass: true
+    ################# clear Node Tool ####################
+    - name: DeleteTurtleObject
+      must: 0
+    - name: DeleteUselessGroupId
+      must: 0
+    - name: DeleteAiOptions
+      must: 0
+    - name: DeleteAiAOVDriver
+      must: 0
+    - name: DeleteDeleteComponentNode
+      must: 0
+    - name: DeleteUselessXgenNode
+      must: 0
+    - name: DeleteUselessRenderSetupNode
+      must: 0
+    - name: DeleteUselessSGNode
+      must: 0
+    - name: DeleteUselessNodeGraphEditorInfoNode
+      must: 0
+    - name: DeleteUselessMaterialInfoNode
+      must: 0
+    - name: DeleteDataStructure
+      must: 0
+    - name: DeleteHyperLayoutNode
+      must: 0
+    - name: DeleteHyperViewNode
+      must: 0
+    - name: DeleteNodeGraphEditorBookmarkInfoNode
+      must: 0
+    - name: DeleteDataReferenceEditsNode
+      must: 0
+    - name: DeleteUselessReference
+      must: 0
+    - name: DeleteRenderLayer
+      must: 0
+    - name: DeleteRenderSetupLayer
+      must: 0
+
+  workfile_save_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: SaveAsScene
+      parms:
+        input: '{workfile_root}/{GetFilename}'
+
+  workfile_saveas_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetTaskName
+
+    - type: VersionUp
+      parms:
+        input: '{workfile_root}/{sequence}_{shot}_{short_name}_v###.mb'
+
+    - type: SaveAsScene
+      parms:
+        input: '{VersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        files: '{SaveAsScene}'
+        part: 'Layout'
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile
+
+  publisher_actions:
+    - name: current_file_basename2
+      type: KeepName
+      parms:
+        input: '{current_file_basename}'
+
+    - name: current_filename2
+      type: CreateVar
+      parms:
+        input: '{current_file_basename2}.mb'
+
+    - type: SetLowViwer
+      parms:
+        wireframe: false
+
+    - type: SaveScene
+      parms:
+        format: 'mb'
+
+    # ------------------ copy file to history --------------------
+    - name: HistoryPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish_versions'
+
+    - name: HistoryFilePath
+      type: CopyFile
+      parms:
+        input: '{current_file}'
+        output: '{HistoryPath}/{current_filename2}'
+
+    - type: ExportSceneLayout
+      parms:
+        asset_types: set
+        output: '{HistoryPath}/{current_file_basename2}.json'
+
+    - name: vers
+      type: SplitString
+      parms:
+        input: '{current_file_basename2}'
+        splitter: '_'
+        index: 3
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{HistoryPath}/{current_filename2}'
+        pattern: 'v###'
+
+    # ------------------ copy file to approved file --------------------
+    - name: vp_filename
+      type: cutVersion
+      parms:
+        input: '{current_filename2}'
+
+    - name: ApprovedPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish'
+
+    - name: new_filename2
+      type: GetFileBaseName
+      parms:
+        input: '{HistoryPath}/{vp_filename}'
+
+    - name: new_basename2
+      type: ReplaceString
+      parms:
+        input: '{new_filename2}'
+        replace: '_v\d+'
+        to: ''
+
+    - name: ApprovedFile
+      type: CopyFile
+      parms:
+        input: '{HistoryPath}/{current_filename2}'
+        output: '{ApprovedPath}/{vp_filename}'
+
+    - name: layout_approved_path
+      type: CopyFile
+      parms:
+        input: '{HistoryPath}/{current_file_basename2}.json'
+        output: '{ApprovedPath}/{sequence}_{shot}_{short_name}_layout.json'
+
+    - name: level
+      type: SplitString
+      parms:
+        input: '{current_file_basename2}'
+        splitter: '_'
+        index: 3
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{ApprovedPath}'
+        part: 'Layout'
+        description: '{description}'
+        version: '{version}'
+        thumbnail: ''
+        name: '{vp_filename}'
+        version_type: publish
+        level: '{level}'
+
+    - type: SubmitApprovedDatabase
+      parms:
+        input: '{ApprovedFile}'
+        discription: '{description}'
+        state: Publish
+
+    # ------------------ play blast --------------------
+    - name: PublishMoviesPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_previs'
+
+    - name: HistoryMoviesPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_previs_versions'
+
+#    - type: SetSceneActiveViewAttributes
+
+    - type: ClearMoviesBeforeCopy
+      parms:
+        target: '{PublishMoviesPath}'
+
+    - name: PublishMovieFile
+      type: PlayBlastFunc2
+      parms:
+        movPath: '{PublishMoviesPath}/{current_file_basename2}.mov'
+
+    - name: HistoryMoviePath
+      type: CopyFile
+      parms:
+        input: '{PublishMovieFile}'
+        output: '{HistoryMoviesPath}/{current_file_basename2}.mov'
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{PublishMoviesPath}/{current_file_basename2}.mov'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{PublishMoviesPath}'
+        version_type: publish
+        version: '{version}'
+        name: '{current_file_basename2}.mov'
+        part: 'Layout'
+        asset: '{shot}'
+
+    - type: SubmitApprovedDatabase
+      parms:
+        input: '{PublishMoviesPath}/{current_file_basename2}.mov'
+
+    - type: SendMessage
+      parms:
+        file_path: '{PublishMoviesPath}/{current_file_basename2}.mov'
+        discription: '{description}'
+
+    # ------------------ camera abc --------------------
+    - name: cam_approve_path
+      type: GetPathFromTag
+      parms:
+        input: 'cam_approved'
+
+    - name: cam_history_path
+      type: GetPathFromTag
+      parms:
+        input: 'cam_history'
+
+    - type: CameraName
+
+    - name: camera_abc_app
+      type: ExportAbc
+      parms:
+        input: '{CameraName}'
+        output: '{cam_approve_path}/{sequence}_{shot}_camera.abc'
+        single_frame: false
+        deleteArnoldAttr: true
+
+    - name: version_camera_abc
+      type: KeepName
+      parms:
+        input: '{cam_history_path}/{sequence}_{shot}_camera_{version}.abc'
+
+    - name: camera_abc_his
+      type: CopyFile
+      parms:
+        input: '{camera_abc_app}'
+        output: '{version_camera_abc}'
+
+    # ------------------ camera mb --------------------
+    - name: camera_mb_app
+      type: ExportScene
+      parms:
+        object: '{CameraName}'
+        output: '{cam_approve_path}/{sequence}_{shot}_camera.mb'
+
+    - name: version_cam_mb
+      type: KeepName
+      parms:
+        input: '{cam_history_path}/{sequence}_{shot}_camera_{version}.mb'
+
+    - name: camera_mb_his
+      type: CopyFile
+      parms:
+        input: '{camera_mb_app}'
+        output: '{version_cam_mb}'
+
+    - type: ChangePublish
+      parms:
+        file_path: '{current_file_basename2}'
+
+    - type: SetCGTPublishedFileInfo
+      parms:
+        path: '{HistoryPath}/{current_file_basename2}.mov'
 
 
 Animation:
-
+  short_name: Ani
   work_path: '{step}_work'
   publish_path: '{step}_publish'
+
+  submit_widget: CommentWidget
+  publisher_widget: CommentWidget
+
+  checking_items:
+    - name: checkCGtFrame
+      must: 0
+    - name: changeAniFrame
+      must: 0
+    - name: CheckCamera
+      must: 0
+    - name: CheckUnknown
+      must: 0
+    - name: CheckAovs
+      must: 0
+    - name: CheckUnknownPlugin
+      must: 0
+    - name: CheckRigVersion
+      must: 0
+      can_pass: true
+    - name: DeviceAspectRatio
+      must: 0
+    ################# clear Node Tool ####################
+    - name: DeleteTurtleObject
+      must: 0
+    - name: DeleteUselessGroupId
+      must: 0
+    - name: DeleteAiOptions
+      must: 0
+    - name: DeleteAiAOVDriver
+      must: 0
+    - name: DeleteDeleteComponentNode
+      must: 0
+    - name: DeleteUselessXgenNode
+      must: 0
+    - name: DeleteUselessRenderSetupNode
+      must: 0
+    - name: DeleteUselessSGNode
+      must: 0
+    - name: DeleteUselessNodeGraphEditorInfoNode
+      must: 0
+    - name: DeleteUselessMaterialInfoNode
+      must: 0
+    - name: DeleteDataStructure
+      must: 0
+    - name: DeleteHyperLayoutNode
+      must: 0
+    - name: DeleteHyperViewNode
+      must: 0
+    - name: DeleteNodeGraphEditorBookmarkInfoNode
+      must: 0
+    - name: DeleteDataReferenceEditsNode
+      must: 0
+    - name: DeleteUselessReference
+      must: 0
+    - name: DeleteRenderLayer
+      must: 0
+    - name: DeleteRenderSetupLayer
+      must: 0
+    # 20190730
+    - name: DeleteUselessScript
+      must: 0
+    - name: DeleteUselessExpression
+      must: 0
+    - name: DeleteUselessCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnSurfaceInfo
+      must: 0
+    - name: DeleteUselessClosestPointOnSurface
+      must: 0
+    - name: DeleteUselessDistanceBetween
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessPolyUnite
+      must: 0
+    - name: DeleteUselessBlendWeighted
+      must: 0
+    - name: DeleteUselessAnimCurve
+      must: 0
+    - name: DeleteUselessGroupParts
+      must: 0
+    - name: DeleteUselessPartition
+      must: 0
+    - name: DeleteUselessPoseInterpolatorManager
+      must: 0
+    - name: DeleteUselessShapeEditorManager
+      must: 0
+    - name: DeleteUselessTrackInfoManager
+      must: 0
+    - name: DeleteUselessCameraView
+      must: 0
+    - name: DeleteUselessBlindDataTemplate
+      must: 0
+      # - name: DeleteUselessConstraint
+      # must: 0
+    - name: DeleteUselessObjectSet
+      must: 0
+
+  workfile_filename_description_items:
+    - name: Blocking
+      short_name: BLO
+      description: Blocking stage
+    - name: Spline
+      short_name: SPL
+      description: Spline stage
+    - name: Polishing
+      short_name: POL
+      description: Polishing stage
 
   workfile_save_actions:
     - name: workfile_root
@@ -324,12 +2763,462 @@ Animation:
     - type: SaveAsScene
       parms:
         input: '{workfile_root}/{GetFilename}'
+
+  workfile_saveas_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetTaskName
+
+    - type: VersionUp
+      parms:
+        input: '{workfile_root}/{sequence}_{shot}_{short_name}_{file_description}_v###.mb'
+
+    - type: SaveAsScene
+      parms:
+        input: '{VersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        files: '{SaveAsScene}'
+        part: 'Animation'
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile
+
+    - type: UploadFiles
+
+    # 拍屏
+    - name: work_movies
+      type: GetPathFromTag
+      parms:
+        input: '{step}_previs1'
+
+    - name: movie_path
+      type: PlayBlastFunc2
+      parms:
+        movPath: '{work_movies}/{current_file_basename}.mov'
+
+    - type: SubmitCharVersionDatabase
+      parms:
+        input: '{current_file}'
+        discription: '{description}'
+        state: Submit
+
+    - type: SubmitCharVersionDatabase
+      parms:
+        input: '{movie_path}'
+        discription: '{description}'
+        state: Submit
+
+    - type: ChangeStateAni
+      parms:
+        file_path: '{current_file_basename}'
+
+    - type: CheangeSubmit
+
+    - type: UploadFiles1
+      parms:
+        movie_path: '{publish_root}/{current_file_basename}.mov'
+
+#    - type: ExportRRAbc
+#      parms:
+#        input: '{engine_parm_isabc}'
+
+  publisher_actions:
+#    - name: current_file_basename2
+#      type: FindMaxVersionWorkFileBasename
+
+    - name: current_file_basename2
+      type: KeepName
+      parms:
+        input: '{current_file_basename}'
+
+    - name: current_filename2
+      type: CreateVar
+      parms:
+        input: '{current_file_basename2}.mb'
+
+    - type: SetLowViwer
+      parms:
+        wireframe: false
+
+    - type: SaveScene
+      parms:
+        format: 'mb'
+
+    # ------------------ copy file to history --------------------
+    - name: HistoryPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish_versions'
+
+    - name: HistoryFilePath
+      type: CopyFile
+      parms:
+        input: '{current_file}'
+        output: '{HistoryPath}/{current_filename2}'
+
+    - type: ExportSceneLayout
+      parms:
+        asset_types: set
+        output: '{HistoryPath}/{current_file_basename2}.json'
+
+    - name: vers
+      type: SplitString
+      parms:
+        input: '{current_file_basename2}'
+        splitter: '_'
+        index: 4
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{HistoryPath}/{current_filename2}'
+        pattern: 'v###'
+
+    # ------------------ copy file to approved file --------------------
+    - name: vp_filename
+      type: cutVersion
+      parms:
+        input: '{current_filename2}'
+
+    - name: ApprovedPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish'
+
+    - name: new_filename2
+      type: GetFileBaseName
+      parms:
+        input: '{HistoryPath}/{vp_filename}'
+
+    - name: new_basename2
+      type: ReplaceString
+      parms:
+        input: '{new_filename2}'
+        replace: '_v\d+'
+        to: ''
+
+    - name: ApprovedFile
+      type: CopyFile
+      parms:
+        input: '{HistoryPath}/{current_filename2}'
+        output: '{ApprovedPath}/{vp_filename}'
+
+    - name: layout_approved_path
+      type: CopyFile
+      parms:
+        input: '{HistoryPath}/{current_file_basename2}.json'
+        output: '{ApprovedPath}/{sequence}_{shot}_{short_name}_layout.json'
+
+#    # Publish abc file
+#    - type: GroupData
+#      parms:
+#        group_key: 'instance'
+#        collapse_key: 'full_path'
+#        new_key: 'objects'
+#        data: '{engine_parm_objects}'
+#
+#    - type: ForLoop
+#      parms:
+#        input: '{GroupData}'
+
+    - name: level
+      type: SplitString
+      parms:
+        input: '{current_file_basename2}'
+        splitter: '_'
+        index: 4
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{ApprovedPath}'
+        part: 'Animation'
+        description: '{description}'
+        version: '{version}'
+        thumbnail: ''
+        name: '{vp_filename}'
+        version_type: publish
+        level: '{level}'
+
+    - type: SubmitApprovedDatabase
+      parms:
+        input: '{ApprovedFile}'
+        discription: '{description}'
+        state: Publish
+
+    # ------------------ play blast --------------------
+    - name: PublishMoviesPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_previs'
+
+    - name: HistoryMoviesPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_previs_versions'
+
+    - type: SetSceneActiveViewAttributes
+      parms:
+        input:
+
+    - type: ClearMoviesBeforeCopy
+      parms:
+        target: '{PublishMoviesPath}'
+
+    - name: PublishMovieFile
+      type: PlayBlastFunc2
+      parms:
+        movPath: '{PublishMoviesPath}/{current_file_basename2}.mov'
+
+    - name: HistoryMoviePath
+      type: CopyFile
+      parms:
+        input: '{PublishMovieFile}'
+        output: '{HistoryMoviesPath}/{current_file_basename2}.mov'
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{PublishMoviesPath}/{current_file_basename2}.mov'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{PublishMoviesPath}'
+        version_type: publish
+        version: '{version}'
+        name: '{current_file_basename2}.mov'
+        part: 'Animation'
+        asset: '{shot}'
+
+    - type: SubmitApprovedDatabase
+      parms:
+        input: '{PublishMoviesPath}/{current_file_basename2}.mov'
+
+    - type: SendMessage
+      parms:
+        file_path: '{PublishMoviesPath}/{current_file_basename2}.mov'
+        discription: '{description}'
+
+    # ------------------ camera abc --------------------
+    - name: cam_approve_path
+      type: GetPathFromTag
+      parms:
+        input: 'cam_approved'
+
+    - name: cam_history_path
+      type: GetPathFromTag
+      parms:
+        input: 'cam_history'
+
+    - type: CameraName
+
+    - name: camera_abc_app
+      type: ExportAbc
+      parms:
+        input: '{CameraName}'
+        output: '{cam_approve_path}/{sequence}_{shot}_camera.abc'
+        single_frame: false
+        deleteArnoldAttr: true
+
+    - name: version_camera_abc
+      type: KeepName
+      parms:
+        input: '{cam_history_path}/{sequence}_{shot}_camera_{version}.abc'
+
+    - name: camera_abc_his
+      type: CopyFile
+      parms:
+        input: '{camera_abc_app}'
+        output: '{version_camera_abc}'
+
+    # ------------------ camera mb --------------------
+    - name: camera_mb_app
+      type: ExportScene
+      parms:
+        object: '{CameraName}'
+        output: '{cam_approve_path}/{sequence}_{shot}_camera.mb'
+
+    - name: version_cam_mb
+      type: KeepName
+      parms:
+        input: '{cam_history_path}/{sequence}_{shot}_camera_{version}.mb'
+
+    - name: camera_mb_his
+      type: CopyFile
+      parms:
+        input: '{camera_mb_app}'
+        output: '{version_cam_mb}'
+    #------------------------------------------------------
+    #
+
+    - type: ChangeStateAni
+      parms:
+        file_path: '{current_file_basename2}'
+
+    - type: ChangePublish
+      parms:
+        file_path: '{current_file_basename2}'
+
+    - type: SetCGTPublishedFileInfo
+      parms:
+        path: '{HistoryPath}/{current_file_basename2}.mov'
+
+    - type: UploadFiles1
+      parms:
+        hist_path: '{HistoryFilePath}'
+        appr_path: '{ApprovedFile}'
+        hist_movie: '{HistoryMoviePath}'
+        movie_path: '{PublishMovieFile}'
+        camera_history: '{camera_mb_his}'
+        camera_approve: '{camera_mb_app}'
+        camera_abc_his: '{camera_abc_his}'
+        camera_abc_app: '{camera_abc_app}'
 
 
 BG_Characters:
 
+  short_name: BG
   work_path: '{step}_work'
   publish_path: '{step}_publish'
+
+  submit_widget: CommentWidget
+  publisher_widget: CommentWidget
+
+  workfile_filename_description_items:
+    - name: Blocking
+      short_name: BLO
+      description: Blocking stage
+    - name: Spline
+      short_name: SPL
+      description: Spline stage
+    - name: Polishing
+      short_name: POL
+      description: Polishing stage
+
+  checking_items:
+    - name: SceneUnit
+      must: 1
+    - name: checkCGtFrame
+      must: 0
+    - name: FrameRange
+      must: 0
+    - name: changeAniFrame
+      must: 0
+    - name: CheckCamera
+      must: 0
+    - name: CheckUnknown
+      must: 0
+    - name: CheckCharState
+      must: 0
+    - name: CheckAovs
+      must: 0
+    - name: CheckUnknownPlugin
+      must: 0
+    - name: LockCmaera
+      must: 0
+    - name: CleanDistanceBetweenNodes
+      must: 0
+    - name: DeviceAspectRatio
+      must: 0
+    ################# clear Node Tool ####################
+    - name: DeleteTurtleObject
+      must: 0
+    - name: DeleteUselessGroupId
+      must: 0
+    - name: DeleteAiOptions
+      must: 0
+    - name: DeleteAiAOVDriver
+      must: 0
+    - name: DeleteDeleteComponentNode
+      must: 0
+    - name: DeleteUselessXgenNode
+      must: 0
+    - name: DeleteUselessRenderSetupNode
+      must: 0
+    - name: DeleteUselessSGNode
+      must: 0
+    - name: DeleteUselessNodeGraphEditorInfoNode
+      must: 0
+    - name: DeleteUselessMaterialInfoNode
+      must: 0
+    - name: DeleteDataStructure
+      must: 0
+    - name: DeleteHyperLayoutNode
+      must: 0
+    - name: DeleteHyperViewNode
+      must: 0
+    - name: DeleteNodeGraphEditorBookmarkInfoNode
+      must: 0
+    - name: DeleteDataReferenceEditsNode
+      must: 0
+    - name: DeleteUselessReference
+      must: 0
+    - name: DeleteRenderLayer
+      must: 0
+    - name: DeleteRenderSetupLayer
+      must: 0
+    # 20190730
+    - name: DeleteUselessScript
+      must: 0
+    - name: DeleteUselessExpression
+      must: 0
+    - name: DeleteUselessCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnSurfaceInfo
+      must: 0
+    - name: DeleteUselessClosestPointOnSurface
+      must: 0
+    - name: DeleteUselessDistanceBetween
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessPolyUnite
+      must: 0
+    - name: DeleteUselessBlendWeighted
+      must: 0
+    - name: DeleteUselessAnimCurve
+      must: 0
+    - name: DeleteUselessGroupParts
+      must: 0
+    - name: DeleteUselessPartition
+      must: 0
+    - name: DeleteUselessPoseInterpolatorManager
+      must: 0
+    - name: DeleteUselessShapeEditorManager
+      must: 0
+    - name: DeleteUselessTrackInfoManager
+      must: 0
+    - name: DeleteUselessCameraView
+      must: 0
+    - name: DeleteUselessBlindDataTemplate
+      must: 0
+    - name: DeleteUselessConstraint
+      must: 0
+    - name: DeleteUselessObjectSet
+      must: 0
 
   workfile_save_actions:
     - name: workfile_root
@@ -345,11 +3234,155 @@ BG_Characters:
       parms:
         input: '{workfile_root}/{GetFilename}'
 
+  workfile_saveas_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
 
-VFX:
+    - type: GetTaskName
+
+    - type: VersionUp
+      parms:
+        input: '{workfile_root}/{shot}_{GetTaskName}_{step}_v###_{file_description}.mb'
+
+    - type: SaveAsScene
+      parms:
+        input: '{VersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        files: '{SaveAsScene}'
+        part: 'BG_Characters'
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile
+
+
+FX:
 
   work_path: '{step}_work'
   publish_path: '{step}_publish'
+
+  workfile_filename_description_items:
+    - name: None
+      short_name: ''
+      description: None
+    - name: VFX
+      short_name: vfx
+      description: VFX
+
+  checking_items:
+    - name: SceneUnit
+      must: 1
+    - name: FrameRange
+      must: 0
+    - name: CheckUnknown
+      must: 1
+    - name: RenameShape1
+      must: 0
+    - name: CheckCharState
+      must: 0
+    - name: CheckAovs
+      must: 0
+    - name: CheckUnknownPlugin
+      must: 0
+    - name: CleanDistanceBetweenNodes
+      must: 0
+    ################# clear Node Tool ####################
+    - name: DeleteTurtleObject
+      must: 0
+    - name: DeleteUselessGroupId
+      must: 0
+    - name: DeleteAiOptions
+      must: 0
+    - name: DeleteAiAOVDriver
+      must: 0
+    - name: DeleteDeleteComponentNode
+      must: 0
+    - name: DeleteUselessXgenNode
+      must: 0
+    - name: DeleteUselessRenderSetupNode
+      must: 0
+    - name: DeleteUselessSGNode
+      must: 0
+    - name: DeleteUselessNodeGraphEditorInfoNode
+      must: 0
+    - name: DeleteUselessMaterialInfoNode
+      must: 0
+    - name: DeleteDataStructure
+      must: 0
+    - name: DeleteHyperLayoutNode
+      must: 0
+    - name: DeleteHyperViewNode
+      must: 0
+    - name: DeleteNodeGraphEditorBookmarkInfoNode
+      must: 0
+    - name: DeleteDataReferenceEditsNode
+      must: 0
+    - name: DeleteUselessReference
+      must: 0
+    - name: DeleteRenderLayer
+      must: 0
+    - name: DeleteRenderSetupLayer
+      must: 0
+    # 20190730
+    - name: DeleteUselessScript
+      must: 0
+    - name: DeleteUselessExpression
+      must: 0
+    - name: DeleteUselessCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnSurfaceInfo
+      must: 0
+    - name: DeleteUselessClosestPointOnSurface
+      must: 0
+    - name: DeleteUselessDistanceBetween
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessPolyUnite
+      must: 0
+    - name: DeleteUselessBlendWeighted
+      must: 0
+    - name: DeleteUselessAnimCurve
+      must: 0
+    - name: DeleteUselessGroupParts
+      must: 0
+    - name: DeleteUselessPartition
+      must: 0
+    - name: DeleteUselessPoseInterpolatorManager
+      must: 0
+    - name: DeleteUselessShapeEditorManager
+      must: 0
+    - name: DeleteUselessTrackInfoManager
+      must: 0
+    - name: DeleteUselessCameraView
+      must: 0
+    - name: DeleteUselessBlindDataTemplate
+      must: 0
+    - name: DeleteUselessConstraint
+      must: 0
+    - name: DeleteUselessObjectSet
+      must: 0
 
   workfile_save_actions:
     - name: workfile_root
@@ -364,10 +3397,107 @@ VFX:
     - type: SaveAsScene
       parms:
         input: '{workfile_root}/{GetFilename}'
+
+  workfile_saveas_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetTaskName
+
+    - type: VersionUp
+      parms:
+        input: '{workfile_root}/{shot}_{GetTaskName}_{step}_v###.mb'
+
+    - type: SaveAsScene
+      parms:
+        input: '{VersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        files: '{SaveAsScene}'
+        part: 'VFX'
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile
 
 
 Assembling:
 
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
+
+  submit_widget: CommentWidget
+  publisher_widget: CommentWidget
+
+  checking_items:
+    - name: SceneUnit
+      must: 1
+    - name: FrameRange
+      must: 0
+    - name: CheckUnknown
+      must: 1
+    - name: CheckCharState
+      must: 0
+    - name: CheckAovs
+      must: 0
+    - name: CheckUnknownPlugin
+      must: 0
+    - name: CleanDistanceBetweenNodes
+      must: 0
+    ################# clear Node Tool ####################
+    - name: DeleteTurtleObject
+      must: 0
+    - name: DeleteUselessGroupId
+      must: 0
+    - name: DeleteAiOptions
+      must: 0
+    - name: DeleteAiAOVDriver
+      must: 0
+    - name: DeleteDeleteComponentNode
+      must: 0
+    - name: DeleteUselessXgenNode
+      must: 0
+    - name: DeleteUselessRenderSetupNode
+      must: 0
+    - name: DeleteUselessSGNode
+      must: 0
+    - name: DeleteUselessNodeGraphEditorInfoNode
+      must: 0
+    - name: DeleteUselessMaterialInfoNode
+      must: 0
+    - name: DeleteDataStructure
+      must: 0
+    - name: DeleteHyperLayoutNode
+      must: 0
+    - name: DeleteHyperViewNode
+      must: 0
+    - name: DeleteNodeGraphEditorBookmarkInfoNode
+      must: 0
+    - name: DeleteDataReferenceEditsNode
+      must: 0
+    - name: DeleteUselessReference
+      must: 0
+    - name: DeleteRenderLayer
+      must: 0
+    - name: DeleteRenderSetupLayer
+      must: 0
+
   workfile_save_actions:
     - name: workfile_root
       type: GetPathFromTag
@@ -381,9 +3511,171 @@ Assembling:
     - type: SaveAsScene
       parms:
         input: '{workfile_root}/{GetFilename}'
+
+  workfile_saveas_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetTaskName
+
+    - type: VersionUp
+      parms:
+        input: '{workfile_root}/{shot}_{GetTaskName}_{step}_v###.mb'
+
+    - type: SaveAsScene
+      parms:
+        input: '{VersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        files: '{SaveAsScene}'
+        part: 'Assembling'
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile
 
 
 shotFinaling:
+  short_name: SF
+
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
+
+  submit_widget: CommentWidget
+  publisher_widget: CommentWithSelectAssetWidget
+
+  workfile_filename_description_items:
+    - name: Blocking
+      short_name: BLO
+      description: Blocking stage
+    - name: Spline
+      short_name: SPL
+      description: Spline stage
+    - name: Polishing
+      short_name: POL
+      description: Polishing stage
+
+  checking_items:
+    - name: SceneUnit
+      must: 1
+    - name: CheckAudioFrms
+      must: 0
+    - name: checkCGtFrame
+      must: 0
+    - name: FrameRange
+      must: 0
+    - name: changeAniFrame
+      must: 0
+    - name: CheckCamera
+      must: 0
+    - name: CheckUnknown
+      must: 1
+    - name: CheckCharState
+      must: 0
+    - name: CheckAovs
+      must: 0
+    - name: CheckUnknownPlugin
+      must: 0
+    - name: CheckProxyEyes
+      must: 0
+    - name: KeyNurbsCurve970
+      must: 0
+    - name: DeviceAspectRatio
+      must: 0
+    ################# clear Node Tool ####################
+    - name: DeleteTurtleObject
+      must: 0
+    - name: DeleteUselessGroupId
+      must: 0
+    - name: DeleteAiOptions
+      must: 0
+    - name: DeleteAiAOVDriver
+      must: 0
+    - name: DeleteDeleteComponentNode
+      must: 0
+    - name: DeleteUselessXgenNode
+      must: 0
+    - name: DeleteUselessRenderSetupNode
+      must: 0
+    - name: DeleteUselessSGNode
+      must: 0
+    - name: DeleteUselessNodeGraphEditorInfoNode
+      must: 0
+    - name: DeleteUselessMaterialInfoNode
+      must: 0
+    - name: DeleteDataStructure
+      must: 0
+    - name: DeleteHyperLayoutNode
+      must: 0
+    - name: DeleteHyperViewNode
+      must: 0
+    - name: DeleteNodeGraphEditorBookmarkInfoNode
+      must: 0
+    - name: DeleteDataReferenceEditsNode
+      must: 0
+    - name: DeleteUselessReference
+      must: 0
+    - name: DeleteRenderLayer
+      must: 0
+    - name: DeleteRenderSetupLayer
+      must: 0
+    # 20190730
+    - name: DeleteUselessScript
+      must: 0
+    - name: DeleteUselessExpression
+      must: 0
+    - name: DeleteUselessCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnCurveInfo
+      must: 0
+    - name: DeleteUselessPointOnSurfaceInfo
+      must: 0
+    - name: DeleteUselessClosestPointOnSurface
+      must: 0
+    - name: DeleteUselessDistanceBetween
+      must: 0
+    - name: DeleteUselessWire
+      must: 0
+    - name: DeleteUselessPolyUnite
+      must: 0
+    - name: DeleteUselessBlendWeighted
+      must: 0
+    - name: DeleteUselessAnimCurve
+      must: 0
+    - name: DeleteUselessGroupParts
+      must: 0
+    - name: DeleteUselessPartition
+      must: 0
+    - name: DeleteUselessPoseInterpolatorManager
+      must: 0
+    - name: DeleteUselessShapeEditorManager
+      must: 0
+    - name: DeleteUselessTrackInfoManager
+      must: 0
+    - name: DeleteUselessCameraView
+      must: 0
+    - name: DeleteUselessBlindDataTemplate
+      must: 0
+    - name: DeleteUselessConstraint
+      must: 0
+    - name: DeleteUselessObjectSet
+      must: 0
 
   workfile_save_actions:
     - name: workfile_root
@@ -398,10 +3690,368 @@ shotFinaling:
     - type: SaveAsScene
       parms:
         input: '{workfile_root}/{GetFilename}'
+
+  workfile_saveas_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetTaskName
+
+    - type: VersionUp
+      parms:
+        input: '{workfile_root}/{shot}_{GetTaskName}_{step}_v###_{file_description}.mb'
+
+    - type: SaveAsScene
+      parms:
+        input: '{VersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        files: '{SaveAsScene}'
+        part: 'shotFinaling'
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile
+
+  publisher_actions:
+#    - name: current_file_basename2
+#      type: FindMaxVersionWorkFileBasename
+
+    - name: current_file_basename2
+      type: KeepName
+      parms:
+        input: '{current_file_basename}'
+
+    - name: current_filename2
+      type: CreateVar
+      parms:
+        input: '{current_file_basename2}.mb'
+
+    - type: SetLowViwer
+      parms:
+        wireframe: false
+
+    - type: SaveScene
+      parms:
+        format: 'mb'
+
+    # ------------------ Publish ma file to history ------------------
+    - name: FileHistoryPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish_versions'
+
+    - name: CopyFile1
+      type: CopyFile
+      parms:
+        input: '{current_file}'
+        output: '{FileHistoryPath}/{current_filename2}'
+
+    - name: vers
+      type: SplitString
+      parms:
+        input: '{current_file_basename2}'
+        splitter: '_'
+        index: 3
+
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{FileHistoryPath}/{current_filename2}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{FileHistoryPath}'
+        part: 'shotFinaling'
+        description: '{description}'
+        version: '{version}'
+        thumbnail: ''
+        name: '{current_file_basename}'
+        version_type: publish
+
+    # ------------------ Publish ma file to approved ------------------
+    - name: ApprovedPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_publish'
+
+    - name: vp_filename
+      type: cutVersion
+      parms:
+        input: '{current_filename2}'
+
+    - name: vp_basename
+      type: GetFileBaseName1
+      parms:
+        input: '{vp_filename}'
+
+    - name: new_filename2
+      type: GetFileBaseName
+      parms:
+        input: '{FileHistoryPath}/{vp_filename}'
+
+    - name: new_basename2
+      type: ReplaceString
+      parms:
+        input: '{new_filename2}'
+        replace: '_v\d+'
+        to: ''
+
+    - name: CopyFile3
+      type: CopyFile
+      parms:
+        input: '{FileHistoryPath}/{current_filename2}'
+        output: '{ApprovedPath}/{vp_filename}'
+
+    - name: level
+      type: SplitString
+      parms:
+        input: '{current_file_basename2}'
+        splitter: '_'
+        index: 3
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{ApprovedPath}'
+        part: 'shotFinaling'
+        description: '{description}'
+        version: '{version}'
+        thumbnail: ''
+        name: '{vp_filename}'
+        version_type: publish
+        level: '{level}'
+
+    # ------------------ play blast with banner ------------------
+    - name: MovieHistoryPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_previs_versions'
+
+    - name: MoviePublishPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_previs'
+
+    - type: PlayBlastFunc2
+      parms:
+        movPath: '{MovieHistoryPath}/{current_file_basename2}.mov'
+
+#    - name: movie_path
+#      type: VersionUp
+#      parms:
+#        input: '{MovieHistoryPath}/{current_file_basename2}.mov'
+
+    - type: copyMovies
+      parms:
+        root: '{MovieHistoryPath}'
+        current: '{current_file_basename2}'
+        target: '{MoviePublishPath}'
+
+    # ------------------ export object abc ------------------
+    - name: abcHistoryPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_abcH'
+
+    - name: abcPath
+      type: GetPathFromTag
+      parms:
+        input: '{step}_abc'
+
+    - type: ForLoop
+      parms:
+        input: '{objects}'
+
+      subs:
+        # Publish files to version root
+        - name: abcHistoryPath
+          type: GetPathFromTag
+          parms:
+            input: '{step}_abcH'
+
+        - name: abcPath
+          type: GetPathFromTag
+          parms:
+            input: '{step}_abc'
+
+        - name: abc_path
+          type: VersionUp
+          parms:
+            input: '{abcHistoryPath}/{sequence}_{shot}_{step}_{instance}_v###.abc'
+
+        - type: HidObject
+          parms:
+            input: '{instance}'
+
+        - type: BreakHiddenObjectConnect
+
+        - type: ExportAbc
+          parms:
+            input: '{each_objects}'
+            output: '{abc_path}'
+            single_frame: false
+
+        - type: LinkHiddenObjectConnect
+          parms:
+            connectInfo: '{BreakHiddenObjectConnect}'
+
+        - name: version
+          type: GetVersionNumber
+          parms:
+            input: '{abc_path}'
+            pattern: 'v###'
+
+#        - name: level
+#          type: SplitString
+#          parms:
+#            input: '{current_file_basename2}'
+#            splitter: '_'
+#            index: 3
+
+        - name: CopyFile2
+          type: CopyFile
+          parms:
+            input: '{abc_path}'
+            output: '{abcPath}/{sequence}_{shot}_{short_step}_{instance}.abc'
+
+        - type: ExportAssembleJson
+          parms:
+            cache_path: '{CopyFile2}'
+            grp_name: '{each_objects}'
+            output_path: '{abcPath}/MaterialMessage.json'
+
+        - type: UploadFiles1
+          parms:
+            appr_abc_path: '{CopyFile2}'
+
+    # ------------------ export camera  --------------------
+    - name: cam_approve_path
+      type: GetPathFromTag
+      parms:
+        input: 'cam_approved'
+
+    - name: cam_history_path
+      type: GetPathFromTag
+      parms:
+        input: 'cam_history'
+
+    - type: CameraName
+
+    - type: SubmitApprovedDatabase
+      parms:
+        input: '{CopyFile3}'
+
+    - type: SetSceneActiveViewAttributes
+      parms:
+        input:
+
+    #  camera abc
+    - name: camera_abc_app
+      type: ExportAbc
+      parms:
+        input: '{CameraName}'
+        output: '{cam_approve_path}/{sequence}_{shot}_camera.abc'
+        single_frame: false
+        deleteArnoldAttr: true
+
+    - name: version_camera_abc
+      type: VersionUp
+      parms:
+        input: '{cam_history_path}/{sequence}_{shot}_camera_v###.abc'
+
+    - name: camera_abc_his
+      type: CopyFile
+      parms:
+        input: '{camera_abc_app}'
+        output: '{version_camera_abc}'
+
+    # camera mb
+    - name: camera_mb_app
+      type: ExportScene
+      parms:
+        object: '{CameraName}'
+        output: '{cam_approve_path}/{sequence}_{shot}_camera.mb'
+
+    - name: version_cam_mb
+      type: VersionUp
+      parms:
+        input: '{cam_history_path}/{sequence}_{shot}_camera_v###.mb'
+
+    - name: camera_mb_his
+      type: CopyFile
+      parms:
+        input: '{camera_mb_app}'
+        output: '{version_cam_mb}'
+
+    # ------------------ submit message  --------------------
+    - name: version
+      type: GetVersionNumber
+      parms:
+        input: '{MovieHistoryPath}/{current_file_basename2}.mov'
+        pattern: 'v###'
+
+    - type: SubmitApprovedDatabase
+      parms:
+        input: '{MovieHistoryPath}/{current_file_basename2}.mov'
+
+    - type: SendMessage
+      parms:
+        file_path: '{MovieHistoryPath}/{current_file_basename2}.mov'
+        discription: '{engine_parm_description}'
+
+    - type: ChangeStateAni
+      parms:
+        file_path: '{current_file_basename2}'
+
+    - type: ChangePublish
+
+    - type: SetCGTPublishedFileInfo
+      parms:
+        path: '{MovieHistoryPath}/{current_file_basename2}.mov'
 
 
 Lighting:
 
+  short_name: Lgt
+  work_path: '{step}_work'
+  publish_path: '{step}_publish'
+
+  submit_widget: CommentWidget
+  publisher_widget: CommentWidget
+
+  workfile_filename_description_items:
+    - name: Lgt
+      short_name: Lgt
+      description: Lgt
+    - name: Rendering
+      short_name: Rendering
+      description: Rendering
+
+  checking_items:
+    - name: SceneUnit
+      must: 1
+    - name: FrameRange
+      must: 0
+    - name: CheckUnknown
+      must: 1
+
   workfile_save_actions:
     - name: workfile_root
       type: GetPathFromTag
@@ -415,3 +4065,41 @@ Lighting:
     - type: SaveAsScene
       parms:
         input: '{workfile_root}/{GetFilename}'
+
+  workfile_saveas_actions:
+    - name: workfile_root
+      type: GetPathFromTag
+      parms:
+        input: '{step}_work'
+
+    - type: GetTaskName
+
+    - type: VersionUp
+      parms:
+        input: '{workfile_root}/{shot}_{GetTaskName}_{step}_v###.mb'
+
+    - type: SaveAsScene
+      parms:
+        input: '{VersionUp}'
+
+    - type: MakeFileOpenRecord
+
+    - type: GetFilename
+      parms:
+        input: '{current_file}'
+
+    - type: GetVersionNumber
+      parms:
+        input: '{GetFilename}'
+        pattern: 'v###'
+
+    - type: NewMakePublishInfoFile
+      parms:
+        output: '{current_file}'
+        files: '{SaveAsScene}'
+        part: 'Lighting'
+        description: '{description}'
+        version: '{GetVersionNumber}'
+        thumbnail: ''
+        name: '{GetFilename}'
+        version_type: workfile

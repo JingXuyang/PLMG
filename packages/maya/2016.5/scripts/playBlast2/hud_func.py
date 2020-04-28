@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-import sys,os
-import yaml
 import inspect
-import qtlb
-import nodes
+import os
+
+import yaml
+
 import huds_widgets
+
 reload(huds_widgets)
-#app = qtlb.Application(sys.argv)
 
 currentFile = inspect.getfile(inspect.currentframe())
-transparentImg = r'%s/1920_1080.png'%(os.path.dirname(currentFile))
-transparentImg = transparentImg.replace('\\','/')
-
+transparentImg = r'%s/1920_1080.png' % (os.path.dirname(currentFile))
+transparentImg = transparentImg.replace('\\', '/')
 
 dafaultData = '''
 labels: 
@@ -50,29 +49,24 @@ mask:
 '''
 '#FFD505'
 
-def main(data='',
-        srcPath='',
-        dstPath='',
-        frameRange='',
-        bgImg=''):
-    
+
+def main(data='', srcPath='', dstPath='', frameRange='', bgImg=''):
     if not data:
         data = dafaultData
-    
+
     if not os.path.exists(bgImg):
         bgImg = transparentImg
     wgt = huds_widgets.SceneHUDsPrefsWidget(backgroundImage=bgImg)
-        
+
     dat = yaml.load(data)
     wgt.setValue(dat)
     # refresh first label text font
-    #wgt.show()
-    #wgt.close()
+    # wgt.show()
+    # wgt.close()
 
     srcPath = srcPath
     dstPath = dstPath
     frameRange = frameRange
-    wgt.saveSequence(srcPath, dstPath, frameRange,transparentImg=transparentImg)
+    wgt.saveSequence(srcPath, dstPath, frameRange, transparentImg=transparentImg)
 
-    #sys.exit(app.exec_())
-
+    # sys.exit(app.exec_())

@@ -4,7 +4,7 @@
     "pack_path": "", 
     "data_path": "E:\\LongGong\\XSYH\\data", 
     "global_config": "", 
-    "project": "LongGong", 
+    "project": "LongGongTest", 
     "sw_tools": "C:/Program Files/Autodesk/Maya2016.5/bin/mayapy.exe", 
     "extra_envs": [
         {

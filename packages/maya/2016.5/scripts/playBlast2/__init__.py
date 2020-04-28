@@ -1,9 +1,9 @@
 
-def run(path=''):
+def run(path='', cam=''):
     import HudWatermark
     reload(HudWatermark)
     
-    hudmk = HudWatermark.HudWatermark(path=path)
+    hudmk = HudWatermark.HudWatermark(path=path, cam=cam)
 
     # set camera attr
     hudmk.setCameraAttr()

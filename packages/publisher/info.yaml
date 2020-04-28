@@ -1,12 +1,225 @@
 open file: |
-  import qtlb
-  reload(qtlb)
-  from qtlb import TaskLoadWindow
-  win = TaskLoadWindow()
+  from nodes.engines import subengine
+  dialog = subengine.openDialog('SelectTask')
+  if dialog:
+      dialog.show()
+
+
+submit file: |
+  from nodes.engines import subengine
+  dialog = subengine.openDialog('submit')
+  if dialog:
+      dialog.show()
+
+publish file: |
+  import swif
+  software = swif.software()
+  if not software.isUntitled():
+      from nodes.engines import subengine
+      dialog = subengine.openDialog('publish')
+      if dialog:
+          dialog.show()
+
+check_and_fix: |
+  import swif
+  software = swif.software()
+  if not software.isUntitled():
+      from nodes.engines import subengine
+      dialog = subengine.openDialog('checking')
+      if dialog:
+          dialog.show()
+
+Asset Loader: |
+  print 'Asset Loader'
+
+Scene Assembly: |
+  print 'Scene Assembly'
+
+clear scene: |
+  import maya.mel as mel
+  mel.eval('source syf_Clear_Node_Tool.mel;SYF_Clear_Nodes()')
+
+playblast with banner: |
+  import playBlast_local
+  reload(playBlast_local)
+  win = playBlast_local.Window()
   win.show()
 
-bb: |
-  print "bb"
+publish camera: |
+  from publisherCamera import publishUI
+  reload(publishUI)
+  win = publishUI.UI()
+  win.show()
 
-cc: |
-  print "c"
+export_all_camera: |
+  import sys
+  sys.path.append(r'Z:\bin\pltk\packages\maya\2016.5\scripts\exportAllCam')
+  import exportAllCamUI
+  reload(exportAllCamUI)
+  win = exportAllCamUI.MainWindow()
+  win.show()
+
+# ----------------------- CFX Tools ----------------------------
+djRivert: |
+  import pm.mel.core as pm
+  pm.mel.eval('source "Z:/bin/pltk/packages/maya/2016.5/scripts/CFXTools/rivet.mel";')
+
+rivet: |
+  import pymel.core as pm
+  pm.mel.eval('source "Z:/bin/pltk/packages/maya/2016.5/scripts/CFXTools/djRivert.mel";')
+  pm.mel.eval('djRivet();')
+
+
+time_scale: |
+  import sys
+  sys.path.append(r'Z:/bin/pltk/packages/maya/2016.5/scripts/CFXTools')
+  import time_scale
+  reload(time_scale)
+
+weiyi: |
+  import sys
+  sys.path.append(r'Z:/bin/pltk/packages/maya/2016.5/scripts/CFXTools')
+  import weiyi
+  reload(weiyi)
+
+curve_blend_gradient: |
+  import sys
+  sys.path.append(r'Z:/bin/pltk/packages/maya/2016.5/scripts/CFXTools')
+  import nurvs_blend_gradient
+  reload(nurvs_blend_gradient)
+
+lcaCfxBlendtool: |
+  import sys
+  sys.path.append(r'Z:/bin/pltk/packages/maya/2016.5/scripts/CFXTools')
+  import lcaCfxBlendtool.BlendTool as BL
+  reload(BL)
+  BL.Blend()
+
+IKhandle: |
+  import sys
+  sys.path.append(r'Z:/bin/pltk/packages/maya/2016.5/scripts/CFXTools')
+  import IKhandle.CreateStretchIk as CIK
+  CIK.createIK()
+
+nHairTools: |
+  import sys
+  sys.path.append(r'Z:\LongGong\users\yaoqq\Share\Scripts')
+  import nHair_Tools_UI
+  reload(nHair_Tools_UI)
+
+  nHair_Tools_UI.UI_Start()
+
+XgenCache: |
+  import sys
+  sys.path.append(r'Z:\bin\script\work\maya\setXgenFiles')
+  import script
+  reload(script)
+
+  from script import SetXgen
+  set_sgn = SetXgen()
+  set_sgn.run()
+
+softSelectToCluster: |
+  import sys
+  sys.path.append(r'Z:\bin\script\work\maya\softSelectToCluster')
+  import softSelectToCluster
+  reload(softSelectToCluster)
+
+  softSelectToCluster.run()
+
+
+# ----------------------- Light Tools ------------------
+aiOpaque_off: |
+  import sys
+  sys.path.append(r'Z:/bin/pltk/packages/maya/2016.5/scripts/LightingTools')
+  import aiOpaque_off
+  reload(aiOpaque_off)
+
+ar_sub: |
+  import sys
+  sys.path.append(r'Z:/bin/pltk/packages/maya/2016.5/scripts/LightingTools')
+  import ar_sub
+  reload(ar_sub)
+
+MH_CheckOverName: |
+  import pymel.core as pm
+  pm.mel.eval('source "Z:/bin/pltk/packages/maya/2016.5/scripts/LightingTools/MH_CheckOverName.mel";')
+
+nHair_Assign_peBrush_tool: |
+  import pymel.core as pm
+  pm.mel.eval('source "Z:/bin/pltk/packages/maya/2016.5/scripts/LightingTools/nHair_Assign_peBrush_tool.mel";')
+
+Random_Rename_Objects: |
+  import pymel.core as pm
+  pm.mel.eval('source "Z:/bin/pltk/packages/maya/2016.5/scripts/LightingTools/Random_Rename_Objects.mel";')
+
+TurnOffMatte_TurnOffPrimaryVis: |
+  import pymel.core as pm
+  pm.mel.eval('source "Z:/bin/pltk/packages/maya/2016.5/scripts/LightingTools/TurnOffMatte_TurnOffPrimaryVis.mel";')
+
+Xgen_Tools: |
+  import pymel.core as pm
+  pm.mel.eval('source "Z:/bin/pltk/packages/maya/2016.5/scripts/LightingTools/Xgen_Tools.mel";')
+
+Render_setup_delete_rs_prefix: |
+  from PreRender import *
+  import PreRender
+  PreRender.PreRender()
+
+Clear_Node_Tool: |
+  import pymel.core as pm
+  pm.mel.eval('source "syf_Clear_Node_Tool";SYF_Clear_Nodes();')
+
+Add_AOV: |
+  import pymel.core as pm
+  pm.mel.eval('source "Z:/bin/pltk/packages/maya/2016.5/scripts/LightingTools/Add_AOV.mel";')
+
+Delete_charQian_Backface: |
+  import pymel.core as pm
+  pm.mel.eval('source "Z:/bin/script/mh_Delete_charQian_Backface.mel";')
+
+DNoise_Tool: |
+  import pymel.core as pm
+  pm.mel.eval('source "Z:/bin/script/syf_DNoise_Task.mel";')
+
+
+# ----------------------- SF Tools ------------------
+autoRR_render: |
+  import auto_RRrender
+  reload(auto_RRrender)
+  result = auto_RRrender.run()
+  if result == "END":
+      cmds.confirmDialog(title="Tip", message="Setting Successfully !", button="Yes")
+  else:
+      cmds.confirmDialog(title="Tip", message="Please contact Jing Xuyang", button="Yes")
+
+# ----------------------- Upload And Download Tools ------------------
+uploadSelPose: |
+  import uploadSelPose
+  reload(uploadSelPose)
+  win = uploadSelPose.Window()
+  win.show()
+
+uploadAllPose: |
+  import uploadAllPoses
+  reload(uploadAllPoses)
+  win = uploadAllPoses.Window()
+  win.show()
+
+downloadPoses: |
+  import DownLoadPos
+  reload(DownLoadPos)
+  win = DownLoadPos.Window()
+  win.show()
+
+Upload Files: |
+  import UpLoadFiles
+  reload(UpLoadFiles)
+  UpLoadFiles.A()
+
+Download Files: |
+  import DownLoadFiles
+  reload(DownLoadFiles)
+  a = DownLoadFiles.DownloadFiles()
+  a.show()
+

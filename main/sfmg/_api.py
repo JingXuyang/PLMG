@@ -23,6 +23,8 @@ def refreshMenu(shelve_path, name):
     @param name:  menu name
     @return: None
     '''
+    from nodes.actions import actions
+    reload(actions)
     if cmds.menu(name, exists=True):
         cmds.deleteUI(cmds.menu(name))
         cmds.deleteUI(name)
@@ -85,14 +87,17 @@ def build_shelf(shelve_path):
     # main_win = pm.language.melGlobals['gMainWindow']
     # get maya main window
     gMainWindow = mel.eval('$tmpVar=$gMainWindow')
-
-    # create refresh item
     shelve_data = utilities.load_yaml(shelve_path)
 
     # create menu
-    menu_name = shelve_data.get("menu_name", "Test")
+    menu_name = shelve_data.get("menu_name")
     deafult_menu = cmds.menu(menu_name, label=menu_name, tearOff=True, parent=gMainWindow)
-    cmds.menuItem(label="Refresh", parent=deafult_menu, command=lambda *args: refreshMenu(shelve_path, deafult_menu))
+
+    # create refresh item
+    cmds.menuItem(label="Refresh",
+                  parent=deafult_menu,
+                  command=lambda *args: refreshMenu(shelve_path, deafult_menu),
+                  image="{IMAGE_PATH}/refresh.png".format(IMAGE_PATH=IMAGE_PATH))
 
     # create item
     for item_dic in shelve_data.get("items"):

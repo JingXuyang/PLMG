@@ -14,6 +14,9 @@ import os
 import re
 import shutil
 import time
+import shiboken
+from PySide import QtGui, QtCore
+import maya.OpenMayaUI as apiUI
 
 
 class Maya:
@@ -140,9 +143,9 @@ class Maya:
         self._cmds.file(force=force, newFile=True, prompt=False)
         return True
 
-    def open(self, path, force=False):
+    def open(self, path, loadReferenceDepth="all", force=False):
         self._cmds.file(path, force=force, open=True, prompt=False,
-                        ignoreVersion=True)
+                        loadReferenceDepth=loadReferenceDepth, ignoreVersion=True)
         return True
 
     def hasSavingError(self):
@@ -834,6 +837,12 @@ class Maya:
                 result.append(info)
 
         return result
+
+    def isAlreadyReferenced(self, f):
+        if f in self._cmds.file(r=True, q=True):
+            return self._cmds.referenceQuery(f, namespace=True)
+
+        return False
 
     def changeReference_bak1(self, path, loadReference):
         '''loadReference is nameSpace'''
@@ -2801,6 +2810,14 @@ class Maya:
         f.close()
 
     # ---------------------------------- Render -------------------------------
+    @classmethod
+    def getMayaWindow(cls):
+        ptr = apiUI.MQtUtil.mainWindow()
+        if ptr is not None:
+            win = shiboken.wrapInstance(long(ptr), QtGui.QWidget)
+            win.setWindowState(QtCore.Qt.WindowMaximized)
+        return shiboken.wrapInstance(long(ptr), QtGui.QMainWindow)
+
     def getModelPanel4Camera(self):
         return self._cmds.modelPanel('modelPanel4', q=True, cam=True)
 
