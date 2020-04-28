@@ -299,15 +299,14 @@ class CGT(object):
     def getShots(self, sequence):
         '''
         得到场次的所有镜头号：[u'Shot010', u'Shot020', u'Shot030']
-        @param sequence: 场次
         @return: list
         '''
         if sequence:
             t_id_list = self.tw2.info.get_id(self.database, 'shot', [["eps.eps_name", "=", sequence]])
             shot_list = self.tw2.info.get(self.database, 'shot', t_id_list, ['shot.shot'])
             return sorted([i["shot.shot"] for i in shot_list])
-        else:
-            return False
+
+        return False
 
     def getShotTask(self, sequence='', shot='', task_id_ls='', load_label=''):
         filters = [i.get("sign") for i in self.config_data.get("global").get("shot_load")]
@@ -338,6 +337,7 @@ class CGT(object):
     def getPathFromTag(self, type="", sequence="", shot="", tag=""):
         '''
         根据目录标签，得到对应的完整路径
+        @return: str
         '''
         if type == "shot":
             id_list = self.tw2.info.get_id(self.database, type,
@@ -347,35 +347,46 @@ class CGT(object):
                                            [["asset.asset_name", "=", shot], 'and', ['asset.type_name', '=', sequence]])
         if id_list:
             return self.tw2.info.get_dir(self.database, type, id_list, [tag])[0][tag]
-        else:
-            return None
 
-    def getTaskFromTag(self, type="", sequence="", shot="", tag="", step=''):
-        '''
-        根据目录标签，获取CGT项目目录的路径
-        '''
-        if type == "shot":
-            id_list = self.tw2.info.get_id(self.database, type,
-                                           [["shot.shot", "=", shot], 'and', ['shot.eps_name', '=', sequence]])
-        else:
-            id_list = self.tw2.info.get_id(self.database, type,
-                                           [["asset.asset_name", "=", shot], 'and', ['asset.type_name', '=', sequence]])
-        if id_list:
-            return self.tw2.info.get_dir(self.database, type, id_list, [tag])[0][tag]
-        else:
-            return None
+        return False
 
     def getShotFrameRange(self, project, shotId=''):
+        '''
+        @return: tuple
+        '''
         data = self.tw2.info.get(self.getDataBase(project), 'shot', [shotId], ['shot.first_frame', 'shot.last_frame'])
         if data:
             frm1, frm2 = data[0]['shot.first_frame'], data[0]['shot.last_frame']
             return frm1, frm2
-        else:
-            return '', ''
+
+        return '', ''
+
+    def getShotLinkedAssets(self, info):
+        '''
+        得到包含镜头link的资产信息的列表
+        [
+            {'type_name': 'char', 'name': 'testCharDog'},
+            ...
+        ]
+        @return: list
+        '''
+        database = self.getDataBase(info.get('project'))
+        link_id_ls = self.tw2.link.get_asset(database, 'shot', 'info', info.get('id'))
+        result = list()
+        if link_id_ls:
+            for _id in link_id_ls:
+                asset_info = self.tw2.info.get(database, 'asset', [_id], ['asset.asset_name', 'asset.type_name'])
+                temp = dict()
+                temp['type_name'] = asset_info[0].get('asset.type_name')
+                temp['name'] = asset_info[0].get('asset.asset_name')
+                result.append(temp)
+            return result
+        return False
 
     def doesVersionExist(self, info, project=os.environ.get('XSYH_PROJECT')):
         '''
         检查version模块中是否存在该信息，存在返回信息ID，不存在返回False
+        @return: str
         '''
         id_list = self.tw2.info.get_id(self.database, 'version', [['version.sequence', "=", info['sequence']],
                                                                   ['version.shot', "=", info['shot']],
@@ -387,8 +398,8 @@ class CGT(object):
         if id_list:
             data = self.tw2.info.get(self.getDataBase(project), 'version', id_list, ['version.id'])
             return data[0]['version.id']
-        else:
-            return False
+
+        return False
 
     def updateVersionInfo(self, version_id, info, project=os.environ.get('XSYH_PROJECT')):
         '''
@@ -427,8 +438,8 @@ class CGT(object):
         if id_list:
             data = self.tw2.info.get(self.getDataBase(project), 'version', id_list, ['version.{}'.format(sign)])
             return data[0]['version.{}'.format(sign)]
-        else:
-            return False
+
+        return False
 
 
 if __name__ == '__main__':
