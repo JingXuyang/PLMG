@@ -32,6 +32,8 @@ def openDialog(action):
         return qtlb.PublishWidget(PublishEngine)
     elif action == 'SelectTask':
         return qtlb.SelectTaskWindow(ActionEngine)
+    elif action == 'assembly':
+        return qtlb.SceneAssembly(ActionEngine)
 
 
 # ================================= Action =================================
