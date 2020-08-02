@@ -175,7 +175,7 @@ global:
   workfile_new_actions:
     - type: NewScene
 
-    - type: SetSceneFrameRange
+    # - type: SetSceneFrameRange
 #
     - type: SetSceneResolution
 #
@@ -354,7 +354,7 @@ Model:
 
     - type: ModelVersionUp
       parms:
-        input: '{workfile_root}/{shot}_{GetTaskName}_{step}_v###_{file_description}.{workfile_format}'
+        input: '{workfile_root}/{shot}_{GetTaskName}_{step}_v###_{file_description}.mb'
 
     - type: SetModelNotes
 
@@ -395,7 +395,7 @@ Model:
 
     - type: SaveScene
       parms:
-        format: '{workfile_format}'
+        format: 'mb'
 
     # Copy to versions folder
     - type: SetModelNotes
@@ -412,7 +412,7 @@ Model:
         output: '{VersionRoot}/{current_file_basename}.mb'
 
     - name: history_abc_path
-      type: keepName
+      type: KeepName
       parms:
         input: '{VersionRoot}/{current_file_basename}.abc'
 
@@ -1330,7 +1330,7 @@ charEffects:
         - name: VersionRoot
           type: CreateVar
           parms:
-            input: '{charEffectsNclothTag}/{shot}_{code}_{engine_parm_file_description}_v###.{workfile_format}'
+            input: '{charEffectsNclothTag}/{shot}_{code}_{engine_parm_file_description}_v###.mb'
           condition:
             type: asset
             step: charEffects
@@ -1338,7 +1338,7 @@ charEffects:
         - name: VersionRoot
           type: CreateVar
           parms:
-            input: '{charEffectsNhairTag}/{shot}_fur_v###.{workfile_format}'
+            input: '{charEffectsNhairTag}/{shot}_fur_v###.mb'
           condition:
             type: asset
             step: charEffects
@@ -1418,7 +1418,7 @@ charEffects:
     - name: CopyFile2
       type: SaveAsScene
       parms:
-        input: '{VersionRoot2}/{new_basename}.{workfile_format}'
+        input: '{VersionRoot2}/{new_basename}.mb'
 
     - type: CreateLatestVersion
       parms:

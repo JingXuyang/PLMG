@@ -10,22 +10,18 @@
 import glob
 import os
 import re
-
 import widget
-
 reload(widget)
 from widget import *
 
-# sys.path.append(r"E:\LongGong\XSYH\main")
 import dbif
 import swif
-from nodes import engine
-from nodes.engines import subengine
+import nodes
 
 reload(dbif)
-reload(subengine)
 
 # ================================= Global variable =================================
+engine = nodes.engine
 config_data = engine.getConfigs()
 database = dbif.CGT(config_data=config_data)
 prj_name = os.environ["XSYH_PROJECT"]
@@ -560,7 +556,8 @@ class SelectTaskWindow(QtWidgets.QDialog):
         新建场景，初始化一些设置
         '''
         if self.getTaskSelectionInfo():
-            engine.WorkfileManager('workfile_new')
+            import nodes.engines.subengine as subengine
+            subengine.WorkfileManager('workfile_new')
         self.close()
 
     def _open_file(self):
@@ -831,6 +828,7 @@ class SubmitWidget(QtWidgets.QDialog):
                 self._engine.file_description = self.des_comp.currentText()  # 添加 file_description
             self.close()
             # 打开检查窗口
+            import nodes.engines.subengine as subengine
             s = CheckingWidget(subengine.CheckingEngine, self._engine, self)
             s.show()
         else:
@@ -873,6 +871,7 @@ class PublishWidget(QtWidgets.QDialog):
         if sel_info:
             self.close()
             # 打开检查窗口
+            import nodes.engines.subengine as subengine
             s = CheckingWidget(subengine.CheckingEngine, self._engine, self)
             s.show()
         else:
@@ -918,7 +917,6 @@ class CheckingWidget(QtWidgets.QDialog):
         if self._par_engine.__name__ == 'SubmitEngine':
             wgt_name = self._par_engine.getStepConfig().get('submit_widget', 'CommentWidget')
             this_module = sys.modules[__name__]  # __name__表示当前文件
-            print getattr(this_module, wgt_name)
             s = getattr(this_module, wgt_name)(self._par_engine, 'Submit')
         else:
             wgt_name = self._par_engine.getStepConfig().get('publisher_widget', 'CommentWidget')

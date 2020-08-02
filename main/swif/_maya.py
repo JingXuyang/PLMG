@@ -14,8 +14,14 @@ import os
 import re
 import shutil
 import time
-import shiboken
-from PySide import QtGui, QtCore
+import sys
+sys.path.append(os.path.join(os.environ["XSYH_ROOT_PATH"], "main/qtlb"))
+try:
+    import shiboken
+except:
+    import shiboken2 as shiboken 
+from Qt import QtWidgets, QtGui, QtCore
+# from PySide import QtGui, QtCore
 import maya.OpenMayaUI as apiUI
 
 
@@ -2797,7 +2803,7 @@ class Maya:
         return texDic
 
     def replaceTexturePaths(self, maPath, pathInfo):
-        # print exportPath,"########################"
+        # print exportPath,"########################
         f = open(maPath, "r")
         txt = f.read()
         f.close()
@@ -2814,9 +2820,9 @@ class Maya:
     def getMayaWindow(cls):
         ptr = apiUI.MQtUtil.mainWindow()
         if ptr is not None:
-            win = shiboken.wrapInstance(long(ptr), QtGui.QWidget)
+            win = shiboken.wrapInstance(long(ptr), QtWidgets.QWidget)
             win.setWindowState(QtCore.Qt.WindowMaximized)
-        return shiboken.wrapInstance(long(ptr), QtGui.QMainWindow)
+        return shiboken.wrapInstance(long(ptr), QtWidgets.QMainWindow)
 
     def getModelPanel4Camera(self):
         return self._cmds.modelPanel('modelPanel4', q=True, cam=True)

@@ -32,7 +32,10 @@ class MyTreeWidget(QtWidgets.QTreeWidget):
         self.setHeaderLabels(labels)
 
     def setHeaderStyle(self):
-        self.header().setResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+        try:
+            self.header().setResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+        except:
+            self.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
         self.setSortingEnabled(True)
         self.sortItems(0, QtCore.Qt.AscendingOrder)
 

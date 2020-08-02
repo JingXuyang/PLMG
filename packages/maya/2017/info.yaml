@@ -1,0 +1,23 @@
+############### Env Setup ###########################
+env:
+  - name: MAYA_UI_LANGUAGE
+    value: en_US
+    mode: over
+
+  - name: PYTHONPATH
+    value: '{XSYH_ROOT_PATH}\scripts'
+    mode: prefix
+
+  - name: MAYA_DISABLE_CLIC_IPM
+    value: "1"
+    mode: over
+
+  - name: MAYA_SCRIPT_PATH
+    value: "{XSYH_PACKAGE_PATH}/scripts"
+    mode: prefix
+
+## Commands for the main exe of the package.
+exe: 'F:/Maya2017/bin/maya.exe'
+
+tools: 'F:/Maya2017/bin/mayapy.exe'
+

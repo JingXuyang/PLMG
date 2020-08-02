@@ -1,0 +1,4275 @@
+//Code by sunyefei 20190404
+global proc SYF_Clear_Nodes()
+{
+	string $layout = getOptionBox();
+	setParent $layout;
+	waitCursor -state 1;
+	scrollLayout   -cr 1 -mcw 10 -pe 1 -vsb 0   -horizontalScrollBarThickness 16 -verticalScrollBarThickness 16 ; 
+	string $parent = `columnLayout -adjustableColumn 1`;
+//-------------------------------------------------------------------------------
+    columnLayout;
+    rowLayout -numberOfColumns 3;
+    textFieldButtonGrp -ed false -label "Unknown"  -text ""  -buttonLabel " Clear " -bc "unknown_proc(1,0)" unknown_tfb;//ls -typ "unknown"
+    popupMenu;
+        menuItem -label "Open < Unknown > List" -c ("unknown_proc(999,0)") ;       
+        menuItem -label "Help About Unknown" -c ("display_help_About_nodeType_In_ClearTool(\"Unknown\")") ;  
+    button -w 35 -l "Select"  -c "unknown_proc(888,0)" unknown_select_btn; //-bgc 0 1 0     
+    button -w 8 -l ""  -c "unknown_proc(999,0)" unknown_list; //-bgc 0 1 0
+    setParent..;
+    
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "unknownPlugin" -text ""  -buttonLabel " Clear " -bc "unknownPlugin_proc(1,0)" unknownPlugin_tfb;//
+    popupMenu;
+        menuItem -label "Open < unknownPlugin > List" -c ("unknownPlugin_proc(999,0)") ;       
+        menuItem -label "Help About unknownPlugin" -c ("display_help_About_nodeType_In_ClearTool(\"unknownPlugin\")") ;
+    button -w 35 -l "Select"  -en 0 -c "unknownPlugin_proc(888,0)" unknownPlugin_select_btn; //-bgc 0 1 0  
+    button -w 8 -l "" -c "unknownPlugin_proc(999,0)" unknownPlugin_list; //-bgc 1 0 0
+    setParent..;	
+    
+    rowLayout -numberOfColumns 3;	
+	textFieldButtonGrp -ed false -label "dataStructure" -text ""   -buttonLabel " Clear " -bc "dataStructure_proc(1,0)" dataStructure_tfb;//
+	popupMenu;
+        menuItem -label "Open < dataStructure > List" -c ("dataStructure_proc(999,0)") ;       
+        menuItem -label "Help About dataStructure" -c ("display_help_About_nodeType_In_ClearTool(\"dataStructure\")") ;
+	button -w 35 -l "Select"  -en 0 -c "dataStructure_proc(888,0)" dataStructure_select_btn; //-bgc 0 1 0 
+	button -w 8 -l "" -c "dataStructure_proc(999,0)" dataStructure_list; //-bgc 1 0 0
+	setParent..;	
+    
+    rowLayout -numberOfColumns 3;
+    textFieldButtonGrp -ed false -label "Turtle"  -text ""  -buttonLabel " Clear " -bc "turtle_proc(1,0)" turtle_tfb;//ls -typ "unknown"
+    popupMenu;
+        menuItem -label "Open < Turtle > List" -c ("turtle_proc(999,0)") ;       
+        menuItem -label "Help About Turtle" -c ("display_help_About_nodeType_In_ClearTool(\"Turtle\")") ;       
+    button -w 35 -l "Select"  -c "turtle_proc(888,0)" turtle_select_btn; //-bgc 0 1 0  
+    button -w 8 -l ""  -c "turtle_proc(999,0)" turtle_list; //-bgc 0 1 0
+    setParent..;
+    
+    rowLayout -numberOfColumns 3;
+    textFieldButtonGrp -ed false -label "Script"   -text ""   -buttonLabel " Clear " -bc "script_proc(1,0)" script_tfb;//
+    popupMenu;
+        menuItem -label "Open < Script > List" -c ("script_proc(999,0)") ;       
+        menuItem -label "Help About script_proc" -c ("display_help_About_nodeType_In_ClearTool(\"Script\")") ;  
+    button -w 35 -l "Select"  -c "script_proc(888,0)" script_select_btn; //-bgc 0 1 0  
+    button -w 8 -l ""  -c "script_proc(999,0)" script_list; //-bgc 1 0 0
+    setParent..;
+    
+   
+	
+	rowLayout -numberOfColumns 3;	
+	textFieldButtonGrp -ed false -label "aiOptions" -text ""  -buttonLabel " Clear " -bc "aiOptions_proc(1,0)" aiOptions_tfb;//
+	popupMenu;
+        menuItem -label "Open < aiOptions > List" -c ("aiOptions_proc(999,0)") ;       
+        menuItem -label "Help About aiOptions" -c ("display_help_About_nodeType_In_ClearTool(\"aiOptions\")") ;
+	button -w 35 -l "Select"  -c "aiOptions_proc(888,0)" aiOptions_select_btn; //-bgc 0 1 0 
+	button -w 8 -l "" -c "aiOptions_proc(999,0)" aiOptions_list; //-bgc 1 0 0
+	setParent..;
+	
+	rowLayout -numberOfColumns 3;	
+	textFieldButtonGrp -ed false -label "aiAOVDriver" -text ""  -buttonLabel " Clear " -bc "aiAOVDriver_proc(1,0)" aiAOVDriver_tfb;//
+	popupMenu;
+        menuItem -label "Open < aiAOVDriver > List" -c ("aiAOVDriver_proc(999,0)") ;       
+        menuItem -label "Help About aiAOVDriver" -c ("display_help_About_nodeType_In_ClearTool(\"aiAOVDriver\")") ;
+	button -w 35 -l "Select"  -c "aiAOVDriver_proc(888,0)" aiAOVDriver_select_btn; //-bgc 0 1 0 
+	button -w 8 -l "" -c "aiAOVDriver_proc(999,0)" aiAOVDriver_list; //-bgc 1 0 0
+	setParent..;
+		
+	rowLayout -numberOfColumns 3;	
+	textFieldButtonGrp -ed false -label "Expression( ***xgm*** )" -text ""  -buttonLabel " Clear " -bc "expression_proc(1,0)" expression_tfb;//
+	popupMenu;
+        menuItem -label "Open Expression( xgm*** ) List" -c ("expression_proc(999,0)") ;       
+        menuItem -label "Help About Expression( xgm*** )" -c ("display_help_About_nodeType_In_ClearTool(\"Expression\")") ;
+	button -w 35 -l "Select"  -c "expression_proc(888,0)" expression_select_btn; //-bgc 0 1 0 
+	button -w 8 -l "" -c "expression_proc(999,0)" xgm_expression_list; //-bgc 1 0 0
+	setParent..;	
+	
+	rowLayout -numberOfColumns 3;	
+	textFieldButtonGrp -ed false -label "renderSetup"  -text ""   -buttonLabel " Clear " -bc "renderSetup_proc(1,0)" renderSetup_tfb;//
+	popupMenu;
+        menuItem -label "Open < renderSetup > List" -c ("renderSetup_proc(999,0)") ;       
+        menuItem -label "Help About renderSetup" -c ("display_help_About_nodeType_In_ClearTool(\"renderSetup\")") ;
+	button -w 35 -l "Select"  -c "renderSetup_proc(888,0)" renderSetup_select_btn; //-bgc 0 1 0 
+	button -w 8 -l "" -c "renderSetup_proc(999,0)" renderSetup_list; //-bgc 1 0 0
+	setParent..;	
+			
+	
+	rowLayout -numberOfColumns 3;	
+	textFieldButtonGrp -ed false -label "nodeGraphEditorInfo" -text ""   -buttonLabel " Clear " -bc "nodeGraphEditorInfo_proc(1,0)" nodeGraphEditorInfo_tfb;//
+	popupMenu;
+        menuItem -label "Open < nodeGraphEditorInfo > List" -c ("nodeGraphEditorInfo_proc(999,0)") ;       
+        menuItem -label "Help About nodeGraphEditorInfo" -c ("display_help_About_nodeType_In_ClearTool(\"nodeGraphEditorInfo\")") ;
+	button -w 35 -l "Select"  -c "nodeGraphEditorInfo_proc(888,0)" nodeGraphEditorInfo_select_btn; //-bgc 0 1 0 
+	button -w 8 -l "" -c "nodeGraphEditorInfo_proc(999,0)" nodeGraphEditorInfo_list; //-bgc 1 0 0
+	setParent..;	
+	
+	
+	rowLayout -numberOfColumns 3;	
+	textFieldButtonGrp -ed false -label "materialInfo" -text ""   -buttonLabel " Clear " -bc "materialInfo_proc(1,0)" materialInfo_tfb;//
+	popupMenu;
+        menuItem -label "Open < materialInfo > List" -c ("materialInfo_proc(999,0)") ;       
+        menuItem -label "Help About materialInfo" -c ("display_help_About_nodeType_In_ClearTool(\"materialInfo\")") ;
+	button -w 35 -l "Select"  -c "materialInfo_proc(888,0)" materialInfo_select_btn; //-bgc 0 1 0 
+	button -w 8 -l "" -c "materialInfo_proc(999,0)" materialInfo_list; //-bgc 1 0 0
+	setParent..;	
+	
+	
+	       
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "hyperLayout" -text ""   -buttonLabel " Clear " -bc "hyperLayout_proc(1,0)" hyperLayout_tfb;//
+    popupMenu;
+        menuItem -label "Open < hyperLayout > List" -c ("hyperLayout_proc(999,0)") ;       
+        menuItem -label "Help About hyperLayout" -c ("display_help_About_nodeType_In_ClearTool(\"hyperLayout\")") ;
+    button -w 35 -l "Select"  -c "hyperLayout_proc(888,0)" hyperLayout_select_btn; //-bgc 0 1 0 
+    button -w 8 -l "" -c "hyperLayout_proc(999,0)" hyperLayout_list; //-bgc 1 0 0
+    setParent..;	
+    
+        
+    rowLayout -numberOfColumns 3;	
+	 textFieldButtonGrp -ed false -label "hyperView" -text ""   -buttonLabel " Clear " -bc "hyperView_proc(1,0)" hyperView_tfb;//
+	 popupMenu;
+        menuItem -label "Open < hyperView > List" -c ("hyperView_proc(999,0)") ;       
+        menuItem -label "Help About hyperView" -c ("display_help_About_nodeType_In_ClearTool(\"hyperView\")") ;
+    button -w 35 -l "Select"  -c "hyperView_proc(888,0)" hyperView_select_btn; //-bgc 0 1 0
+    button -w 8 -l "" -c "hyperView_proc(999,0)" hyperView_list; //-bgc 1 0 0
+    setParent..;	
+    
+    
+    rowLayout -numberOfColumns 3;	
+	 textFieldButtonGrp -ed false -label "nodeGraphEditorBookmarkInfo" -text ""   -buttonLabel " Clear " -bc "nodeGraphEditorBookmarkInfo_proc(1,0)" nodeGraphEditorBookmarkInfo_tfb;//
+    popupMenu;
+        menuItem -label "Open < nodeGraphEditorBookmarkInfo > List" -c ("nodeGraphEditorBookmarkInfo_proc(999,0)") ;       
+        menuItem -label "Help About nodeGraphEditorBookmarkInfo" -c ("display_help_About_nodeType_In_ClearTool(\"nodeGraphEditorBookmarkInfo\")") ;
+    button -w 35 -l "Select"  -c "nodeGraphEditorBookmarkInfo_proc(888,0)" nodeGraphEditorBookmarkInfo_select_btn; 
+    button -w 8 -l "" -c "nodeGraphEditorBookmarkInfo_proc(999,0)" nodeGraphEditorBookmarkInfo_list; //-bgc 1 0 0
+    setParent..;	
+    
+    
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "dataReferenceEdits" -text ""  -buttonLabel " Clear " -bc "dataReferenceEdits_proc(1,0)" dataReferenceEdits_tfb;//
+    popupMenu;
+        menuItem -label "Open < dataReferenceEdits > List" -c ("dataReferenceEdits_proc(999,0)") ;       
+        menuItem -label "Help About dataReferenceEdits" -c ("display_help_About_nodeType_In_ClearTool(\"dataReferenceEdits\")") ;
+    button -w 35 -l "Select"  -c "dataReferenceEdits_proc(888,0)" dataReferenceEdits_select_btn; 
+    button -w 8 -l "" -c "dataReferenceEdits_proc(999,0)" dataReferenceEdits_list; //-bgc 1 0 0
+    setParent..;	
+    
+    
+    
+    rowLayout -numberOfColumns 3;	
+	 textFieldButtonGrp -ed false -label "useless reference"  -text ""  -buttonLabel " Clear " -bc "reference_proc(1,0)" reference_tfb;//
+	 popupMenu;
+        menuItem -label "Open < useless reference > List" -c ("reference_proc(999,0)") ;       
+        menuItem -label "Help About reference" -c ("display_help_About_nodeType_In_ClearTool(\"reference\")") ;
+    button -w 35 -l "Select"  -c "reference_proc(888,0)" reference_select_btn; 
+    button -w 8 -l "" -c "reference_proc(999,0)" reference_list; //-bgc 1 0 0
+    setParent..;	    
+    
+    rowLayout -numberOfColumns 3;	
+	 textFieldButtonGrp -ed false -label "useless curveInfo"  -text ""  -buttonLabel " Clear " -bc "curveInfo_proc(1,0)" curveInfo_tfb;//
+	 popupMenu;
+        menuItem -label "Open < useless curveInfo > List" -c ("curveInfo_proc(999,0)") ;       
+        menuItem -label "Help About curveInfo" -c ("display_help_About_nodeType_In_ClearTool(\"curveInfo\")") ;
+    button -w 35 -l "Select"  -c "curveInfo_proc(888,0)" curveInfo_select_btn; 
+    button -w 8 -l "" -c "curveInfo_proc(999,0)" curveInfo_list; //-bgc 1 0 0
+    setParent..;	    
+    
+    rowLayout -numberOfColumns 3;	
+	 textFieldButtonGrp -ed false -label "useless pointOnCurveInfo"  -text ""   -buttonLabel " Clear " -bc "pointOnCurveInfo_proc(1,0)" pointOnCurveInfo_tfb;//
+	 popupMenu;
+        menuItem -label "Open < useless pointOnCurveInfo > List" -c ("pointOnCurveInfo_proc(999,0)") ;       
+        menuItem -label "Help About pointOnCurveInfo" -c ("display_help_About_nodeType_In_ClearTool(\"pointOnCurveInfo\")") ;
+    button -w 35 -l "Select"  -c "pointOnCurveInfo_proc(888,0)" pointOnCurveInfo_select_btn; 
+    button -w 8 -l "" -c "pointOnCurveInfo_proc(999,0)" pointOnCurveInfo_list; //-bgc 1 0 0
+    setParent..;	    
+    
+    rowLayout -numberOfColumns 3;	
+	 textFieldButtonGrp -ed false -label "useless pointOnSurfaceInfo"  -text ""   -buttonLabel " Clear " -bc "pointOnSurfaceInfo_proc(1,0)" pointOnSurfaceInfo_tfb;//
+	 popupMenu;
+        menuItem -label "Open < useless pointOnSurfaceInfo > List" -c ("pointOnSurfaceInfo_proc(999,0)") ;       
+        menuItem -label "Help About pointOnSurfaceInfo" -c ("display_help_About_nodeType_In_ClearTool(\"pointOnSurfaceInfo\")") ;
+    button -w 35 -l "Select"  -c "pointOnSurfaceInfo_proc(888,0)" pointOnSurfaceInfo_select_btn; 
+    button -w 8 -l "" -c "pointOnSurfaceInfo_proc(999,0)" pointOnSurfaceInfo_list; //-bgc 1 0 0
+    setParent..;	    
+    
+    
+    rowLayout -numberOfColumns 3;	
+	 textFieldButtonGrp -ed false -label "useless closestPointOnSurface"  -text ""   -buttonLabel " Clear " -bc "closestPointOnSurface_proc(1,0)" closestPointOnSurface_tfb;//
+	 popupMenu;
+        menuItem -label "Open < useless closestPointOnSurface > List" -c ("closestPointOnSurface_proc(999,0)") ;       
+        menuItem -label "Help About closestPointOnSurface" -c ("display_help_About_nodeType_In_ClearTool(\"closestPointOnSurface\")") ;
+    button -w 35 -l "Select"  -c "closestPointOnSurface_proc(888,0)" closestPointOnSurface_select_btn; 
+    button -w 8 -l "" -c "closestPointOnSurface_proc(999,0)" closestPointOnSurface_list; //-bgc 1 0 0
+    setParent..;	    
+    
+    rowLayout -numberOfColumns 3;	
+	textFieldButtonGrp -ed false -label "useless ShadingEngine" -text ""   -buttonLabel " Clear " -bc "nullSE_proc(1,0)" nullSE_tfb;//
+	popupMenu;
+        menuItem -label "Open < useless ShadingEngine > List" -c ("nullSE_proc(999,0)") ;       
+        menuItem -label "Help About useless ShadingEngine" -c ("display_help_About_nodeType_In_ClearTool(\"useless ShadingEngine\")") ;
+	button -w 35 -l "Select"  -c "nullSE_proc(888,0)" nullSE_select_btn; 
+	button -w 8 -l "" -c "nullSE_proc(999,0)" unused_SE_list; //-bgc 1 0 0
+	setParent..;	
+	
+	 rowLayout -numberOfColumns 3;	
+	 textFieldButtonGrp -ed false -label "useless groupId"  -text ""   -buttonLabel " Clear " -bc "groupId_proc(1,0)" groupId_tfb;//
+	 popupMenu;
+        menuItem -label "Open < useless groupId > List" -c ("groupId_proc(999,0)") ;       
+        menuItem -label "Help About groupId" -c ("display_help_About_nodeType_In_ClearTool(\"useless groupId\")") ;
+    button -w 35 -l "Select"  -c "groupId_proc(888,0)" groupId_select_btn; 
+    button -w 8 -l "" -c "groupId_proc(999,0)" groupId_list; //-bgc 1 0 0
+    setParent..;	
+    
+    rowLayout -numberOfColumns 3;	
+	 textFieldButtonGrp -ed false -label "useless distanceBetween"  -text ""   -buttonLabel " Clear " -bc "distanceBetween_proc(1,0)" distanceBetween_tfb;//
+	 popupMenu;
+        menuItem -label "Open < useless distanceBetween > List" -c ("distanceBetween_proc(999,0)") ;       
+        menuItem -label "Help About distanceBetween" -c ("display_help_About_nodeType_In_ClearTool(\"distanceBetween\")") ;
+    button -w 35 -l "Select"  -c "distanceBetween_proc(888,0)" distanceBetween_select_btn; 
+    button -w 8 -l "" -c "distanceBetween_proc(999,0)" distanceBetween_list; //-bgc 1 0 0
+    setParent..;	  
+
+    rowLayout -numberOfColumns 3;	
+	 textFieldButtonGrp -ed false -label "useless wire"  -text ""  -buttonLabel " Clear " -bc "wire_proc(1,0)" wire_tfb;//
+	 popupMenu;
+        menuItem -label "Open < useless wire > List" -c ("wire_proc(999,0)") ;       
+        menuItem -label "Help About wire" -c ("display_help_About_nodeType_In_ClearTool(\"wire\")") ;
+    button -w 35 -l "Select"  -c "wire_proc(888,0)" wire_select_btn; 
+    button -w 8 -l "" -c "wire_proc(999,0)" wire_list; 
+    setParent..;	  
+    
+    rowLayout -numberOfColumns 3;	
+	 textFieldButtonGrp -ed false -label "useless polyUnite"  -text ""   -buttonLabel " Clear " -bc "polyUnite_proc(1,0)" polyUnite_tfb;//
+	 popupMenu;
+        menuItem -label "Open < useless polyUnite > List" -c ("polyUnite_proc(999,0)") ;       
+        menuItem -label "Help About polyUnite" -c ("display_help_About_nodeType_In_ClearTool(\"polyUnite\")") ;
+    button -w 35 -l "Select"  -c "polyUnite_proc(888,0)" polyUnite_select_btn; 
+    button -w 8 -l "" -c "polyUnite_proc(999,0)" polyUnite_list; 
+    setParent..;	  
+    
+    rowLayout -numberOfColumns 3;	
+	 textFieldButtonGrp -ed false -label "useless blendWeighted"  -text ""  -buttonLabel " Clear " -bc "blendWeighted_proc(1,0)" blendWeighted_tfb;//
+	 popupMenu;
+        menuItem -label "Open < useless blendWeighted > List" -c ("blendWeighted_proc(999,0)") ;       
+        menuItem -label "Help About blendWeighted" -c ("display_help_About_nodeType_In_ClearTool(\"blendWeighted\")") ;
+    button -w 35 -l "Select"  -c "blendWeighted_proc(888,0)" blendWeighted_select_btn; 
+    button -w 8 -l "" -c "blendWeighted_proc(999,0)" blendWeighted_list;
+    setParent..;	  
+    
+     rowLayout -numberOfColumns 3;	
+	textFieldButtonGrp -ed false -label "useless deleteComponent" -text ""  -buttonLabel " Clear " -bc "deleteComponent_proc(1,0)" deleteComponent_tfb;//
+	popupMenu;
+        menuItem -label "Open < deleteComponent > List" -c ("deleteComponent_proc(999,0)") ;       
+        menuItem -label "Help About deleteComponent" -c ("display_help_About_nodeType_In_ClearTool(\"deleteComponent\")") ;
+	button -w 35 -l "Select"  -c "deleteComponent_proc(888,0)" deleteComponent_select_btn;
+	button -w 8 -l "" -c "deleteComponent_proc(999,0)" deleteComponent_list; 
+	setParent..;	
+    
+   rowLayout -numberOfColumns 3;	
+	textFieldButtonGrp -ed false -label "useless animCurve" -text ""  -buttonLabel " Clear " -bc "animCurve_proc(1,0)" animCurve_tfb;//
+	popupMenu;
+        menuItem -label "Open < useless animCurve > List" -c ("animCurve_proc(999,0)") ;       
+        menuItem -label "Help About useless animCurve" -c ("display_help_About_nodeType_In_ClearTool(\"useless animCurve\")") ;
+	button -w 35 -l "Select"  -c "animCurve_proc(888,0)" animCurve_select_btn;
+	button -w 8 -l "" -c "animCurve_proc(999,0)" animCurve_list; 
+	setParent..;	
+    
+   rowLayout -numberOfColumns 3;	
+	textFieldButtonGrp -ed false -label "useless groupParts" -text ""   -buttonLabel " Clear " -bc "groupParts_proc(1,0)" groupParts_tfb;//
+	popupMenu;
+        menuItem -label "Open < useless groupParts > List" -c ("groupParts_proc(999,0)") ;       
+        menuItem -label "Help About useless groupParts" -c ("display_help_About_nodeType_In_ClearTool(\"useless groupParts\")") ;
+	button -w 35 -l "Select"  -c "groupParts_proc(888,0)" groupParts_select_btn;
+	button -w 8 -l "" -c "groupParts_proc(999,0)" groupParts_list; 
+	setParent..;	 
+    
+   rowLayout -numberOfColumns 3;	
+	textFieldButtonGrp -ed false -label "useless partition" -text ""   -buttonLabel " Clear " -bc "partition_proc(1,0)" partition_tfb;//
+	popupMenu;
+        menuItem -label "Open < useless partition > List" -c ("partition_proc(999,0)") ;       
+        menuItem -label "Help About useless partition" -c ("display_help_About_nodeType_In_ClearTool(\"useless partition\")") ;
+	button -w 35 -l "Select"  -c "partition_proc(888,0)" partition_select_btn;
+	button -w 8 -l "" -c "partition_proc(999,0)" partition_list; 
+	setParent..;	 
+	
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "useless poseInterpolatorManager" -text ""  -buttonLabel " Clear " -bc "poseInterpolatorManager_proc(1,0)" poseInterpolatorManager_tfb;//
+    popupMenu;
+        menuItem -label "Open < useless poseInterpolatorManager > List" -c ("poseInterpolatorManager_proc(999,0)") ;       
+        menuItem -label "Help About useless poseInterpolatorManager" -c ("display_help_About_nodeType_In_ClearTool(\"useless poseInterpolatorManager\")") ;
+    button -w 35 -l "Select"  -c "poseInterpolatorManager_proc(888,0)" poseInterpolatorManager_select_btn;
+    button -w 8 -l "" -c "poseInterpolatorManager_proc(999,0)" poseInterpolatorManager_list; 
+    setParent..;	 
+	
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "useless shapeEditorManager" -text ""   -buttonLabel " Clear " -bc "shapeEditorManager_proc(1,0)" shapeEditorManager_tfb;//
+    popupMenu;
+        menuItem -label "Open < useless shapeEditorManager > List" -c ("shapeEditorManager_proc(999,0)") ;       
+        menuItem -label "Help About useless shapeEditorManager" -c ("display_help_About_nodeType_In_ClearTool(\"useless shapeEditorManager\")") ;
+    button -w 35 -l "Select"  -c "shapeEditorManager_proc(888,0)" shapeEditorManager_select_btn;
+    button -w 8 -l "" -c "shapeEditorManager_proc(999,0)" shapeEditorManager_list; 
+    setParent..;	 
+	
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "useless trackInfoManager" -text ""  -buttonLabel " Clear " -bc "trackInfoManager_proc(1,0)" trackInfoManager_tfb;//
+    popupMenu;
+        menuItem -label "Open < useless trackInfoManager > List" -c ("trackInfoManager_proc(999,0)") ;       
+        menuItem -label "Help About useless trackInfoManager" -c ("display_help_About_nodeType_In_ClearTool(\"useless trackInfoManager\")") ;
+    button -w 35 -l "Select"  -c "trackInfoManager_proc(888,0)" trackInfoManager_select_btn;
+    button -w 8 -l "" -c "trackInfoManager_proc(999,0)" trackInfoManager_list; 
+    setParent..;	 
+	
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "useless cameraView" -text ""   -buttonLabel " Clear " -bc "cameraView_proc(1,0)" cameraView_tfb;//
+    popupMenu;
+        menuItem -label "Open < useless cameraView > List" -c ("cameraView_proc(999,0)") ;       
+        menuItem -label "Help About useless cameraView" -c ("display_help_About_nodeType_In_ClearTool(\"useless cameraView\")") ;
+    button -w 35 -l "Select"  -c "cameraView_proc(888,0)" cameraView_select_btn;
+    button -w 8 -l "" -c "cameraView_proc(999,0)" cameraView_list; 
+    setParent..;	
+	
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "useless blindDataTemplate" -text ""   -buttonLabel " Clear " -bc "blindDataTemplate_proc(1,0)" blindDataTemplate_tfb;//
+    popupMenu;
+        menuItem -label "Open < useless blindDataTemplate > List" -c ("blindDataTemplate_proc(999,0)") ;       
+        menuItem -label "Help About useless blindDataTemplate" -c ("display_help_About_nodeType_In_ClearTool(\"useless blindDataTemplate\")") ;
+    button -w 35 -l "Select"  -c "blindDataTemplate_proc(888,0)" blindDataTemplate_select_btn;
+    button -w 8 -l "" -c "blindDataTemplate_proc(999,0)" blindDataTemplate_list; 
+    setParent..;	
+	
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "useless Constraint" -text ""   -buttonLabel " Clear " -bc "Constraint_proc(1,0)" Constraint_tfb;//
+    popupMenu;
+        menuItem -label "Open < useless Constraint > List" -c ("Constraint_proc(999,0)") ;       
+        menuItem -label "Help About useless Constraint" -c ("display_help_About_nodeType_In_ClearTool(\"useless Constraint\")") ;
+    button -w 35 -l "Select"  -c "Constraint_proc(888,0)" Constraint_select_btn;
+    button -w 8 -l "" -c "Constraint_proc(999,0)" Constraint_list; 
+    setParent..;	
+    
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "useless objectSet" -text ""   -buttonLabel " Clear " -bc "objectSet_proc(1,0)" objectSet_tfb;//
+    popupMenu;
+        menuItem -label "Open < useless objectSet > List" -c ("objectSet_proc(999,0)") ;       
+        menuItem -label "Help About useless objectSet" -c ("display_help_About_nodeType_In_ClearTool(\"useless objectSet\")") ;
+    button -w 35 -l "Select"  -c "objectSet_proc(888,0)" objectSet_select_btn;
+    button -w 8 -l "" -c "objectSet_proc(999,0)" objectSet_list; 
+    setParent..;	
+	
+	rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "useless renderSetupLayer" -text ""   -buttonLabel " Clear " -bc "renderSetupLayer_proc(1,0)" renderSetupLayer_tfb;//
+    popupMenu;
+        menuItem -label "Open < useless renderSetupLayer > List" -c ("renderSetupLayer_proc(999,0)") ;       
+        menuItem -label "Help About useless renderSetupLayer" -c ("display_help_About_nodeType_In_ClearTool(\"useless renderSetupLayer\")") ;
+    button -w 35 -l "Select"  -c "renderSetupLayer_proc(888,0)" renderSetupLayer_select_btn;
+    button -w 8 -l "" -c "renderSetupLayer_proc(999,0)" renderSetupLayer_list; 
+    setParent..;	
+    
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "useless aiLightDecay" -text ""   -buttonLabel " Clear " -bc "aiLightDecay_proc(1,0)" aiLightDecay_tfb;//
+    popupMenu;
+        menuItem -label "Open < useless aiLightDecay > List" -c ("aiLightDecay_proc(999,0)") ;       
+        menuItem -label "Help About useless aiLightDecay" -c ("display_help_About_nodeType_In_ClearTool(\"useless aiLightDecay\")") ;
+    button -w 35 -l "Select"  -c "aiLightDecay_proc(888,0)" aiLightDecay_select_btn;
+    button -w 8 -l "" -c "aiLightDecay_proc(999,0)" aiLightDecay_list; 
+    setParent..;	
+    
+    
+    
+    
+    //////////////////////////////////////////////////
+    rowLayout -numberOfColumns 3;	  
+    textFieldButtonGrp -ed false -label "HyperShaderUnusedNodes"  -bgc 1 0 0 -text "Click Clear To Delete Unused Nodes"   -buttonLabel "        Clear          " -bc "hyperShadePanelMenuCommand(\"hyperShadePanel1\", \"deleteUnusedNodes\")" HyperShaderUnusedNodes_tfb;//
+    popupMenu;
+        menuItem -label "Open < HyperShaderUnusedNodes > List" -c ("HyperShaderUnusedNodes_proc(999,0)") ;       
+        menuItem -label "Help About HyperShaderUnusedNodes" -c ("display_help_About_nodeType_In_ClearTool(\"HyperShaderUnusedNodes\")") ;
+   
+    setParent..;
+    	
+	rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "HyperShaderSpeedUP"  -bgc 1 0 0 -text "Click Optimize To Speed Up HyperShader"   -buttonLabel "     Optimize      " -bc "HyperShaderSpeedUP_proc()" HyperShaderSpeedUP_tfb;//
+    popupMenu;
+        menuItem -label "Open < HyperShaderSpeedUP > List" -c ("HyperShaderSpeedUP_proc(999,0)") ;       
+        menuItem -label "Help About HyperShaderSpeedUP" -c ("display_help_About_nodeType_In_ClearTool(\"HyperShaderSpeedUP\")") ;
+   
+    setParent..;	
+	/////////////////////////////////////////////////////	
+	
+		     
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "useless Lights"  -bgc 1 0.5 0.5 -text ""   -buttonLabel " Clear " -bc "uselessLights_proc(1,0)" uselessLights_tfb;//
+    popupMenu;
+        menuItem -label "Open < uselessLights > List" -c ("uselessLights_proc(999,0)") ;       
+        menuItem -label "Help About uselessLights" -c ("display_help_About_nodeType_In_ClearTool(\"uselessLights\")") ;
+    button -w 35 -l "Select" -bgc 1 0.5 0.5  -c "uselessLights_proc(888,0)" uselessLights_select_btn;
+    button -w 8 -l "" -c "uselessLights_proc(999,0)" uselessLights_list; 
+    setParent..;
+  
+    
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "RenderLayer( legacy )" -bgc 1 0.5 0.5 -text ""   -buttonLabel " Clear " -bc "renderLayer_proc(1,0)" renderLayer_tfb;//
+    popupMenu;
+        menuItem -label "Open RenderLayer( legacy ) List" -c ("renderLayer_proc(999,0)") ;       
+        menuItem -label "Help About RenderLayer" -c ("display_help_About_nodeType_In_ClearTool(\"RenderLayer\")") ; 
+    button -w 35 -l "Select" -bgc 1 0.5 0.5 -c "renderLayer_proc(888,0)" renderLayer_select_btn;
+    button -w 8 -l "" -c "renderLayer_proc(999,0)"  renderLayer_list; 
+    setParent..;	
+	
+	rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "collection( Render Layer )"  -bgc 1 0.5 0.5 -text ""  -buttonLabel " Clear " -bc "collection_proc(1,0)" collection_tfb;//
+    popupMenu;
+        menuItem -label "Open < collection > List" -c ("collection_proc(999,0)") ;       
+        menuItem -label "Help About collection" -c ("display_help_About_nodeType_In_ClearTool(\"collection\")") ;
+    button -w 35 -l "Select" -bgc 1 0.5 0.5 -c "collection_proc(888,0)" collection_select_btn;
+    button -w 8 -l "" -c "collection_proc(999,0)" collection_list; 
+    setParent..;
+	
+	rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "renderSetupLayer( ALL )"  -bgc 1 0.5 0.5 -text ""  -buttonLabel " Clear " -bc "renderSetupLayerALL_proc(1,0)" renderSetupLayerALL_tfb;//
+    popupMenu;
+        menuItem -label "Open < renderSetupLayerALL > List" -c ("renderSetupLayerALL_proc(999,0)") ;       
+        menuItem -label "Help About renderSetupLayerALL" -c ("display_help_About_nodeType_In_ClearTool(\"renderSetupLayerALL\")") ;
+    button -w 35 -l "Select" -bgc 1 0.5 0.5 -c "renderSetupLayerALL_proc(888,0)" renderSetupLayerALL_select_btn;
+    button -w 8 -l "" -c "renderSetupLayerALL_proc(999,0)" renderSetupLayerALL_list; 
+    setParent..;
+	
+	rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "aiAOV"  -bgc 1 0.5 0.5 -text ""  -buttonLabel " Clear " -bc "aiAOV_proc(1,0)" aiAOV_tfb;//
+    popupMenu;
+        menuItem -label "Open < aiAOV > List" -c ("aiAOV_proc(999,0)") ;       
+        menuItem -label "Help About aiAOV" -c ("display_help_About_nodeType_In_ClearTool(\"aiAOV\")") ;
+    button -w 35 -l "Select" -bgc 1 0.5 0.5 -c "aiAOV_proc(888,0)" aiAOV_select_btn;
+    button -w 8 -l "" -c "aiAOV_proc(999,0)" aiAOV_list; 
+    setParent..;	 
+    
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "displayLayer" -bgc 1 0.5 0.5 -text ""   -buttonLabel " Clear " -bc "displayLayer_proc(1,0)" displayLayer_tfb;//
+    popupMenu;
+        menuItem -label "Open displayLayer List" -c ("displayLayer_proc(999,0)") ;       
+        menuItem -label "Help About displayLayer" -c ("display_help_About_nodeType_In_ClearTool(\"displayLayer\")") ; 
+    button -w 35 -l "Select" -bgc 1 0.5 0.5 -c "displayLayer_proc(888,0)" displayLayer_select_btn;
+    button -w 8 -l ""  -c "displayLayer_proc(999,0)"  displayLayer_list; 
+    setParent..;	 
+    
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "Mesh Render & Visbility"  -bgc 1 0.5 0.5 -text ""  -buttonLabel "   Fix   " -bc "meshRenderVisbility_proc(1,0)" meshRenderVisbility_tfb;//
+    popupMenu;
+        menuItem -label "Open < meshRenderVisbility > List" -c ("meshRenderVisbility_proc(999,0)") ;       
+        menuItem -label "Help About meshRenderVisbility" -c ("display_help_About_nodeType_In_ClearTool(\"meshRenderVisbility\")") ;
+    button -w 35 -l "Select"  -bgc 1 0.5 0.5 -c "meshRenderVisbility_proc(888,0)" meshRenderVisbility_select_btn; 
+    button -w 8 -l "" -c "meshRenderVisbility_proc(999,0)" meshRenderVisbility_list; //-bgc 1 0 0
+    setParent..;	
+    
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "xgen All Nodes" -bgc 1 0.5 0.5 -text ""  -buttonLabel " Clear " -bc "xgenAllNodes_proc(1,0)" xgenAllNodes_tfb ;//
+    popupMenu;
+        menuItem -label "Open < xgenAllNodes > List" -c ("xgenAllNodes_proc(999,0)") ;       
+        menuItem -label "Help About xgenAllNodes" -c ("display_help_About_nodeType_In_ClearTool(\"xgenAllNodes\")") ;
+    button -w 35 -l "Select" -bgc 1 0.5 0.5 -c "xgenAllNodes_proc(888,0)" xgenAllNodes_select_btn;
+    button -w 8 -l "" -c "xgenAllNodes_proc(999,0)" xgenAllNodes_list; 
+    setParent..;	
+    
+     rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -eb false -label "by Face Assign Shader" -bgc 1 0.5 0.5 -text "" -buttonLabel " Clear " -bc "byFaceAssignShader_proc(1,0)" byFaceAssignShader_tfb ;//
+    popupMenu;
+        menuItem -label "Open < byFaceAssignShader > List" -c ("byFaceAssignShader_proc(999,0)") ;       
+        menuItem -label "Help About byFaceAssignShader" -c ("display_help_About_nodeType_In_ClearTool(\"byFaceAssignShader\")") ;
+    button -w 35 -l "Select" -bgc 1 0.5 0.5 -c "byFaceAssignShader_proc(888,0)" byFaceAssignShader_select_btn;
+    button -w 8 -l "" -c "byFaceAssignShader_proc(999,0)" byFaceAssignShader_list; 
+    setParent..; 
+    ////////////////////////////////////////////
+    
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -eb false -label "Unstitched Objects" -bgc 0 0.5 0.5 -text "" -buttonLabel " Clear " -bc "unstitched_proc(1,0)" unstitched_tfb ;//
+    popupMenu;
+        menuItem -label "Open < Unstitched > List" -c ("unstitched_proc(999,0)") ;       
+        menuItem -label "Help About unstitched" -c ("display_help_About_nodeType_In_ClearTool(\"unstitched\")") ;
+    button -w 35 -l "Select" -bgc 0 0.5 0.5 -c "unstitched_proc(888,0)" unstitched_select_btn;
+    button -w 8 -l "" -c "unstitched_proc(999,0)" unstitched_list; 
+    setParent..; 
+   
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -eb false -label "Overlay Objects" -bgc 0 0.5 0.5 -text "" -buttonLabel " Clear " -bc "overlayObject_proc(1,0)" overlayObject_tfb ;//
+    popupMenu;
+        menuItem -label "Open < overlayObject > List" -c ("overlayObject_proc(999,0)") ;       
+        menuItem -label "Help About overlayObject" -c ("display_help_About_nodeType_In_ClearTool(\"overlayObject\")") ;
+    button -w 35 -l "Select" -bgc 0 0.5 0.5 -c "overlayObject_proc(888,0)" overlayObject_select_btn;
+    button -w 8 -l "" -c "overlayObject_proc(999,0)" overlayObject_list;  
+    setParent..;  
+    
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -eb true -label "Intermediate Objects" -bgc 0 0.5 0.5 -text "" -buttonLabel " Clear " -bc "intermediateObject_proc(1,0)" intermediateObject_tfb ;//
+    popupMenu;
+        menuItem -label "Open < intermediateObject > List" -c ("intermediateObject_proc(999,0)") ;       
+        menuItem -label "Help About intermediateObject" -c ("display_help_About_nodeType_In_ClearTool(\"intermediateObject\")") ;
+    button -w 35 -l "Select" -bgc 0 0.5 0.5 -c "intermediateObject_proc(888,0)" intermediateObject_select_btn;
+    button -w 8 -l "" -c "intermediateObject_proc(999,0)" intermediateObject_list; 	
+    setParent..;  
+    
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -eb false -label "Hidden Shapes" -bgc 0 0.5 0.5 -text "" -buttonLabel " Clear " -bc "hiddenShapes_proc(1,0)" hiddenShapes_tfb ;//
+    popupMenu;
+        menuItem -label "Open < hiddenShapes > List" -c ("hiddenShapes_proc(999,0)") ;       
+        menuItem -label "Help About hiddenShapes" -c ("display_help_About_nodeType_In_ClearTool(\"hiddenShapes\")") ;
+    button -w 35 -l "Select" -bgc 0 0.5 0.5 -c "hiddenShapes_proc(888,0)" hiddenShapes_select_btn;
+    button -w 8 -l "" -c "hiddenShapes_proc(999,0)" hiddenShapes_list; 
+    setParent..;	
+	
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "animLayer" -bgc 0.6 0 1 -text ""  -buttonLabel " Clear " -bc "animLayer_proc(1,0)" animLayer_tfb;//
+    popupMenu;
+        menuItem -label "Open animLayer List" -c ("animLayer_proc(999,0)") ;       
+        menuItem -label "Help About animLayer" -c ("display_help_About_nodeType_In_ClearTool(\"animLayer\")") ; 
+    button -w 35 -l "Select" -bgc 0.6 0 1 -c "animLayer_proc(888,0)" animLayer_select_btn;
+    button -w 8 -l "" -c "animLayer_proc(999,0)"  animLayer_list; 
+    setParent..;	
+    
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -eb false -label "decimal Keys" -bgc 0.6 0 1 -text ""  -buttonLabel " Clear " -bc "decimalKeys_proc(1,0)" decimalKeys_tfb;//
+    popupMenu;
+        menuItem -label "Open animLayer List" -c ("decimalKeys_proc(999,0)") ;       
+        menuItem -label "Help About animLayer" -c ("display_help_About_nodeType_In_ClearTool(\"decimalKeys\")") ; 
+    button -w 35 -l "Select" -bgc 0.6 0 1 -c "decimalKeys_proc(888,0)" decimalKeys_select_btn;
+    button -w 8 -l "" -c "decimalKeys_proc(999,0)"  decimalKeys_list; 
+    
+    setParent..;	
+	
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "animKeys" -bgc 0.7 0.7 0 -text ""  -buttonLabel " Clear " -bc "animKeys_proc(1,0)" animKeys_tfb;//
+    popupMenu;
+        menuItem -label "Open animKeys List" -c ("animKeys_proc(999,0)") ;       
+        menuItem -label "Help About animKeys" -c ("display_help_About_nodeType_In_ClearTool(\"animKeys\")") ; 
+    button -w 35 -l "Select" -bgc 0.7 0.7 0 -c "animKeys_proc(888,0)" animKeys_select_btn;
+    button -w 8 -l "" -c "animKeys_proc(999,0)"  animKeys_list; 
+    
+    setParent..;	
+	
+    rowLayout -numberOfColumns 3;	
+    textFieldButtonGrp -ed false -label "drivenKeys" -bgc 0.7 0.7 0 -text ""  -buttonLabel " Clear " -bc "drivenKeys_proc(1,0)" drivenKeys_tfb;//
+    popupMenu;
+        menuItem -label "Open drivenKeys List" -c ("drivenKeys_proc(999,0)") ;       
+        menuItem -label "Help About drivenKeys" -c ("display_help_About_nodeType_In_ClearTool(\"drivenKeys\")") ; 
+    button -w 35 -l "Select" -bgc 0.7 0.7 0 -c "drivenKeys_proc(888,0)" drivenKeys_select_btn;
+    button -w 8 -l "" -c "drivenKeys_proc(999,0)"  drivenKeys_list; 
+    
+    setParent..;	setParent..;	
+    rowLayout -numberOfColumns 2;	
+    button -label "Delete Override Face" -bgc 0.1 0.6 0.4 -c "syf_check_override_face()";
+    button -label "Check Override Curve" -bgc 0.87 0.46 0.37 -c "syf_check_override_Curve()";
+//-----------------------------------------------------------------------------
+	setParent ..;
+	setParent -menu ..;
+	waitCursor -state 0;
+	setUITemplate -popTemplate;
+	string $applyBtn = getOptionBoxApplyBtn();
+	button -edit 
+		-label "Check"
+		-command ("check_some_node(0)") 
+		$applyBtn;
+	string $applyAndCloseBtn = getOptionBoxApplyAndCloseBtn();
+	button -edit 
+		-label "General Clear"
+		-command("clearAll()")
+		$applyAndCloseBtn;
+	string $saveBtn = getOptionBoxSaveBtn();
+	button -edit
+		-command ("")
+		$saveBtn;
+	string $resetBtn = getOptionBoxResetBtn();
+	button -edit 
+		-command ("SYF_Clear_Nodes()")
+		$resetBtn;
+	//setOptionBoxHelpTag("PolySphere");//help menu
+	
+    string $helpItem = getOptionBoxHelpItem();
+    menuItem -edit -label ("Help About Clear Node Tool") -command ("print \"asdfbbbbbbbb\"" )	$helpItem;
+		
+		
+		//whatIs getOptionBoxResetBtn
+    string $closeBtn = getOptionBoxCloseBtn(); //     whatIs getOptionBoxCloseBtn
+    button -edit
+        -command("closeClearNodeTool_win()")
+        $closeBtn;
+	setOptionBoxTitle("syf Clear Nodes Tool");
+    
+	showOptionBox();
+	window -e -w 510 -h 800 -s 0 OptionBoxWindow;
+	closeNodeList_win("syfClearNodes_NodeList");
+	
+}
+
+global proc onCloseCommand()
+{
+	if(`thumbnailCaptureComponent -q -fileDialogProcessing` == 0)
+		thumbnailCaptureComponent -closeCurrentSession;
+	closeNodeList_win("syfClearNodes_NodeList");
+}
+global proc display_help_About_nodeType_In_ClearTool(string $helpString)
+{
+    print $helpString;
+}
+global proc check_some_node(int $i)
+{
+    if(!`pluginInfo -q -l "mtoa"`)
+        catchQuiet(`loadPlugin "mtoa"`);
+    if(!`pluginInfo -q -l "xgenToolkit"`)
+        catchQuiet(`loadPlugin "xgenToolkit"`);
+    //if(`pluginInfo -q -l "xgenMR"`)
+     //   catchQuiet(`unloadPlugin "xgenMR"`);
+
+    if($i==0)closeNodeList_win("syfClearNodes_NodeList");
+    string $procs[] = {
+    "unknown_proc(0,0)",
+    "turtle_proc(0,0)",
+    "script_proc(0,0)",
+    "renderLayer_proc(0,0)",
+    "aiAOV_proc(0,0)",
+    "renderSetup_proc(0,0)",
+    "aiOptions_proc(0,0)",
+    "aiAOVDriver_proc(0,0)",
+    "expression_proc(0,0)",
+    "deleteComponent_proc(0,0)",
+    "nullSE_proc(0,0)",
+    "nodeGraphEditorInfo_proc(0,0)",
+    "materialInfo_proc(0,0)",
+    "xgenAllNodes_proc(0,0)",
+    "dataStructure_proc(0,0)",
+    "unknownPlugin_proc(0,0)",
+    "uselessLights_proc(0,0)",
+    "animCurve_proc(0,0)",
+    "blendWeighted_proc(0,0)",
+    "curveInfo_proc(0,0)",
+    "hyperLayout_proc(0,0)",
+    "groupId_proc(0,0)",
+    "hyperView_proc(0,0)",
+    "nodeGraphEditorBookmarkInfo_proc(0,0)",
+    "dataReferenceEdits_proc(0,0)",
+    "reference_proc(0,0)",
+    "distanceBetween_proc(0,0)",
+    "pointOnCurveInfo_proc(0,0)",
+    "polyUnite_proc(0,0)",
+    "closestPointOnSurface_proc(0,0)",
+    "pointOnSurfaceInfo_proc(0,0)",
+    "groupParts_proc(0,0)",
+    "partition_proc(0,0)",
+    "poseInterpolatorManager_proc(0,0)",
+    "shapeEditorManager_proc(0,0)",
+    "trackInfoManager_proc(0,0)",
+    "cameraView_proc(0,0)",
+    "blindDataTemplate_proc(0,0)",
+    "wire_proc(0,0)",
+    "displayLayer_proc(0,0)",
+    "animLayer_proc(0,0)",
+    "unstitched_proc(0,0)",
+    "overlayObject_proc(0,0)",
+    "intermediateObject_proc(0,0)",
+    "hiddenShapes_proc(0,0)",
+    "Constraint_proc(0,0)",
+    "decimalKeys_proc(0,0)",
+    "objectSet_proc(0,0)",
+    "meshRenderVisbility_proc(0,0)",
+    "renderSetupLayer_proc(0,0)",
+    "byFaceAssignShader_proc(0,0)",
+    "collection_proc(0,0)",
+    "renderSetupLayerALL_proc(0,0)",
+    "aiLightDecay_proc(0,0)",
+    "animKeys_proc(0,0)",
+    "drivenKeys_proc(0,0)"
+    };
+    int $size = `size $procs`;
+    int $iiii = 0;
+    //********************************************
+    float $amount=0;
+    progressWindow
+    -title "Checking..."
+    -progress $amount
+    -status "  Completed:%0                                                        "
+    -isInterruptable false;
+    //********************************************
+    for(;$iiii<$size;$iiii++)
+    {
+        eval($procs[$iiii]);     
+        //*********************************************************************************************
+
+        $amount=(int)(((float)$iiii/(float)$size)*100);
+        progressWindow -edit
+        -progress $amount
+        -status("  Completed: "+$amount+"%                                                        ");
+        
+        //************************************************************************************************
+    }     
+    $amount=100;
+    progressWindow -edit
+    -progress $amount
+    -status("  Completed: "+$amount+"%                                                        ");
+    //pause -seconds 1;
+    progressWindow -endProgress;     
+    
+    
+}
+global proc clearAll()
+{
+    
+    if(!`pluginInfo -q -l "mtoa"`)
+        catchQuiet(`loadPlugin "mtoa"`);
+    if(!`pluginInfo -q -l "xgenToolkit"`)
+        catchQuiet(`loadPlugin "xgenToolkit"`);
+
+    
+    closeNodeList_win("syfClearNodes_NodeList");
+    //renderLayer_proc(1,0);
+    //aiAOV_proc(1,0);
+    //xgmMakeGuide_proc(1,0);
+    //uselessLights_proc(1,0);
+    //missMaterialObjects_proc(1,0);
+    //displayLayer_proc(1,0);
+    //animLayer_proc(1,0);
+    //"meshRenderVisbility_proc(1,0)"
+    string $procs[] = {
+    "unknown_proc(1,0)",
+    "turtle_proc(1,0)",
+    "script_proc(1,0)",
+    "renderSetup_proc(1,0)",
+    "aiOptions_proc(1,0)",
+    "aiAOVDriver_proc(1,0)",
+    "expression_proc(1,0)",
+    "deleteComponent_proc(1,0)",
+    "nullSE_proc(1,0)",
+    "nodeGraphEditorInfo_proc(1,0)",
+    "materialInfo_proc(1,0)  ", 
+    "dataStructure_proc(1,0)",
+    "unknownPlugin_proc(1,0) ",
+    "hyperLayout_proc(1,0)",
+    "groupId_proc(1,0)",
+    "hyperView_proc(1,0)",
+    "nodeGraphEditorBookmarkInfo_proc(1,0)",
+    "dataReferenceEdits_proc(1,0)",
+    "reference_proc(1,0)",
+    "distanceBetween_proc(1,0)",
+    "animCurve_proc(1,0)",
+    "blendWeighted_proc(1,0)",
+    "curveInfo_proc(1,0)",
+    "pointOnCurveInfo_proc(1,0)",
+    "polyUnite_proc(1,0)",
+    "closestPointOnSurface_proc(1,0)",
+    "pointOnSurfaceInfo_proc(1,0)",
+    "groupParts_proc(1,0)",
+    "partition_proc(1,0)",
+    "poseInterpolatorManager_proc(1,0)",
+    "shapeEditorManager_proc(1,0)",
+    "trackInfoManager_proc(1,0)",
+    "cameraView_proc(1,0)",
+    "blindDataTemplate_proc(1,0)",
+    "wire_proc(1,0) ",
+    "Constraint_proc(1,0)",
+    "objectSet_proc(1,0)",
+    "renderSetupLayer_proc(1,0)",
+    "aiLightDecay_proc(1,0)"
+    };
+    int $size = `size $procs`;
+    int $iiii = 0;
+    //********************************************
+    float $amount=0;
+    progressWindow
+    -title "Deleting..."
+    -progress $amount
+    -status "  Completed:%0                                                        "
+    -isInterruptable false;
+    //********************************************
+    for(;$iiii<$size;$iiii++)
+    {
+        eval($procs[$iiii]);     
+        //*********************************************************************************************
+
+        $amount=(int)(((float)$iiii/(float)$size)*100);
+        progressWindow -edit
+        -progress $amount
+        -status("  Completed: "+$amount+"%                                                        ");
+        
+        //************************************************************************************************
+    }     
+    $amount=100;
+    progressWindow -edit
+    -progress $amount
+    -status("  Completed: "+$amount+"%                                                        ");
+    //pause -seconds 1;
+    progressWindow -endProgress;  
+    
+    
+}
+
+global proc closeClearNodeTool_win()
+{
+    hideOptionBox;
+    if (`window -exists OptionBoxWindow`) deleteUI -window OptionBoxWindow;
+    onCloseCommand;
+    saveOptionBoxSize();   
+    closeNodeList_win("syfClearNodes_NodeList");
+}
+
+
+
+global proc result_display(string $found_node_list[],string $type_name)
+{
+    if (`window -exists syfClearNodes_NodeList`) deleteUI syfClearNodes_NodeList;
+    if(`windowPref -exists syfClearNodes_NodeList`==1)windowPref -r syfClearNodes_NodeList;
+    window
+    -rtf 1
+    -s 1
+    -wh 500 150
+    -title ( "< "+$type_name+" > List" ) syfClearNodes_NodeList;
+    columnLayout -adjustableColumn true	-columnAlign "center" -cat "left" 0;
+    textScrollList -numberOfRows 30 -allowMultiSelection true -sc "selecte_nodes_run(0)" nodeList_comp;
+    button -label "Select All" -h 50 -c "selecte_nodes_run(1)" ;
+    button -label "Delete Selected" -en 0 -h 50 -c "delete_selectedItemFromList()" result_list_delete_selected;
+    string $node_itme="";
+    for($node_item in $found_node_list)
+        textScrollList -e -append $node_item nodeList_comp;
+    
+    showWindow syfClearNodes_NodeList;
+	
+    string $all_items[] = `textScrollList -q -ai nodeList_comp`;
+    string $selected_items[] = `textScrollList -q -si nodeList_comp`;
+    string $displaySTR = `size $selected_items`+" / "+`size $all_items`;
+    string $getTitle = `window -q -t syfClearNodes_NodeList`;
+    string $sep[] = stringToStringArray($getTitle,"-");//    print $sep[0]
+    window -e -t ($sep[0]+"------"+$displaySTR) syfClearNodes_NodeList;
+}
+
+global proc selecte_nodes_run(int $isAll)
+{
+    
+    select -cl;
+    string $all_items[] = `textScrollList -q -ai nodeList_comp`;
+    string $selected_items[] = `textScrollList -q -si nodeList_comp`;
+    if($isAll==1)
+    {
+        
+        int $size = `size $all_items`;
+        int $i=1;
+        for(;$i<=$size;$i++)
+            textScrollList -e -sii $i  nodeList_comp;
+        catchQuiet(`select -r $all_items`);
+        
+     $all_items = `textScrollList -q -ai nodeList_comp`;
+     $selected_items = `textScrollList -q -si nodeList_comp`;
+	  string $displaySTR = `size $selected_items`+" / "+`size $all_items`;
+      string $getTitle = `window -q -t syfClearNodes_NodeList`;
+      string $sep[] = stringToStringArray($getTitle,"-");//    print $sep[0]
+      window -e -t ($sep[0]+"------"+$displaySTR) syfClearNodes_NodeList;
+    }
+    else 
+    {
+        //print "BBBBBBBBB";
+        catchQuiet(` select -r $selected_items`);
+    }
+    string $sel[]=`ls -sl`;
+    if(`size $sel`==0)button -e -en 0 result_list_delete_selected;
+    else  button -e -en 1 result_list_delete_selected;   
+    
+    //string $all_items[] = `textScrollList -q -ai nodeList_comp`;
+    //string $selected_items[] = `textScrollList -q -si nodeList_comp`;  
+    string $displaySTR = `size $selected_items`+" / "+`size $all_items`;
+    string $getTitle = `window -q -t syfClearNodes_NodeList`;
+    string $sep[] = stringToStringArray($getTitle,"-");//    print $sep[0]
+    window -e -t ($sep[0]+"------"+$displaySTR) syfClearNodes_NodeList;
+}
+global proc closeNodeList_win(string $uiName)
+{
+    if (`window -exists $uiName`) deleteUI $uiName;
+    if(`windowPref -exists $uiName`==1)windowPref -r $uiName;
+}
+
+global proc string [] aiLightDecay_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $aiLightDecayNodes[] = `ls -typ "aiLightDecay"` ;             
+        string $every="";
+        for($every in $aiLightDecayNodes )
+        {
+            string $listconn[] = `listConnections ($every)`;
+            string $remove[] = {"defaultRenderUtilityList1"};
+            $listconn = stringArrayRemove($remove, $listconn);
+            if(`size $listconn`==0)
+            {
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+            }
+        }
+    }    
+    
+    string $aiLightDecayNodes[] = `ls -typ "aiLightDecay"` ;  
+    string $candelete[]={};
+    string $every="";
+    for($every in $aiLightDecayNodes)
+    {
+        string $listconn[] = `listConnections  ($every)`;
+        string $remove[] = {"defaultRenderUtilityList1"};
+        $listconn = stringArrayRemove($remove, $listconn);
+        if(`size $listconn`==0)
+        {            
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count aiLightDecay_tfb;//
+    if($node_count==0)setButtonGreenorRed("aiLightDecay_list",0);
+    else              setButtonGreenorRed("aiLightDecay_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"aiLightDecay");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+global proc HyperShaderSpeedUP_proc()
+{
+    HypershadeWindow;
+    hyperShadePanelMenuCommand("hyperShadePanel1", "asList");
+    hyperShadePanelMenuCommand("hyperShadePanel1", "superIcons");
+    refreshPauseButtonCmd 0;
+    //onCloseHypershadeDockWindow LookdevShaderballPanel;
+    //   whatIs onCloseHypershadeDockWindow
+    //optionVar -stringValue ($win + "State") `window -q -state LookdevShaderballPanel`;
+
+}
+
+global proc delete_selectedItemFromList()
+{
+    string $all_items[] = `textScrollList -q -ai nodeList_comp`;
+    string $selected_items[] = `textScrollList -q -si nodeList_comp`;
+    string $diff[] = stringArrayRemove($selected_items, $all_items);
+    string $sel[]=`ls -sl`;
+    if(`size $sel`>0)
+    {
+        string $every="";
+        for($every in $sel)
+            catchQuiet(`lockNode -l 0 $every`);
+        catchQuiet(`doDelete`);
+        string $node_itme="";
+        textScrollList -e -ra nodeList_comp;
+        for($node_item in $diff)
+            textScrollList -e -append $node_item nodeList_comp;
+        check_some_node(1);
+    }
+    $all_items = `textScrollList -q -ai nodeList_comp`;
+    $selected_items = `textScrollList -q -si nodeList_comp`;
+    string $displaySTR = `size $selected_items`+" / "+`size $all_items`;
+    string $getTitle = `window -q -t syfClearNodes_NodeList`;
+    string $sep[] = stringToStringArray($getTitle,"-");//    print $sep[0]
+    window -e -t ($sep[0]+"------"+$displaySTR) syfClearNodes_NodeList;
+}
+
+
+//All Clear Button Define Start
+global proc string [] unknown_proc(int $i,int $isreturn)
+{
+    string $unknown_Nodes[] = `ls -typ "unknown"`;
+    if($i==1)
+    {
+        if(`size $unknown_Nodes`>0)
+        {
+            string $every="";
+            for($every in $unknown_Nodes)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }
+    }
+    string $nodes[] = `ls -typ "unknown"`;
+    int $node_count = `size $nodes`;
+    if($isreturn==1)return $nodes;
+    textFieldButtonGrp -e -text $node_count unknown_tfb;//
+    if($node_count==0)setButtonGreenorRed("unknown_list",0);
+    else              setButtonGreenorRed("unknown_list",1);
+    
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"Unknown");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+global proc string [] turtle_proc(int $i,int $isreturn)
+{
+    
+    string $list[] = `ls "TurtleBakeLayerManager" "TurtleDefaultBakeLayer" "TurtleRenderOptions" "TurtleUIOptions"`;
+    if($i==1)
+    {
+        string $item="";
+        for ($item in $list) 
+        {
+            catchQuiet(`lockNode -l 0 $item`);
+            catchQuiet(`delete $item`);
+        }
+    }
+    
+
+    string $nodes[] = `ls "TurtleBakeLayerManager" "TurtleDefaultBakeLayer" "TurtleRenderOptions" "TurtleUIOptions"`;
+    int $node_count = `size $nodes`;
+    if($isreturn==1)return $nodes;
+    textFieldButtonGrp -e -text $node_count turtle_tfb;//
+    if($node_count==0)setButtonGreenorRed("turtle_list",0);
+    else              setButtonGreenorRed("turtle_list",1);
+    
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"Turtle");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] script_proc(int $i,int $isreturn)
+{
+    
+    if($i==1)
+    {
+        string $script_Nodes[] = `ls -typ "script"`;
+        string $remove[] = {"sceneConfigurationScriptNode","uiConfigurationScriptNode","xgenGlobals"};
+        $script_Nodes = stringArrayRemove($remove, $script_Nodes);// 
+        if(`size $script_Nodes`>0)
+        {
+            string $every="";
+            for($every in $script_Nodes)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }
+    }
+    string $nodes[] = `ls -typ "script"`;
+    string $remove[] = {"sceneConfigurationScriptNode","uiConfigurationScriptNode","xgenGlobals"};
+    $nodes = stringArrayRemove($remove, $nodes);// 
+    int $node_count = `size $nodes`;
+    if($isreturn==1)return $nodes;
+    textFieldButtonGrp -e -text $node_count script_tfb;//
+    if($node_count==0)setButtonGreenorRed("script_list",0);
+    else              setButtonGreenorRed("script_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"Script");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+
+
+global proc string [] meshRenderVisbility_proc(int $i,int $isreturn)
+{
+    
+    if($i==1)
+    {
+        string $all_mesh[] = `ls -typ "mesh"`;
+        string $mesh;
+        for($mesh in $all_mesh)
+        {
+            int $castshadow = `getAttr ($mesh+".castsShadows")`;//1
+            int $receiveShadows = `getAttr ($mesh+".receiveShadows")`;//1
+            int $holdout = `getAttr ($mesh+".holdOut")`;//0
+            int $motionblur = `getAttr ($mesh+".motionBlur")`;//1
+            int $pvis = `getAttr ($mesh+".primaryVisibility")`;//1
+            int $smooth = `getAttr ($mesh+".smoothShading")`;//1
+            int $visref = `getAttr ($mesh+".visibleInReflections")`;//1
+            int $visrefr = `getAttr ($mesh+".visibleInRefractions")`;//1
+            int $double = `getAttr ($mesh+".doubleSided")`;//1
+            int $geoanti = `getAttr ($mesh+".geometryAntialiasingOverride")`;//0
+            int $shadingsample = `getAttr ($mesh+".shadingSamplesOverride")`;//0
+            int $aivisref = `getAttr ($mesh+".aiVisibleInDiffuseReflection")`;//1
+            int $aivisspec = `getAttr ($mesh+".aiVisibleInSpecularReflection")`;//1
+            int $aivisdiftrans = `getAttr ($mesh+".aiVisibleInDiffuseTransmission")`;//1
+            int $aivisspetrans = `getAttr ($mesh+".aiVisibleInSpecularTransmission")`;//1
+            int $aivisvolume = `getAttr ($mesh+".aiVisibleInVolume")`;//1
+            int $aiselfshadow = `getAttr ($mesh+".aiSelfShadows")`;//1 
+            
+            
+            int $params[] = {$castshadow,$receiveShadows,$holdout,$motionblur,$pvis,
+                            $smooth,$visref,$visrefr,$double,$geoanti,$shadingsample,$aivisref,$aivisspec,
+                            $aivisdiftrans,$aivisspetrans,$aivisvolume,$aiselfshadow };
+            
+            string $param_str = intArrayToString( $params, "");
+            string $values[] = {"1","1","0","1","1","1","1","1","1","0","0","1","1","1","1","1","1"};
+            string $value_str = stringArrayToString($values, "");
+            if($param_str!=$value_str)
+            {
+                setAttr ($mesh+".castsShadows") 1;//1
+                setAttr ($mesh+".receiveShadows") 1;//1
+                setAttr ($mesh+".holdOut") 0;//0
+                setAttr ($mesh+".motionBlur") 1;//1
+                setAttr ($mesh+".primaryVisibility") 1;//1
+                setAttr ($mesh+".smoothShading") 1;//1
+                setAttr ($mesh+".visibleInReflections") 1;//1
+                setAttr ($mesh+".visibleInRefractions") 1;//1
+                setAttr ($mesh+".doubleSided") 1;//1
+                setAttr ($mesh+".geometryAntialiasingOverride") 0;//0
+                setAttr ($mesh+".shadingSamplesOverride") 0;//0
+                setAttr ($mesh+".aiVisibleInDiffuseReflection") 1;//1
+                setAttr ($mesh+".aiVisibleInSpecularReflection") 1;//1
+                setAttr ($mesh+".aiVisibleInDiffuseTransmission") 1;//1
+                setAttr ($mesh+".aiVisibleInSpecularTransmission") 1;//1
+                setAttr ($mesh+".aiVisibleInVolume") 1;//1
+                setAttr ($mesh+".aiSelfShadows") 1;//1                  
+            }
+            
+        }
+
+    }
+    
+    string $all_mesh[] = `ls -typ "mesh"`;
+    string $mesh;
+    string $nodes[]={};
+    for($mesh in $all_mesh)
+    {
+        int $castshadow = `getAttr ($mesh+".castsShadows")`;//1
+        int $receiveShadows = `getAttr ($mesh+".receiveShadows")`;//1
+        int $holdout = `getAttr ($mesh+".holdOut")`;//0
+        int $motionblur = `getAttr ($mesh+".motionBlur")`;//1
+        int $pvis = `getAttr ($mesh+".primaryVisibility")`;//1
+        int $smooth = `getAttr ($mesh+".smoothShading")`;//1
+        int $visref = `getAttr ($mesh+".visibleInReflections")`;//1
+        int $visrefr = `getAttr ($mesh+".visibleInRefractions")`;//1
+        int $double = `getAttr ($mesh+".doubleSided")`;//1
+        int $geoanti = `getAttr ($mesh+".geometryAntialiasingOverride")`;//0
+        int $shadingsample = `getAttr ($mesh+".shadingSamplesOverride")`;//0
+        int $aivisref = `getAttr ($mesh+".aiVisibleInDiffuseReflection")`;//1
+        int $aivisspec = `getAttr ($mesh+".aiVisibleInSpecularReflection")`;//1
+        int $aivisdiftrans = `getAttr ($mesh+".aiVisibleInDiffuseTransmission")`;//1
+        int $aivisspetrans = `getAttr ($mesh+".aiVisibleInSpecularTransmission")`;//1
+        int $aivisvolume = `getAttr ($mesh+".aiVisibleInVolume")`;//1
+        int $aiselfshadow = `getAttr ($mesh+".aiSelfShadows")`;//1 
+        
+        
+        int $params[] = {$castshadow,$receiveShadows,$holdout,$motionblur,$pvis,
+                        $smooth,$visref,$visrefr,$double,$geoanti,$shadingsample,$aivisref,$aivisspec,
+                        $aivisdiftrans,$aivisspetrans,$aivisvolume,$aiselfshadow };
+        
+        string $param_str = intArrayToString( $params, "");
+        string $values[] = {"1","1","0","1","1","1","1","1","1","0","0","1","1","1","1","1","1"};
+        string $value_str = stringArrayToString($values, "");
+        if($param_str!=$value_str)stringArrayInsertAtIndex(100000, $nodes, $mesh);
+        
+    }
+    
+    
+    int $node_count = `size $nodes`;
+    if($isreturn==1)return $nodes;
+    textFieldButtonGrp -e -text $node_count meshRenderVisbility_tfb;//
+    if($node_count==0)setButtonGreenorRed("meshRenderVisbility_list",0);
+    else              setButtonGreenorRed("meshRenderVisbility_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"meshRenderVisbility");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+
+
+
+global proc string [] renderLayer_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $renderLayerNodes[] = `ls -typ "renderLayer"`;
+        string $remove[] = {"defaultRenderLayer"};
+        $renderLayerNodes = stringArrayRemove($remove, $renderLayerNodes);// 
+        if(`size $renderLayerNodes`>0)
+        {
+            string $every="";
+            for($every in $renderLayerNodes)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }
+       
+    }
+    
+    string $nodes[] = `ls -typ "renderLayer"`;
+    string $remove[] = {"defaultRenderLayer"};
+    $nodes = stringArrayRemove($remove, $nodes);// 
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count renderLayer_tfb;// 
+    if($node_count==0)setButtonGreenorRed("renderLayer_list",0);
+    else              setButtonGreenorRed("renderLayer_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"RenderLayer(legacy)");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+global proc string [] animLayer_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $animLayerNodes[] = `ls -typ "animLayer"`; 
+        if(`size $animLayerNodes`>0)
+        {
+            string $every="";
+            for($every in $animLayerNodes)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }
+    }
+    
+    string $nodes[] = `ls -typ "animLayer"`;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count animLayer_tfb;// 
+    if($node_count==0)setButtonGreenorRed("animLayer_list",0);
+    else              setButtonGreenorRed("animLayer_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"animLayer");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+global proc string [] displayLayer_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $displayLayerNodes[] = `ls -typ "displayLayer"`;
+        string $remove[] = {"defaultLayer"};
+        $displayLayerNodes = stringArrayRemove($remove, $displayLayerNodes);// 
+        if(`size $displayLayerNodes`>0)
+        {
+            string $every="";
+            for($every in $displayLayerNodes)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }
+    }
+    
+    string $nodes[] = `ls -typ "displayLayer"`;
+    string $remove[] = {"defaultLayer"};
+    $nodes = stringArrayRemove($remove, $nodes);// 
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count displayLayer_tfb;// 
+    if($node_count==0)setButtonGreenorRed("displayLayer_list",0);
+    else              setButtonGreenorRed("displayLayer_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"displayLayer");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] renderSetupLayerALL_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $renderSetupLayerALLNodes[] = `ls -typ "renderSetupLayer"`;
+        if(`size $renderSetupLayerALLNodes`>0)
+        {
+            string $every="";
+            for($every in $renderSetupLayerALLNodes)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }
+    }
+    
+    string $nodes[] = `ls -typ "renderSetupLayer"`;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count renderSetupLayerALL_tfb;// 
+    if($node_count==0)setButtonGreenorRed("renderSetupLayerALL_list",0);
+    else              setButtonGreenorRed("renderSetupLayerALL_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"renderSetupLayerALL");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+
+global proc string [] collection_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $collection_Nodes[] = `ls -typ "collection"`;
+        if(`size $collection_Nodes`>0)
+        {
+            string $every="";
+            for($every in $collection_Nodes)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }
+    }
+    string $nodes[] = `ls -typ "collection"`;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count collection_tfb;//
+    if($node_count==0)setButtonGreenorRed("collection_list",0);
+    else              setButtonGreenorRed("collection_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"collection");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] aiAOV_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $aiAOV_Nodes[] = `ls -typ "aiAOV"`;
+        if(`size $aiAOV_Nodes`>0)
+        {
+            string $every="";
+            for($every in $aiAOV_Nodes)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }
+    }
+    string $nodes[] = `ls -typ "aiAOV"`;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count aiAOV_tfb;//
+    if($node_count==0)setButtonGreenorRed("aiAOV_list",0);
+    else              setButtonGreenorRed("aiAOV_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"aiAOV");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] renderSetup_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $renderSetupNode[] = `ls -typ "renderSetup"`;//    print $renderSetupNode
+        string $remove[]={"renderSetup"};
+        $renderSetupNode = stringArrayRemove($remove, $renderSetupNode);// 
+        string $every="";
+        for($every in $renderSetupNode)
+        {
+            string $tt[] = `listConnections -d 1 ($every+".firstRenderLayer")`;//
+            string $tt2[] = `listConnections -d 1 ($every+".lastRenderLayer")`;//
+            if( (`size $tt`==0)&&(`size $tt2`==0)  )catchQuiet(`delete $every`);
+        }
+    } 
+    string $nodes[] = `ls -typ "renderSetup"`;
+    string $remove[]={"renderSetup"};
+    $nodes = stringArrayRemove($remove, $nodes);//
+    string $every="";
+    string $canDelete[]={};
+    for($every in $nodes)
+    {
+        string $tt[] = `listConnections -d 1 ($every+".firstRenderLayer")`;//
+        string $tt2[] = `listConnections -d 1 ($every+".lastRenderLayer")`;//
+        if( (`size $tt`==0)&&(`size $tt2`==0)  )stringArrayInsertAtIndex( 100000, $canDelete, $every );
+    }
+    $nodes = $canDelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count renderSetup_tfb;//
+    
+    
+    if($node_count==0)setButtonGreenorRed("renderSetup_list",0);
+    else              setButtonGreenorRed("renderSetup_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"renderSetup");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] aiOptions_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $aiOptionsNode[] = `ls -typ "aiOptions"`;//    select -r $aiOptionsNode    
+        string $remove[] = {"defaultArnoldRenderOptions"};
+        $aiOptionsNode = stringArrayRemove($remove, $aiOptionsNode);// 
+        if(`size $aiOptionsNode`>0)
+        {
+            string $every="";
+            for($every in $aiOptionsNode)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }
+    }
+    string $nodes[] = `ls -typ "aiOptions"`;
+    string $remove[] = {"defaultArnoldRenderOptions"};
+    $nodes = stringArrayRemove($remove, $nodes);// 
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count aiOptions_tfb;//
+    
+    if($node_count==0)setButtonGreenorRed("aiOptions_list",0);
+    else              setButtonGreenorRed("aiOptions_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"aiOptions");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] aiAOVDriver_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $aiAOVDriverNode[] = `ls -typ "aiAOVDriver"`;
+        string $remove[] = {"defaultArnoldDisplayDriver","defaultArnoldDriver"};
+        $aiAOVDriverNode = stringArrayRemove($remove, $aiAOVDriverNode);// 
+        if(`size $aiAOVDriverNode`>0)
+        {
+            string $every="";
+            for($every in $aiAOVDriverNode)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }
+    }
+    string $nodes[] = `ls -typ "aiAOVDriver"`;
+    string $remove[] = {"defaultArnoldDisplayDriver","defaultArnoldDriver"};
+    $nodes = stringArrayRemove($remove, $nodes);// 
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count aiAOVDriver_tfb;//
+    if($node_count==0)setButtonGreenorRed("aiAOVDriver_list",0);
+    else              setButtonGreenorRed("aiAOVDriver_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"aiAOVDriver");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] expression_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $expressionNode[] = `ls -typ "expression"`;
+        string $remove[] = {"xgmPreviewWarning", "xgmRefreshPreview", "xgmPreviewWarning"};
+        $expressionNode = stringArrayRemove($remove, $expressionNode);// 
+        string $list[]={};
+        for($SE in $expressionNode)//    $SE = "setHeiHouse_rig_high:propDoor:xgmPreviewWarning4"
+        {  
+            string $sss = `match "xgm" $SE`;
+            
+            if($sss=="xgm")stringArrayInsertAtIndex( 1000000, $list, $SE );   
+                            
+        }        
+        if( `size $list`>0)
+        {
+            string $every="";
+            for($every in $list)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }                  
+    }
+    
+    string $nodes[] = `ls -typ "expression"`;
+    string $remove[] = {"xgmPreviewWarning", "xgmRefreshPreview", "xgmPreviewWarning"};
+    $nodes = stringArrayRemove($remove, $nodes);// 
+    string $list[]={};
+    for($SE in $nodes)
+    {  
+        string $sss = `match "xgm" $SE`;
+        if($sss=="xgm")stringArrayInsertAtIndex( 1000000, $list, $SE );                   
+    } 
+    if($isreturn==1)return $list;    
+    int $node_count = `size $list`;
+    textFieldButtonGrp -e -text $node_count expression_tfb;//
+    if($node_count==0)setButtonGreenorRed("xgm_expression_list",0);
+    else              setButtonGreenorRed("xgm_expression_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($list,"Expression( xgm** )");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $list;
+    }
+    return $list;  
+}
+
+
+global proc string [] deleteComponent_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $deleteComponentNode[] = `ls -typ "deleteComponent"`;
+        string $every="";
+        for($every in $deleteComponentNode)
+        {
+            string $tt[] = `listConnections -d 1 ($every+".inputGeometry")`;//
+            string $tt2[] = `listConnections -d 1 ($every+".outputGeometry")`;
+            if( (`size $tt`==0)&&(`size $tt2`==0) )catchQuiet(`delete $every`);
+        }
+    
+    }
+    string $nodes[] = `ls -typ "deleteComponent"`;
+    string $every="";
+    string $canDelete[]={};
+    for($every in $nodes)
+    {
+        string $tt[] = `listConnections -d 1 ($every+".inputGeometry")`;//
+        string $tt2[] = `listConnections -d 1 ($every+".outputGeometry")`;
+        if( (`size $tt`==0)&&(`size $tt2`==0) )stringArrayInsertAtIndex( 100000, $canDelete, $every );
+    }
+    $nodes = $canDelete;
+    if($isreturn==1)return $nodes; 
+    int $node_count = `size $nodes`;   
+    textFieldButtonGrp -e -text $node_count deleteComponent_tfb;//
+    if($node_count==0)setButtonGreenorRed("deleteComponent_list",0);
+    else              setButtonGreenorRed("deleteComponent_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"deleteComponent");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes; 
+}
+
+
+global proc string [] nullSE_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $nodes[] = `ls -typ "shadingEngine"`;
+        string $remove[] = {"initialShadingGroup", "initialParticleSE"};
+        $nodes = stringArrayRemove($remove, $nodes);// 
+        for($SE in $nodes)
+        {    //print $SE   select -r blinn6SG
+            
+            string $surface[] = `listConnections ($SE+".surfaceShader")`;
+            string $volume[] = `listConnections ($SE+".volumeShader")`;
+            string $displace[] = `listConnections ($SE+".displacementShader")`;
+            if(($surface[0]=="")&&($volume[0]=="")&&($displace[0]==""))catchQuiet(`delete $SE`);
+            
+        }
+    }
+    $nodes = `ls -typ "shadingEngine"`;
+    string $remove[] = {"initialShadingGroup", "initialParticleSE"};
+    $nodes = stringArrayRemove($remove, $nodes);// 
+    string $list[]={};
+    for($SE in $nodes)
+    {    //print $SE   select -r blinn6SG
+        
+        string $surface[] = `listConnections ($SE+".surfaceShader")`;
+        string $volume[] = `listConnections ($SE+".volumeShader")`;
+        string $displace[] = `listConnections ($SE+".displacementShader")`;
+        if(($surface[0]=="")&&($volume[0]=="")&&($displace[0]==""))stringArrayInsertAtIndex( 1000000, $list, $SE );
+        
+    }
+    if($isreturn==1)return $list; 
+    int $node_count = `size $list`;
+    textFieldButtonGrp -e -text $node_count nullSE_tfb;//
+    if($node_count==0)setButtonGreenorRed("unused_SE_list",0);
+    else              setButtonGreenorRed("unused_SE_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($list,"Unused ShadingEngine");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $list;
+    }
+    return $list; 
+}
+
+
+global proc string [] nodeGraphEditorInfo_proc(int $i,int $isreturn)
+{
+    
+    if($i==1)
+    {
+        string $nodes[] = `ls -typ "nodeGraphEditorInfo"`;
+    
+        string $nodes_filter[];
+        string $every_node;
+        for($every_node in $nodes)
+        {
+            string $ngei_conn[] = `listConnections -s 1 -d 0 $every_node`;
+            string $s[] = `listConnections -d 1 $every_node`;
+            int $found = stringArrayContains("initialShadingGroup", $ngei_conn);
+            int $found2= stringArrayContains("initialParticleSE", $ngei_conn);
+            int $found3= stringArrayContains("lambert1", $ngei_conn);
+            if( (`size $ngei_conn`==3)&&($found==1)&&($found2==1)&&($found3==1)  )
+                stringArrayInsertAtIndex(100000, $nodes_filter, $every_node );
+            else  if(`size $s` == 0)stringArrayInsertAtIndex(100000, $nodes_filter, $every_node );
+        }
+        string $ngei[] = $nodes_filter;
+        if(`size $ngei`>0)
+        {
+            string $every="";
+            for($every in $ngei)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }   
+    }
+    
+    string $nodes[] = `ls -typ "nodeGraphEditorInfo"`;
+    
+    string $nodes_filter[];
+    string $every_node;
+    for($every_node in $nodes)
+    {
+        string $ngei_conn[] = `listConnections -s 1 -d 0 $every_node`;
+        string $s[] = `listConnections -d 1 $every_node`;
+        int $found = stringArrayContains("initialShadingGroup", $ngei_conn);
+        int $found2= stringArrayContains("initialParticleSE", $ngei_conn);
+        int $found3= stringArrayContains("lambert1", $ngei_conn);
+        if( (`size $ngei_conn`==3)&&($found==1)&&($found2==1)&&($found3==1)  )
+            stringArrayInsertAtIndex(100000, $nodes_filter, $every_node );
+        else  if(`size $s` == 0)stringArrayInsertAtIndex(100000, $nodes_filter, $every_node );
+    }
+    if($isreturn==1)return $nodes_filter; 
+    int $node_count = `size $nodes_filter`;
+    
+    textFieldButtonGrp -e -text $node_count nodeGraphEditorInfo_tfb;//
+    if($node_count==0)setButtonGreenorRed("nodeGraphEditorInfo_list",0);
+    else              setButtonGreenorRed("nodeGraphEditorInfo_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes_filter,"nodeGraphEditorInfo");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes_filter;
+    }
+    return $nodes_filter; 
+}
+
+
+global proc string [] materialInfo_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $materialInfoNodes[] = `ls -typ "materialInfo"`;
+        string $remove[] = {"initialMaterialInfo"};
+        $materialInfoNodes = stringArrayRemove($remove, $materialInfoNodes);// size $materialInfoNodes
+        if(`size $materialInfoNodes`>0)
+        {
+            string $every="";
+            for($every in $materialInfoNodes)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }  
+    }
+    string $nodes[] = `ls -typ "materialInfo"`;
+    string $remove[] = {"initialMaterialInfo"};
+    $nodes = stringArrayRemove($remove, $nodes);
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count materialInfo_tfb;//
+    if($node_count==0)setButtonGreenorRed("materialInfo_list",0);
+    else              setButtonGreenorRed("materialInfo_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"materialInfo");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] curveInfo_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $curveInfoNodes[] = `ls -typ "curveInfo"`;
+        string $every="";//   $every = "f"
+        for($every in $curveInfoNodes)
+        {
+            string $inputConn[] = `listConnections -d 1 ($every+".inputCurve")`;     
+            if(`size $inputConn`==0)catchQuiet(`delete $every`);
+        }
+    }
+    string $curveInfoNodes[] = `ls -typ "curveInfo"`;
+    string $candelete[]={};
+    string $every="";
+    for($every in $curveInfoNodes)
+    {
+        string $inputConn[] = `listConnections -d 1 ($every+".inputCurve")`;     
+        if(`size $inputConn`==0)stringArrayInsertAtIndex(1000, $candelete, $every);
+    }
+    
+    if($isreturn==1)return $candelete;
+    int $node_count = `size $candelete`;
+    textFieldButtonGrp -e -text $node_count curveInfo_tfb;//
+    if($node_count==0)setButtonGreenorRed("curveInfo_list",0);
+    else              setButtonGreenorRed("curveInfo_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($candelete,"curveInfo");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $candelete;
+    }
+    return $candelete;
+}
+
+
+global proc string [] xgenAllNodes_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $xgen_nodeType[] = {
+        "xgmPalette",
+        "xgmDescription",
+        "xgmPatch",
+        "xgmMakeGuide",
+        "xgmGuide",
+        "xgmGuideManip",
+        "xgmGuideSculptManip",
+        "xgmPointsManip",
+        "xgmConnectivity",
+        "xgmPointsViewer",
+        "xgmNurbsPatch",
+        "xgmSubdPatch",
+        "xgmArchiveGuide",
+        "xgmCardGuide",
+        "createPtexUV",
+        "xgmSphereGuide",
+        "xgmSplineGuide",
+        "igBrushManip",
+        "igmDescription" 
+        };
+        string $all_nodes[]={};
+        string $every_type;
+        for($every_type in $xgen_nodeType)
+        {
+            //print $every_type;
+            string $tempcom = "ls -typ \""+$every_type+"\"";
+            string $node_return[] = eval($tempcom);
+            $all_nodes = stringArrayCatenate($all_nodes, $node_return);    
+        }
+        //print $all_nodes;// size $all_nodes
+        //select -r $all_nodes        
+        if(`size $all_nodes`>0)
+        {
+            string $every="";
+            for($every in $all_nodes)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }  
+    }
+    
+    string $xgen_nodeType[] = {
+    "xgmPalette",
+    "xgmDescription",
+    "xgmPatch",
+    "xgmMakeGuide",
+    "xgmGuide",
+    "xgmGuideManip",
+    "xgmGuideSculptManip",
+    "xgmPointsManip",
+    "xgmConnectivity",
+    "xgmPointsViewer",
+    "xgmNurbsPatch",
+    "xgmSubdPatch",
+    "xgmArchiveGuide",
+    "xgmCardGuide",
+    "createPtexUV",
+    "xgmSphereGuide",
+    "xgmSplineGuide",
+    "igBrushManip",
+    "igmDescription" 
+    };
+    string $all_nodes[]={};
+    string $every_type;
+    for($every_type in $xgen_nodeType)
+    {
+        //print $every_type;
+        string $tempcom = "ls -typ \""+$every_type+"\"";
+        string $node_return[] = eval($tempcom);
+        $all_nodes = stringArrayCatenate($all_nodes, $node_return);    
+    }
+    $all_nodes = stringArrayRemoveDuplicates($all_nodes);
+    //print $all_nodes;// size $all_nodes    
+    
+    
+    
+    string $nodes[] = $all_nodes;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count xgenAllNodes_tfb;//
+    if($node_count==0)setButtonGreenorRed("xgenAllNodes_list",0);
+    else              setButtonGreenorRed("xgenAllNodes_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"xgenAllNodes");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+
+
+global proc string [] dataStructure_proc(int $i,int $isreturn)
+{
+    if($i==1)dataStructure -removeAll;;
+    string $nodes[] = `dataStructure -q -asFile`;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count dataStructure_tfb;//
+    if($node_count==0)setButtonGreenorRed("dataStructure_list",0);
+    else              setButtonGreenorRed("dataStructure_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"dataStructure");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    return $nodes;
+}
+
+
+global proc string [] unknownPlugin_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $all_unknownPlug[]=`unknownPlugin -q -l`;
+        if(`size $all_unknownPlug`>0)
+        {
+            int $i=0;
+            int $size = `size $all_unknownPlug`;
+            for(;$i<$size;$i++)
+                catchQuiet(`unknownPlugin -r $all_unknownPlug[$i]`);
+        }
+    }
+    string $nodes[] = `unknownPlugin -q -l`;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count unknownPlugin_tfb;//
+    if($node_count==0)setButtonGreenorRed("unknownPlugin_list",0);
+    else              setButtonGreenorRed("unknownPlugin_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"unknownPlugin");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    return $nodes;
+}
+
+
+global proc string [] uselessLights_proc(int $i,int $isreturn)
+{
+    string $m_ambient[] = `ls -typ "ambientLight"`;
+    string $m_direction[] = `ls -typ "directionalLight"`;
+    string $m_point[] = `ls -typ "pointLight"`;
+    string $m_spotLight[] = `ls -typ "spotLight"`;
+    string $m_areaLight[] = `ls -typ "areaLight"`;
+    string $m_volumeLight[] = `ls -typ "volumeLight"`;
+    
+    string $ai_AreaLight[] = `ls -typ "aiAreaLight"`;
+    string $ai_SkyDomeLight[] = `ls -typ "aiSkyDomeLight"`;
+    string $ai_MeshLight[] = `ls -typ "aiMeshLight"`;
+    string $ai_PhotometricLight[] = `ls -typ "aiPhotometricLight"`;
+    string $ai_LightPortal[] = `ls -typ "aiLightPortal"`;
+    
+    string $allLights[] = stringArrayCatenate($m_ambient, $m_direction);
+    $allLights = stringArrayCatenate($allLights, $m_point);
+    $allLights = stringArrayCatenate($allLights, $m_spotLight);
+    $allLights = stringArrayCatenate($allLights, $m_areaLight);
+    $allLights = stringArrayCatenate($allLights, $m_volumeLight);
+    
+    $allLights = stringArrayCatenate($allLights, $ai_AreaLight);
+    $allLights = stringArrayCatenate($allLights, $ai_SkyDomeLight);
+    $allLights = stringArrayCatenate($allLights, $ai_MeshLight);
+    $allLights = stringArrayCatenate($allLights, $ai_PhotometricLight);
+    $allLights = stringArrayCatenate($allLights, $ai_LightPortal);
+    $allLights = stringArrayRemoveDuplicates($allLights);    
+    string $all_light_parent[]={};
+    string $light_every;
+    for($light_every in $allLights)
+    {
+        string $parenttp[] = `listRelatives -f -ap $light_every`;
+        stringArrayInsertAtIndex(1000, $all_light_parent, $parenttp[0]);        
+    }   //   print $all_light_parent    
+    
+    if($i==1)
+    {
+        string $useless_light_array[]={};
+        string $useless_light_shape_array[]={};
+        string $light_every;
+        for($light_every in $allLights)
+        {
+            int $yesorno = light_and_Parent_used_check($light_every);
+            string $parenttp[] = `listRelatives -f -ap $light_every`;
+            if($yesorno==0)
+            {
+                stringArrayInsertAtIndex(1000, $useless_light_array, $parenttp[0]);
+                stringArrayInsertAtIndex(1000, $useless_light_shape_array, $light_every);
+            }
+            
+        }
+        $all_light_parent = stringArrayRemove($useless_light_array, $all_light_parent);
+        $allLights = stringArrayRemove($useless_light_shape_array, $allLights);
+        if(`size $useless_light_array`>0)
+        {
+            string $every="";
+            for($every in $useless_light_array)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }  
+        
+    }
+    //size $allLights    size $useless_light_array
+    string $useless_light_array[]={};
+    string $light;
+    for($light in $allLights)
+    {
+        int $yesorno = light_and_Parent_used_check($light);
+        string $parenttp[] = `listRelatives -f -ap $light`;
+        if($yesorno==0)stringArrayInsertAtIndex(1000, $useless_light_array, $parenttp[0]);
+    }
+    
+    
+    //   print $useless_light_array
+    //string $nodes[] = `unknownPlugin -q -l`;
+    if($isreturn==1)return $useless_light_array;
+    int $node_count = `size $useless_light_array`;
+    textFieldButtonGrp -e -text $node_count uselessLights_tfb;//
+    if($node_count==0)setButtonGreenorRed("uselessLights_list",0);
+    else              setButtonGreenorRed("uselessLights_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($useless_light_array,"uselessLights");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $useless_light_array;
+    }
+    return $useless_light_array;
+}
+
+
+global proc string [] missMaterialObjects_proc(int $i,int $isreturn)
+{
+    if($i==1)//     int $i=0;
+    {
+        string $all_mesh[] = `ls -sl -l `;// string $all_mesh[] = {"facial_headSpace_Shape45668437"};
+        string $miss_material_mesh[]={};
+        string $mesh="";
+        for($mesh in $all_mesh)  //    print $mesh
+        {
+            string $meshShape[] = `ls -dag -s -o $mesh`;
+            if(`size $meshShape`>0)
+            {
+                if(`nodeType $meshShape[0]`!="mesh")continue;
+            
+                string $currentSE[] = `listConnections -t "shadingEngine" $meshShape[0]`;
+                if(`size $currentSE`==0)stringArrayInsertAtIndex( 1000000, $miss_material_mesh, $mesh );
+                else
+                {
+                    string $surface[] = `listConnections ($currentSE[0]+".surfaceShader")`;
+                    string $volume[] = `listConnections ($currentSE[0]+".volumeShader")`;
+                    string $displace[] = `listConnections ($currentSE[0]+".displacementShader")`;
+                    if( (($surface[0]=="")&&($volume[0]=="")&&($displace[0]=="")) || ($surface[0] == "lambert1")  )
+                    {
+                        stringArrayInsertAtIndex( 1000000, $miss_material_mesh, $mesh );
+                        }
+                        
+                }
+            }
+        }
+        if(`size $miss_material_mesh`>0)
+        {
+            string $every="";
+            for($every in $miss_material_mesh)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        }      
+    }
+      
+    string $all_mesh[] = `ls -sl -l `;// size $all_mesh   select -r $all_mesh
+    string $miss_material_mesh[]={};
+    string $mesh="";
+    for($mesh in $all_mesh)     
+    {
+        string $meshShape[] = `ls -dag -s -o $mesh`;
+        if(`size $meshShape`>0)
+        {
+            if(`nodeType $meshShape[0]`!="mesh")continue;
+            string $currentSE[] = `listConnections -t "shadingEngine" $meshShape[0]`;
+            if(`size $currentSE`==0)
+            {
+                stringArrayInsertAtIndex( 1000000, $miss_material_mesh, $mesh );          
+            }
+            else
+            {
+                string $surface[] = `listConnections ($currentSE[0]+".surfaceShader")`;
+                string $volume[] = `listConnections ($currentSE[0]+".volumeShader")`;
+                string $displace[] = `listConnections ($currentSE[0]+".displacementShader")`;
+                if( (($surface[0]=="")&&($volume[0]=="")&&($displace[0]=="")) || ($surface[0] == "lambert1")  )
+                {
+                    stringArrayInsertAtIndex( 1000000, $miss_material_mesh, $mesh );  
+                }            
+            }
+        }      
+    }
+    if($isreturn==1)return $miss_material_mesh;
+    int $node_count = `size $miss_material_mesh`;
+    textFieldButtonGrp -e -text $node_count missMaterialObjects_tfb;//
+    if($node_count==0)setButtonGreenorRed("missMaterialObjects_list",0);
+    else              setButtonGreenorRed("missMaterialObjects_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($miss_material_mesh,"Miss Material Objects");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    return $miss_material_mesh;
+}
+
+
+global proc string [] hyperLayout_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $hyperLayoutNodes[] = `ls -typ "hyperLayout"`;
+        string $remove[] = {"hyperGraphLayout"};
+        $hyperLayoutNodes = stringArrayRemove($remove, $hyperLayoutNodes);// size $materialInfoNodes
+        if(`size $hyperLayoutNodes`>0)
+        {
+            string $every="";
+            for($every in $hyperLayoutNodes)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        } 
+    }
+    string $nodes[] = `ls -typ "hyperLayout"`;
+    string $remove[] = {"hyperGraphLayout"};
+    $nodes = stringArrayRemove($remove, $nodes);
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count hyperLayout_tfb;//
+    if($node_count==0)setButtonGreenorRed("hyperLayout_list",0);
+    else              setButtonGreenorRed("hyperLayout_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"hyperLayout");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] groupId_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $groupIdNode[] = `ls -typ "groupId"`;
+        string $allMesh[]=`ls -typ "mesh"`;
+        string $lambertMesh[]={};
+        string $every_mesh="";
+        for($every_mesh in $allMesh)
+        {
+            string $currentSE[] = `listConnections -t "shadingEngine"  $every_mesh`;
+            if(`size $currentSE`>0)
+                if($currentSE[0]=="initialShadingGroup")
+                    stringArrayInsertAtIndex( 10000000, $lambertMesh, $every_mesh);
+        }
+        //print $lambertMesh
+        string $every="";
+        for($every in $groupIdNode)
+        {
+            string $conn_counts[] = `listConnections ($every)`;
+            if( (`size $conn_counts`==0)||( (`size $conn_counts`==1)&& ($conn_counts[0]=="initialShadingGroup") ) )catchQuiet(`delete $every`);
+        } 
+        for($every_mesh in $lambertMesh)  
+            catchQuiet(`sets -forceElement "initialShadingGroup" $every_mesh`); 
+    }      
+    
+    
+    string $nodes[] = `ls -typ "groupId"`;
+    string $candel[]={};
+    string $every="";
+    for($every in $nodes)//   $every = "twist1GroupId"
+    {
+        string $conn_counts[] = `listConnections  ($every)`;//print $conn_counts
+        //string $messconn[] = `listConnections -d 1 ($every+".message")`;//   print $messconn[0]
+        if( (`size $conn_counts`==0)||( (`size $conn_counts`==1)&& ($conn_counts[0]=="initialShadingGroup") ) )
+            stringArrayInsertAtIndex( 10000000, $candel, $every );
+    }   
+    
+    
+    
+    
+    $nodes = $candel;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count groupId_tfb;//
+    if($node_count==0)setButtonGreenorRed("groupId_list",0);
+    else              setButtonGreenorRed("groupId_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"groupId");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] pointOnCurveInfo_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $pointOnCurveInfoNode[] = `ls -typ "pointOnCurveInfo"`;// size $groupIdNode
+        string $every="";
+        for($every in $pointOnCurveInfoNode)//   $every = "setHeishouse_rig_high:propTurtleShell_rig_high:pasted__groupId12566"
+        {
+            string $conn_counts[] = `listConnections ($every+".inputCurve")`;//print $conn_counts
+            if( `size $conn_counts`==0 )catchQuiet(`delete $every`);
+        }    
+    }      
+    string $nodes[] = `ls -typ "pointOnCurveInfo"`;
+    string $candel[]={};
+    string $every="";
+    for($every in $nodes)//   $every = "twist1GroupId"
+    {
+        string $conn_counts[] = `listConnections ($every+".inputCurve")`;//print $conn_counts
+        if( `size $conn_counts`==0 )stringArrayInsertAtIndex( 10000000, $candel, $every );
+    }   
+    $nodes = $candel;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count pointOnCurveInfo_tfb;//
+    if($node_count==0)setButtonGreenorRed("pointOnCurveInfo_list",0);
+    else              setButtonGreenorRed("pointOnCurveInfo_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"pointOnCurveInfo");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] pointOnSurfaceInfo_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $pointOnSurfaceInfoNode[] = `ls -typ "pointOnSurfaceInfo"`;// size $groupIdNode
+        string $every="";
+        for($every in $pointOnSurfaceInfoNode)//   $every = "setHeishouse_rig_high:propTurtleShell_rig_high:pasted__groupId12566"
+        {
+            string $conn_counts[] = `listConnections ($every+".inputSurface")`;//print $conn_counts
+            if( `size $conn_counts`==0 )catchQuiet(`delete $every`);
+        }    
+    }      
+    string $nodes[] = `ls -typ "pointOnSurfaceInfo"`;
+    string $candel[]={};
+    string $every="";
+    for($every in $nodes)//   $every = "twist1GroupId"
+    {
+        string $conn_counts[] = `listConnections ($every+".inputSurface")`;//print $conn_counts
+        if( `size $conn_counts`==0 )stringArrayInsertAtIndex( 10000000, $candel, $every );
+    }   
+    $nodes = $candel;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count pointOnSurfaceInfo_tfb;//
+    if($node_count==0)setButtonGreenorRed("pointOnSurfaceInfo_list",0);
+    else              setButtonGreenorRed("pointOnSurfaceInfo_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"pointOnSurfaceInfo");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] closestPointOnSurface_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $closestPointOnSurfaceNode[] = `ls -typ "closestPointOnSurface"`;// size $closestPointOnSurfaceNode
+        string $every="";
+        for($every in $closestPointOnSurfaceNode)//   $every = "setHeishouse_rig_high:propTurtleShell_rig_high:pasted__groupId12566"
+        {
+            string $conn_counts[] = `listConnections ($every+".inputSurface")`;//print $conn_counts
+            if( `size $conn_counts`==0 )catchQuiet(`delete $every`);
+        }    
+    }      
+    string $nodes[] = `ls -typ "closestPointOnSurface"`;
+    string $candel[]={};
+    string $every="";
+    for($every in $nodes)//   $every = "twist1GroupId"
+    {
+        string $conn_counts[] = `listConnections ($every+".inputSurface")`;//print $conn_counts
+        if( `size $conn_counts`==0 )stringArrayInsertAtIndex( 10000000, $candel, $every );
+    }   
+    $nodes = $candel;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count closestPointOnSurface_tfb;//
+    if($node_count==0)setButtonGreenorRed("closestPointOnSurface_list",0);
+    else              setButtonGreenorRed("closestPointOnSurface_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"closestPointOnSurface");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] hyperView_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $hyperViewNode[] = `ls -typ "hyperView"`;
+        if(`size $hyperViewNode`>0)
+        {
+            string $every="";
+            for($every in $hyperViewNode)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        } 
+    }
+    
+    
+    string $nodes[] = `ls -typ "hyperView"`;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count hyperView_tfb;//
+    if($node_count==0)setButtonGreenorRed("hyperView_list",0);
+    else              setButtonGreenorRed("hyperView_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"hyperView");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] nodeGraphEditorBookmarkInfo_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $nodeGraphEditorBookmarkInfoNode[] = `ls -typ "nodeGraphEditorBookmarkInfo"`;
+        if(`size $nodeGraphEditorBookmarkInfoNode`>0)
+        {
+            string $every="";
+            for($every in $nodeGraphEditorBookmarkInfoNode)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        } 
+    }
+    
+    
+    string $nodes[] = `ls -typ "nodeGraphEditorBookmarkInfo"`;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count nodeGraphEditorBookmarkInfo_tfb;//
+    if($node_count==0)setButtonGreenorRed("nodeGraphEditorBookmarkInfo_list",0);
+    else              setButtonGreenorRed("nodeGraphEditorBookmarkInfo_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"nodeGraphEditorBookmarkInfo");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] dataReferenceEdits_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $dataReferenceEditsNode[] = `ls -typ "dataReferenceEdits"`;
+        if(`size $dataReferenceEditsNode`>0)
+        {
+            string $every="";
+            for($every in $dataReferenceEditsNode)
+            {
+                catchQuiet(`lockNode -l 0 $every`);                
+                catchQuiet(`delete $every`);
+            }
+        } 
+    }
+    
+    
+    string $nodes[] = `ls -typ "dataReferenceEdits"`;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count dataReferenceEdits_tfb;//
+    if($node_count==0)setButtonGreenorRed("dataReferenceEdits_list",0);
+    else              setButtonGreenorRed("dataReferenceEdits_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"dataReferenceEdits");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+
+
+global proc string [] distanceBetween_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $dataReferenceEditsNode[] = `ls -typ "distanceBetween"`;
+        string $every="";
+        for($every in $dataReferenceEditsNode )//   $every = "D"
+        {
+            string $listconn[] = `listConnections ($every+".distance")`;
+            string $para_a[] = `listConnections  ($every+".point1")`;  //
+            string $para_b[] = `listConnections  ($every+".point2")`;  
+            float $point1Value[] = `getAttr ($every+".point1")`;
+            float $point2Value[] = `getAttr ($every+".point2")`;
+            if( (`size $listconn`==0)||( (`size $para_a`==0)&&(`size $para_b`==0)&&($point1Value[0]==0)&&($point1Value[1]==0)&&($point1Value[2]==0)&&($point2Value[0]==0)&&($point2Value[1]==0)&&($point2Value[2]==0)    ))
+            {   
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+            }
+            else
+            {
+                string $allConns[] = `listConnections $every`;
+                $allConns = stringArrayRemoveDuplicates($allConns);
+                if(`size $allConns`==1)
+                {
+                    string $otherAllConns[] = `listConnections $allConns[0]`;
+                    $otherAllConns = stringArrayRemoveDuplicates($otherAllConns);
+                    if(`size $otherAllConns`==1)
+                    {
+                        if($otherAllConns[0] == $every)
+                        {
+                            catchQuiet(`delete $otherAllConns[0] $every`) ;
+                        }
+                    }
+                }
+            }
+        }
+    }    
+    
+    string $nodes[] = `ls -typ "distanceBetween"`;
+    string $candelete[]={};
+    string $every="";
+    for($every in $nodes )
+    {
+        string $listconn[] = `listConnections ($every+".distance")`;
+        string $para_a[] = `listConnections  ($every+".point1")`;  //
+        string $para_b[] = `listConnections  ($every+".point2")`;  
+        float $point1Value[] = `getAttr ($every+".point1")`;
+        float $point2Value[] = `getAttr ($every+".point2")`;
+        if( (`size $listconn`==0)||( (`size $para_a`==0)&&(`size $para_b`==0)&&($point1Value[0]==0)&&($point1Value[1]==0)&&($point1Value[2]==0)&&($point2Value[0]==0)&&($point2Value[1]==0)&&($point2Value[2]==0)    ))
+        {           
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+        else
+        {
+            string $allConns[] = `listConnections $every`;
+            $allConns = stringArrayRemoveDuplicates($allConns);
+            if(`size $allConns`==1)
+            {
+                string $otherAllConns[] = `listConnections $allConns[0]`;
+                $otherAllConns = stringArrayRemoveDuplicates($otherAllConns);
+                if(`size $otherAllConns`==1)
+                {
+                    if($otherAllConns[0] == $every)
+                    {
+                        stringArrayInsertAtIndex( 10000000, $candelete, $every );
+                    }
+                }
+            }
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count distanceBetween_tfb;//
+    if($node_count==0)setButtonGreenorRed("distanceBetween_list",0);
+    else              setButtonGreenorRed("distanceBetween_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"distanceBetween");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] polyUnite_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $polyUniteNode[] = `ls -typ "polyUnite"`;
+        string $every="";
+        for($every in $polyUniteNode)
+        {
+            string $listconn[] = `listConnections  $every`;
+            if(`size $listconn`==0)
+            {
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+            }
+        }
+    }    
+    
+    string $nodes[] = `ls -typ "polyUnite"`;
+    string $candelete[]={};
+    string $every="";
+    for($every in $nodes )
+    {
+        string $listconn[] = `listConnections  $every`;
+        if(`size $listconn`==0)
+        {
+            
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count polyUnite_tfb;//
+    if($node_count==0)setButtonGreenorRed("polyUnite_list",0);
+    else              setButtonGreenorRed("polyUnite_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"polyUnite");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] animCurve_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $animNodes[] = `ls -typ "animCurveTA"` ;
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTL"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTT"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTU"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUA"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUL"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUT"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUU"`);
+        
+        string $every="";
+        for($every in $animNodes )
+        {
+            string $listconn[] = `listConnections -d 1 ($every+".output")`;
+            if(`size $listconn`==0)catchQuiet(`delete $every`);
+        }
+    }    
+    
+    string $animNodes[] = `ls -typ "animCurveTA"` ;
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTL"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTT"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTU"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUA"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUL"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUT"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUU"`);
+    string $candelete[]={};
+    string $every="";
+    for($every in $animNodes)
+    {
+        string $listconn[] = `listConnections -d 1 ($every+".output")`;
+        if(`size $listconn`==0)
+        {
+            lockNode -l 0 $every;
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count animCurve_tfb;//
+    if($node_count==0)setButtonGreenorRed("animCurve_list",0);
+    else              setButtonGreenorRed("animCurve_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"animCurve");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] decimalKeys_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $animNodes[] = `ls -typ "animCurveTA"` ;
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTL"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTT"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTU"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUA"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUL"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUT"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUU"`);
+        
+        string $every="";
+        for($every in $animNodes )//    $every = "pasted__pSphere2_translateZ"
+        {
+            string $listconn[] = `listConnections -d 1 ($every+".output")`;
+            if(`size $listconn`>0)
+            {
+                float $returnTime[] = `keyframe -q $every`;
+                float $everyTime;
+                for($everyTime in $returnTime)
+                {
+                    float $modVal = fmod($everyTime,1);
+                    if($modVal>0)
+                    {
+                        catchQuiet(`delete $every`);
+                        break;
+                    }
+                }                                
+            }
+        }
+  
+               
+    }    
+    
+    string $animNodes[] = `ls -typ "animCurveTA"` ;
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTL"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTT"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTU"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUA"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUL"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUT"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUU"`);
+    
+    string $every="";
+    string $candelete[]={};
+    for($every in $animNodes )//    $every = "pasted__pSphere2_translateZ"
+    {
+        string $listconn[] = `listConnections -d 1 ($every+".output")`;
+        if(`size $listconn`>0)
+        {
+            float $returnTime[] = `keyframe -q $every`;
+            float $everyTime;
+            for($everyTime in $returnTime)
+            {
+                float $modVal = fmod($everyTime,1);
+                if($modVal>0)
+                {
+                    lockNode -l 0 $every;
+                    stringArrayInsertAtIndex( 10000000, $candelete, $every );
+                    break;
+                }
+            }                                
+        }
+    }
+    
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count decimalKeys_tfb;//
+    if($node_count==0)setButtonGreenorRed("decimalKeys_list",0);
+    else              setButtonGreenorRed("decimalKeys_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"decimalKeys");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+global proc string [] animKeys_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $animNodes[] = `ls -typ "animCurveTA"` ;
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTL"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTT"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTU"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUA"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUL"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUT"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUU"`);
+        
+        string $every="";
+        for($every in $animNodes )
+        {
+            string $listconn[] = `listConnections ($every+".input")`;
+            if(`size $listconn`==0)catchQuiet(`delete $every`);
+        }
+    }    
+    
+    string $animNodes[] = `ls -typ "animCurveTA"` ;
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTL"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTT"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTU"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUA"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUL"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUT"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUU"`);
+    string $candelete[]={};
+    string $every="";
+    for($every in $animNodes)
+    {
+        string $listconn[] = `listConnections ($every+".input")`;
+        if(`size $listconn`==0)
+        {
+            lockNode -l 0 $every;
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count animKeys_tfb;//
+    if($node_count==0)setButtonGreenorRed("animKeys_list",0);
+    else              setButtonGreenorRed("animKeys_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"animKeys");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+global proc string [] drivenKeys_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $animNodes[] = `ls -typ "animCurveTA"` ;
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTL"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTT"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTU"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUA"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUL"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUT"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUU"`);
+        
+        string $every="";
+        for($every in $animNodes )
+        {
+            string $listconn[] = `listConnections ($every+".input")`;
+            if(`size $listconn`>0)catchQuiet(`delete $every`);
+        }
+    }    
+    
+    string $animNodes[] = `ls -typ "animCurveTA"` ;
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTL"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTT"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveTU"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUA"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUL"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUT"`);
+    $animNodes = stringArrayCatenate($animNodes, `ls -typ "animCurveUU"`);
+    string $candelete[]={};
+    string $every="";
+    for($every in $animNodes)
+    {
+        string $listconn[] = `listConnections ($every+".input")`;
+        if(`size $listconn`>0)
+        {
+            lockNode -l 0 $every;
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count drivenKeys_tfb;//
+    if($node_count==0)setButtonGreenorRed("drivenKeys_list",0);
+    else              setButtonGreenorRed("drivenKeys_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"drivenKeys");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] Constraint_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $animNodes[] = `ls -typ "parentConstraint"` ;
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "pointConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "orientConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "scaleConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "aimConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "closestPointOnMesh"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "pointOnPolyConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "geometryConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "normalConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "tangentConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "motionPath"`);
+        
+        string $every="";
+        for($every in $animNodes )
+        {
+            string $listconn[] = `listConnections -s 0 $every`;
+            $listconn = stringArrayRemoveDuplicates($listconn);
+            string $tempremove[]={$every};
+            $listconn = stringArrayRemove($tempremove, $listconn);
+            if(`size $listconn`==0)
+            {
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+                
+            }
+        }
+    }    
+
+     string $candeletes[]={};
+     string $animNodes[] = `ls -typ "parentConstraint"` ;
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "pointConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "orientConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "scaleConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "aimConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "closestPointOnMesh"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "pointOnPolyConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "geometryConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "normalConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "tangentConstraint"`);
+        $animNodes = stringArrayCatenate($animNodes, `ls -typ "motionPath"`);
+        
+        string $every="";
+        for($every in $animNodes )
+        {
+            string $listconn[] = `listConnections -s 0 $every`;
+            $listconn = stringArrayRemoveDuplicates($listconn);
+            string $tempremove[]={$every};
+            $listconn = stringArrayRemove($tempremove, $listconn);
+            if(`size $listconn`==0)
+            {
+                 stringArrayInsertAtIndex( 10000000, $candeletes, $every );
+            }   
+        
+        
+        }
+            
+
+    $nodes = $candeletes;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count Constraint_tfb;//
+    if($node_count==0)setButtonGreenorRed("Constraint_list",0);
+    else              setButtonGreenorRed("Constraint_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"Constraint");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+global proc string [] blendWeighted_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $blendWeightedNodes[] = `ls -typ "blendWeighted"` ;             
+        string $every="";
+        for($every in $blendWeightedNodes )
+        {
+            string $listconn[] = `listConnections -d 1 ($every+".output")`;
+            if(`size $listconn`==0)
+            {
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+            }
+        }
+    }    
+    
+    string $blendWeightedNodes[] = `ls -typ "blendWeighted"` ; 
+    string $candelete[]={};
+    string $every="";
+    for($every in $blendWeightedNodes)
+    {
+        string $listconn[] = `listConnections -d 1 ($every+".output")`;
+        if(`size $listconn`==0)
+        {            
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count blendWeighted_tfb;//
+    if($node_count==0)setButtonGreenorRed("blendWeighted_list",0);
+    else              setButtonGreenorRed("blendWeighted_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"blendWeighted");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] groupParts_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $groupPartsNodes[] = `ls -typ "groupParts"` ;             
+        string $every="";
+        for($every in $groupPartsNodes )
+        {
+            string $listconn[] = `listConnections ($every)`;
+            if(`size $listconn`==0)
+            {
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+            }
+        }
+    }    
+    
+    string $groupPartsNodes[] = `ls -typ "groupParts"` ; 
+    string $candelete[]={};
+    string $every="";
+    for($every in $groupPartsNodes)
+    {
+        string $listconn[] = `listConnections  ($every)`;
+        if(`size $listconn`==0)
+        {            
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count groupParts_tfb;//
+    if($node_count==0)setButtonGreenorRed("groupParts_list",0);
+    else              setButtonGreenorRed("groupParts_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"groupParts");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] partition_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $partitionNodes[] = `ls -typ "partition"` ;   
+        string $remove[] = {"characterPartition","renderPartition"};
+        $partitionNodes = stringArrayRemove($remove, $partitionNodes);// size $materialInfoNodes
+        
+                  
+        string $every="";
+        for($every in $partitionNodes )
+        {
+            string $listconn[] = `listConnections ($every)`;
+            if(`size $listconn`==0)
+            {
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+            }
+        }
+    }    
+    
+    string $partitionNodes[] = `ls -typ "partition"` ; 
+    string $remove[] = {"characterPartition","renderPartition"};
+    $partitionNodes = stringArrayRemove($remove, $partitionNodes);
+    string $candelete[]={};
+    string $every="";
+    for($every in $partitionNodes)
+    {
+        string $listconn[] = `listConnections  ($every)`;
+        if(`size $listconn`==0)
+        {            
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count partition_tfb;//
+    if($node_count==0)setButtonGreenorRed("partition_list",0);
+    else              setButtonGreenorRed("partition_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"partition");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] objectSet_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $objectSetNodes[] = `ls -typ "objectSet"` ;   
+        string $remove[] = {"defaultLightSet","defaultObjectSet","lightEditorRoot"};
+        $objectSetNodes = stringArrayRemove($remove, $objectSetNodes);// size $materialInfoNodes
+        
+                  
+        string $every="";
+        for($every in $objectSetNodes)//print $every
+        {
+            string $listconn[] = `listConnections ($every)`;
+            if(`size $listconn`==0)
+            {
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+            }
+        }
+    }    
+    
+    string $objectSetNodes[] = `ls -typ "objectSet"` ;   
+    string $remove[] = {"defaultLightSet","defaultObjectSet","lightEditorRoot"};
+    $objectSetNodes = stringArrayRemove($remove, $objectSetNodes);
+    string $candelete[]={};
+    string $every="";
+    for($every in $objectSetNodes)
+    {
+        string $listconn[] = `listConnections  ($every)`;
+        if(`size $listconn`==0)
+        {            
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count objectSet_tfb;//
+    if($node_count==0)setButtonGreenorRed("objectSet_list",0);
+    else              setButtonGreenorRed("objectSet_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"objectSet");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r -ne $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] renderSetupLayer_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $renderSetupLayerNode[] = `ls -typ "renderSetupLayer"`;// size $renderSetupLayerNode
+        string $every="";
+        for($every in $renderSetupLayerNode)//   $every = "setHeishouse_rig_high:propTurtleShell_rig_high:pasted__groupId12566"
+        {   //    print $every
+            string $conn_counts[] = `listConnections ($every)`;//print $conn_counts
+            if( `size $conn_counts`==0 )catchQuiet(`delete $every`);
+        }    
+    }      
+    string $nodes[] = `ls -typ "renderSetupLayer"`;
+    string $candel[]={};
+    string $every="";
+    for($every in $nodes)//   $every = "twist1GroupId"
+    {
+        string $conn_counts[] = `listConnections ($every)`;//print $conn_counts
+        if( `size $conn_counts`==0 )stringArrayInsertAtIndex( 10000000, $candel, $every );
+    }   
+    $nodes = $candel;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count renderSetupLayer_tfb;//
+    if($node_count==0)setButtonGreenorRed("renderSetupLayer_list",0);
+    else              setButtonGreenorRed("renderSetupLayer_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"renderSetupLayer");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] poseInterpolatorManager_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $poseInterpolatorManagerNodes[] = `ls -typ "poseInterpolatorManager"` ;     
+        string $remove[] = {"poseInterpolatorManager"};
+        $poseInterpolatorManagerNodes = stringArrayRemove($remove, $poseInterpolatorManagerNodes);       
+        string $every="";
+        for($every in $poseInterpolatorManagerNodes )
+        {
+            string $listconn[] = `listConnections ($every)`;
+            if(`size $listconn`==0)
+            {
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+            }
+        }
+    }    
+    
+    string $poseInterpolatorManagerNodes[] = `ls -typ "poseInterpolatorManager"` ; 
+    string $remove[] = {"poseInterpolatorManager"};
+    $poseInterpolatorManagerNodes = stringArrayRemove($remove, $poseInterpolatorManagerNodes);    
+    string $candelete[]={};
+    string $every="";
+    for($every in $poseInterpolatorManagerNodes)
+    {
+        string $listconn[] = `listConnections  ($every)`;
+        if(`size $listconn`==0)
+        {            
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count poseInterpolatorManager_tfb;//
+    if($node_count==0)setButtonGreenorRed("poseInterpolatorManager_list",0);
+    else              setButtonGreenorRed("poseInterpolatorManager_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"poseInterpolatorManager");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] shapeEditorManager_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $shapeEditorManagerNodes[] = `ls -typ "shapeEditorManager"` ; 
+        string $remove[] = {"shapeEditorManager","shapeEditorManager1"};
+        $shapeEditorManagerNodes = stringArrayRemove($remove, $shapeEditorManagerNodes);               
+        string $every="";
+        for($every in $shapeEditorManagerNodes )
+        {
+            string $listconn[] = `listConnections ($every)`;
+            if(`size $listconn`==0)
+            {
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+            }
+        }
+    }    
+    
+    string $shapeEditorManagerNodes[] = `ls -typ "shapeEditorManager"` ; 
+    string $remove[] = {"shapeEditorManager","shapeEditorManager1"};
+    $shapeEditorManagerNodes = stringArrayRemove($remove, $shapeEditorManagerNodes); 
+    string $candelete[]={};
+    string $every="";
+    for($every in $shapeEditorManagerNodes)
+    {
+        string $listconn[] = `listConnections  ($every)`;
+        if(`size $listconn`==0)
+        {            
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count shapeEditorManager_tfb;//
+    if($node_count==0)setButtonGreenorRed("shapeEditorManager_list",0);
+    else              setButtonGreenorRed("shapeEditorManager_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"shapeEditorManager");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] trackInfoManager_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $trackInfoManagerNodes[] = `ls -typ "trackInfoManager"` ;             
+        string $every="";
+        for($every in $trackInfoManagerNodes )
+        {
+            string $listconn[] = `listConnections ($every)`;
+            if(`size $listconn`==0)
+            {
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+            }
+        }
+    }    
+    
+    string $trackInfoManagerNodes[] = `ls -typ "trackInfoManager"` ; 
+    string $candelete[]={};
+    string $every="";
+    for($every in $trackInfoManagerNodes)
+    {
+        string $listconn[] = `listConnections  ($every)`;
+        if(`size $listconn`==0)
+        {            
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count trackInfoManager_tfb;//
+    if($node_count==0)setButtonGreenorRed("trackInfoManager_list",0);
+    else              setButtonGreenorRed("trackInfoManager_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"trackInfoManager");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] cameraView_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $cameraViewNodes[] = `ls -typ "cameraView"` ;             
+        string $every="";
+        for($every in $cameraViewNodes )
+        {
+            string $listconn[] = `listConnections ($every)`;
+            if(`size $listconn`==0)
+            {
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+            }
+        }
+    }    
+    
+    string $cameraViewNodes[] = `ls -typ "cameraView"` ; 
+    string $candelete[]={};
+    string $every="";
+    for($every in $cameraViewNodes)
+    {
+        string $listconn[] = `listConnections  ($every)`;
+        if(`size $listconn`==0)
+        {            
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count cameraView_tfb;//
+    if($node_count==0)setButtonGreenorRed("cameraView_list",0);
+    else              setButtonGreenorRed("cameraView_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"cameraView");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] wire_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $wireNodes[] = `ls -typ "wire"` ;             
+        string $every="";
+        for($every in $wireNodes )
+        {
+            string $listconn[] = `listConnections ($every)`;
+            if(`size $listconn`==0)
+            {
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+            }
+        }
+    }    
+    
+    string $wireNodes[] = `ls -typ "wire"` ; 
+    string $candelete[]={};
+    string $every="";
+    for($every in $wireNodes)
+    {
+        string $listconn[] = `listConnections  ($every)`;
+        if(`size $listconn`==0)
+        {            
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count wire_tfb;//
+    if($node_count==0)setButtonGreenorRed("wire_list",0);
+    else              setButtonGreenorRed("wire_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"wire");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] blindDataTemplate_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $blindDataTemplateNodes[] = `ls -typ "blindDataTemplate"` ;             
+        string $every="";
+        for($every in $blindDataTemplateNodes )
+        {
+            string $listconn[] = `listConnections ($every)`;
+            if(`size $listconn`==0)
+            {
+                catchQuiet(`lockNode -l 0 $every`);
+                catchQuiet(`delete $every`);
+            }
+        }
+    }    
+    
+    string $blindDataTemplateNodes[] = `ls -typ "blindDataTemplate"` ; 
+    string $candelete[]={};
+    string $every="";
+    for($every in $blindDataTemplateNodes)
+    {
+        string $listconn[] = `listConnections  ($every)`;
+        if(`size $listconn`==0)
+        {            
+            stringArrayInsertAtIndex( 10000000, $candelete, $every );
+        }
+    }
+    $nodes = $candelete;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count blindDataTemplate_tfb;//
+    if($node_count==0)setButtonGreenorRed("blindDataTemplate_list",0);
+    else              setButtonGreenorRed("blindDataTemplate_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"blindDataTemplate");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] reference_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $referenceNode[] = `ls -typ "reference"`;
+        if(`size $referenceNode`>0)
+        {
+            string $every="";
+            for($every in $referenceNode)
+            {
+                if( catchQuiet(`referenceQuery -f $every`) )
+                {
+                    lockNode -l 0 $every;
+                    catchQuiet ( `delete $every`);
+                }
+                else
+                {
+                    if(`referenceQuery -f $every`=="")
+                    {
+                        catchQuiet(`lockNode -l 0 $every`);
+                        catchQuiet ( `delete $every`);
+                    }
+                }
+            }            
+        }
+    }
+    
+    
+    string $nodes[] = `ls -typ "reference"`;
+    string $unless_ref_node[]={};
+    string $every="";
+    for($every in $nodes)
+    {
+        if( catchQuiet(`referenceQuery -f $every`) )
+        {
+            lockNode -l 0 $every;
+            stringArrayInsertAtIndex( 10000000, $unless_ref_node, $every );
+        }
+        else
+        {
+            if(`referenceQuery -f $every`=="")
+            {
+                lockNode -l 0 $every;
+                stringArrayInsertAtIndex( 10000000, $unless_ref_node, $every );
+            }
+        }
+    }
+    $nodes = $unless_ref_node;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count reference_tfb;//
+    if($node_count==0)setButtonGreenorRed("reference_list",0);
+    else              setButtonGreenorRed("reference_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"reference");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] byFaceAssignShader_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $AllMeshNodes[] = `ls -l -typ "mesh"`;
+        string $every="";
+        for($every in $AllMeshNodes)
+        {
+            string $currentSE[] = `listConnections -t "shadingEngine"  $every`;
+            $currentSE = stringArrayRemoveDuplicates($currentSE);
+            if(`size $currentSE`>1)catchQuiet(`delete $every`);
+        }
+    }
+    
+    string $nodes[] = `ls -l -typ "mesh"`;
+    string $hasProblem[]={};
+    string $every="";
+    for($every in $nodes)
+    {
+        string $currentSE[] = `listConnections -t "shadingEngine"  $every`;
+        if(`size $currentSE`>1)
+        {
+            string $p = firstParentOf($every);
+            stringArrayInsertAtIndex( 10000000, $hasProblem, $p );
+            $hasProblem = stringArrayRemoveDuplicates($hasProblem);
+        }
+    }
+    $nodes = $hasProblem;//select -r  $hasProblem
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count byFaceAssignShader_tfb;//
+    if($node_count==0)setButtonGreenorRed("byFaceAssignShader_list",0);
+    else              setButtonGreenorRed("byFaceAssignShader_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"byFaceAssignShader");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] unstitched_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $AllMeshNodes[] = `ls -l -typ "mesh"`;
+        string $every="";
+        for($every in $AllMeshNodes)
+        {
+            int $abcd[] = `polyEvaluate -shell $every`;// print  $abcd
+            if($abcd[0]>1)catchQuiet(`delete $every`);
+        }
+    }
+    
+    string $nodes[] = `ls -l -typ "mesh"`;
+    string $hasProblem[]={};
+    string $every="";
+    for($every in $nodes)
+    {
+        int $abcd[] = `polyEvaluate -shell $every`;
+        if($abcd[0]>1)
+        {
+            string $p = firstParentOf($every);
+            stringArrayInsertAtIndex( 10000000, $hasProblem, $p );
+            $hasProblem = stringArrayRemoveDuplicates($hasProblem);
+        }
+    }
+    $nodes = $hasProblem;//select -r  $hasProblem
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count unstitched_tfb;//
+    if($node_count==0)setButtonGreenorRed("unstitched_list",0);
+    else              setButtonGreenorRed("unstitched_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"unstitched");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] overlayObject_proc(int $i,int $isreturn)
+{
+    if($i==1)
+    {
+        string $AllMeshNodes[] = `ls -l -typ "mesh"`;//   select -r $AllMeshNodes
+        string $every="";
+        string $del_intermediate[]={};
+        for($every in $AllMeshNodes)
+        {
+            if(`getAttr ($every+".intermediateObject")`==0)
+                stringArrayInsertAtIndex(1000000,$del_intermediate,$every); 
+        }
+        $AllMeshNodes = $del_intermediate;
+        string $overlayObj[]={};
+        float $all_Bound[]={};
+        for($every in $AllMeshNodes)
+        {
+            float $bound[] = `polyEvaluate -b $every`;
+            float $bound_sum = $bound[0]+$bound[1]+$bound[2]+$bound[3]+$bound[4]+$bound[5];
+            floatArrayInsertAtIndex(10000000,$all_Bound,$bound_sum);
+        }
+        int $ii=0;
+        int $size = `size $all_Bound`;
+        for(;$ii<$size;$ii++)
+        {
+            int $count = floatArrayCount($all_Bound[$ii],$all_Bound);
+            if($count>1)
+            {
+                string $p = firstParentOf($AllMeshNodes[$ii]);
+                stringArrayInsertAtIndex(1000000,$overlayObj,$p);
+            }
+            
+        }
+        $overlayObj = stringArrayRemoveDuplicates($overlayObj);
+    
+    }
+    
+    string $AllMeshNodes[] = `ls -l -typ "mesh"`;
+    string $every="";
+    string $del_intermediate[]={};
+    for($every in $AllMeshNodes)
+    {
+        if(`getAttr ($every+".intermediateObject")`==0)
+            stringArrayInsertAtIndex(1000000,$del_intermediate,$every); 
+    }
+    $AllMeshNodes = $del_intermediate;
+    string $overlayObj[]={};
+    float $all_Bound[]={};
+    for($every in $AllMeshNodes)
+    {
+        float $bound[] = `polyEvaluate -b $every`;
+        float $bound_sum = $bound[0]+$bound[1]+$bound[2]+$bound[3]+$bound[4]+$bound[5];
+        floatArrayInsertAtIndex(10000000,$all_Bound,$bound_sum);
+    }
+    int $ii=0;
+    int $size = `size $all_Bound`;
+    for(;$ii<$size;$ii++)
+    {
+        int $count = floatArrayCount($all_Bound[$ii],$all_Bound);
+        if($count>1)
+        {
+            string $p = firstParentOf($AllMeshNodes[$ii]);
+            stringArrayInsertAtIndex(1000000,$overlayObj,$p);
+        }
+    }
+    
+    $overlayObj = stringArrayRemoveDuplicates($overlayObj);
+    $nodes = $overlayObj;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count overlayObject_tfb;//
+    if($node_count==0)setButtonGreenorRed("overlayObject_list",0);
+    else              setButtonGreenorRed("overlayObject_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"overlayObject");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] intermediateObject_proc(int $i,int $isreturn)//
+{
+    if($i==1)
+    {
+        string $AllMeshNodes[] = `ls -l -typ "mesh"`;//   select -r $AllMeshNodes
+        string $every="";
+        for($every in $AllMeshNodes)
+        {
+            string $testConn[] = `listConnections  ($every)`;
+            if( (`getAttr ($every+".intermediateObject")`==1) && (`size $testConn`==0) )catchQuiet(`delete $every`);               
+        }
+    }    
+    
+    string $AllMeshNodes[] = `ls -l -typ "mesh"`;
+    string $every="";
+    string $del_intermediate[]={};
+    for($every in $AllMeshNodes)
+    {
+        string $testConn[] = `listConnections  ($every)`;
+        if( (`getAttr ($every+".intermediateObject")`==1) && (`size $testConn`==0) )
+            stringArrayInsertAtIndex(1000000,$del_intermediate,$every); 
+    }
+    $overlayObj = $del_intermediate;
+    $nodes = $overlayObj;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count intermediateObject_tfb;//
+    if($node_count==0)setButtonGreenorRed("intermediateObject_list",0);
+    else              setButtonGreenorRed("intermediateObject_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"intermediateObject");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+global proc string [] hiddenShapes_proc(int $i,int $isreturn)//
+{
+    if($i==1)
+    {
+        string $AllMeshNodes[] = `ls -l -typ "mesh"`;//   select -r $AllMeshNodes
+        string $every="";
+        for($every in $AllMeshNodes)
+        {
+            if(`getAttr ($every+".visibility")`==0)catchQuiet(`delete $every`);               
+        }
+    }    
+    
+    string $AllMeshNodes[] = `ls -l -typ "mesh"`;
+    string $every="";
+    string $del_intermediate[]={};
+    for($every in $AllMeshNodes)
+    {
+        if(`getAttr ($every+".visibility")`==0)
+            stringArrayInsertAtIndex(1000000,$del_intermediate,$every); 
+    }
+    $overlayObj = $del_intermediate;
+    $nodes = $overlayObj;
+    if($isreturn==1)return $nodes;
+    int $node_count = `size $nodes`;
+    textFieldButtonGrp -e -text $node_count hiddenShapes_tfb;//
+    if($node_count==0)setButtonGreenorRed("hiddenShapes_list",0);
+    else              setButtonGreenorRed("hiddenShapes_list",1);
+    if($i==1)closeNodeList_win("syfClearNodes_NodeList");
+    if(($i==999)&&($node_count>0))
+    {
+        result_display($nodes,"hiddenShapes");
+    }
+    if(($i==999)&&($node_count==0))
+    {
+        closeNodeList_win("syfClearNodes_NodeList");
+    }
+    if(($i==888)&&($node_count>0))
+    {
+        select -r $nodes;
+    }
+    return $nodes;
+}
+
+
+
+
+global proc int light_and_Parent_used_check(string $lightShape)
+{
+    //string $lightShape;
+    int $getVis = `getAttr ($lightShape+".v")`;  //getAttr "aiAreaLightShape1.v"
+    if($getVis==0)return 0;
+    string $shapePath[] = `listRelatives -f -ap $lightShape`;//   print $shapePath
+    //string $temp[] = {$lightShape};
+    string $lightAndAllParent[]={};
+    $lightAndAllParent[0] = $lightShape;
+    string $shapePath_sep[] = stringToStringArray($shapePath[0],"|");
+    int $size = `size $shapePath_sep`;
+    int $i = 0;
+    for(;$i<$size;$i++)
+    {
+        string $parenttp[] = `listRelatives -f -ap $lightShape`;
+        int $getVis = `getAttr ($parenttp[0]+".v")`;
+        if($getVis==0)return 0;
+        if(`size $parenttp`==0)break;
+        $lightAndAllParent = stringArrayCatenate($lightAndAllParent, $parenttp);
+        $lightShape = $parenttp[0];
+    }
+    //print $lightAndAllParent;
+    //select -r $lightAndAllParent;
+    return 1;
+}
+
+////All Clear Button Define End
+global proc setButtonGreenorRed(string $button_name,int $gORr)
+{
+    if($gORr==1)button -e -bgc 1 0 0 $button_name;
+    if($gORr==0)button -e -bgc 0 1 0 $button_name;
+}
+
+global proc check_override_face_main(string $obj)
+{
+    select -r $obj;
+    string $sel_obj[] = `ls -sl -fl -l`;
+    int $faceCounts[] = `polyEvaluate -f`;
+    select -r ($sel_obj[0]+".f[0:"+string($faceCounts[0]-1)+"]");
+    
+    string $sel_f[] = `ls -sl -fl -l`;
+    string $every="";
+    string $conn_array[]={};
+    string $single_str[]={};
+    for($every in $sel_f)
+    {
+       float $n[] = `xform -q -t -ws $every`;
+       float $eve=0;
+       float $sum=0;
+       for($eve in $n)
+       {
+           $sum+=$eve;
+       }
+       stringArrayInsertAtIndex(1000000, $single_str, $sum);
+       //print (string($sum)+"#"+$every);
+       stringArrayInsertAtIndex(10000000, $conn_array,(string($sum)+"#"+$every));
+       //print "\n";
+       
+    }
+    $single_str = stringArrayRemoveDuplicates($single_str);
+    string $single_str_every="";
+    string $final_array[]={};
+    for($single_str_every in $single_str)
+    {
+        //print $single_str_every;
+        string $temp=$single_str_every+"*";
+        for($every in $conn_array)
+        {
+            string $str_sep[] = stringToStringArray($every,"#");
+            if($str_sep[0]==$single_str_every)
+            {
+                $temp = $temp +$str_sep[1]+"*";
+            }
+        }
+        //print $temp;
+        stringArrayInsertAtIndex(1000000, $final_array, $temp);
+        
+    }
+    //print $final_array;
+    
+    string $need_delete[]={};
+    for($every in $final_array)
+    {
+        string $sep[] = stringToStringArray($every,"*");
+        
+        stringArrayRemoveAtIndex(0, $sep);//   print $sep
+        stringArrayRemoveAtIndex(0, $sep);//   print $sep
+        if(`size $sep`>0)
+        {
+            //print $sep;
+            //delete $sep;
+            $need_delete = stringArrayCatenate($need_delete, $sep);
+    
+        }
+    }
+    //print $need_delete;
+    if(`size $need_delete`>0)
+    {
+        delete $need_delete;
+        warning -n ("Deleted---"+`size $need_delete`+"---Faces");
+        polyNormal -normalMode 2 -userNormalMode 0 -ch 0 $sel_obj[0];
+        polySoftEdge -a 180 -ch 0 $sel_obj[0];
+        //print "\n";
+    
+    }
+    else
+        warning -n ("No Override Faces!");
+    
+    //select -r $sel_obj[0];
+
+}
+global proc syf_check_override_face()
+{
+    string $sel[] = `ls -sl -fl -l`;
+    string $every="";
+    if(`size $sel`==0)warning -n "You Muse Select a Polygon Or More Polygon!";
+    int $i = 0;
+    int $size = `size $sel`;
+    //********************************************
+    float $amount=0;
+    progressWindow
+    -title "Deleting..."
+    -progress $amount
+    -status "  Completed:%0                                                        "
+    -isInterruptable false;
+    //********************************************
+    for(;$i<$size;$i++)
+    {
+        
+        check_override_face_main($sel[$i]);
+         //*********************************************************************************************
+
+        $amount=(int)(((float)$i/(float)$size)*100);
+        progressWindow -edit
+        -progress $amount
+        -status("  Completed: "+$amount+"%                                                        ");
+        
+        //************************************************************************************************
+    }
+    select -r $sel;
+    DeleteHistory;
+    delete -ch;
+    
+    $amount=100;
+    progressWindow -edit
+    -progress $amount
+    -status("  Completed: "+$amount+"%                                                        ");
+    //pause -seconds 1;
+    progressWindow -endProgress;     
+        
+   
+}
+global proc syf_check_override_Curve()
+{
+    
+    
+    float $decimal=0.001;
+    string $text;
+    string $result = `promptDialog
+    -title "decimal fraction"
+    -message "decimal fraction:"
+    -button "OK" -button "Cancel"
+    -tx 0.001
+    -defaultButton "OK" -cancelButton "Cancel"
+    -dismissString "Cancel"`;
+
+    if ($result == "OK") {
+        $decimal = `promptDialog -query -text`;
+    }
+    string $sel[] = `ls -sl`;
+    string $override_objs[]={};
+    float $posX[]={};
+    float $posY[]={};
+    float $posZ[]={};
+    int $i=0;
+    int $size = `size $sel`;
+    
+   
+    for(;$i<$size;$i++)
+    {  
+        float $xyz[] = `xform -q -t -ws ($sel[$i]+".cv[0]")`;
+        floatArrayInsertAtIndex(100000,$posX,$xyz[0]);
+        floatArrayInsertAtIndex(100000,$posY,$xyz[1]);
+        floatArrayInsertAtIndex(100000,$posZ,$xyz[2]);    
+    }
+     //********************************************
+    float $amount=0;
+    progressWindow
+    -title "Check..."
+    -progress $amount
+    -status "  Completed:%0                                                        "
+    -isInterruptable false;
+    //********************************************
+    for($i=0;$i<$size;$i++)
+    {
+        string $source = $sel[$i];
+        float $posxxx = $posX[$i];  
+        float $posyyy = $posY[$i];
+        float $poszzz = $posZ[$i];
+        int $ii=0;
+        for(;$ii<$size;$ii++)
+        {
+            //int $has=0;
+            if(  ($posX[$ii]<=($posxxx+$decimal))&&($posX[$ii]>=($posxxx-$decimal))&&($posY[$ii]<=($posyyy+$decimal))&&($posY[$ii]>=($posyyy-$decimal))&&($posZ[$ii]<=($poszzz+$decimal))&&($posZ[$ii]>=($poszzz-$decimal))  )
+            {
+                if($ii!=$i)
+                {
+                    stringArrayInsertAtIndex(100000, $override_objs, $sel[$ii]);
+                    //$has = 1;
+                }
+            }
+            //string $self[] = {$source};
+            //if($has==0)stringArrayRemove($self, $override_objs);
+
+        }
+        //*********************************************************************************************
+        
+        $amount=(int)(((float)$i/(float)$size)*100);
+        progressWindow -edit
+        -progress $amount
+        -status("  Completed: "+$amount+"%                                                        ");
+        
+        //************************************************************************************************
+    }
+    select -cl;
+    select -r $override_objs; 
+    //*********************************************************************************************
+     $amount=100;
+    progressWindow -edit
+    -progress $amount
+    -status("  Completed: "+$amount+"%                                                        ");
+    //pause -seconds 1;
+    progressWindow -endProgress; 
+    //*********************************************************************************************  
+}
+
+
+//SYF_Clear_Nodes();
+
+
+
+
+
+
+

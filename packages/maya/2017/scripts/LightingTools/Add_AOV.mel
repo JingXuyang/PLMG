@@ -1,0 +1,96 @@
+global proc autoAdd_AOV()
+{
+    python("import mtoa.aovs as aovs");
+    
+    setAttr -type "string" defaultRenderGlobals.currentRenderer "arnold";
+    unifiedRenderGlobalsWindow;
+    if(`objExists "aiAOV_N"`!=1)//N
+    {
+        python("aovs.AOVInterface().addAOV('N', aovType='vector')");
+    }
+    if(`objExists "aiAOV_P"`!=1)//P
+    {
+        python("aovs.AOVInterface().addAOV('P', aovType='vector')");
+    }
+    if(`objExists "aiAOV_Pref"`!=1)//Pref
+    {
+        python("aovs.AOVInterface().addAOV('Pref', aovType='rgb')");
+    }
+    if(`objExists "aiAOV_Z"`!=1)//Z
+    {
+        python("aovs.AOVInterface().addAOV('Z', aovType='float')");
+    }
+    if(`objExists "aiAOV_albedo"`!=1)//albedo
+    {
+        python("aovs.AOVInterface().addAOV('albedo', aovType='rgb')");
+    }
+    if(`objExists "aiAOV_coat"`!=1)//coat
+    {
+        python("aovs.AOVInterface().addAOV('coat', aovType='rgb')");
+    }
+    if(`objExists "aiAOV_crypto_object"`!=1)//crypto_object
+    {
+        python("aovs.AOVInterface().addAOV('crypto_object', aovType='rgb')");
+        
+        if(`objExists "_aov_cryptomatte"`==0)
+        {
+            string $crytomatteNode = `createNode cryptomatte`;
+            rename $crytomatteNode "_aov_cryptomatte";
+        }
+        connectAttr ("_aov_cryptomatte.outColor") ("aiAOV_crypto_object.defaultValue"); 
+    }
+    if(`objExists "aiAOV_diffuse"`!=1)//diffuse
+    {
+        python("aovs.AOVInterface().addAOV('diffuse', aovType='rgb')");
+    }
+    if(`objExists "aiAOV_diffuse_direct"`!=1)//diffuse_direct
+    {
+        python("aovs.AOVInterface().addAOV('diffuse_direct', aovType='rgb')");
+    }
+    if(`objExists "aiAOV_diffuse_indirect"`!=1)//diffuse_indirect
+    {
+        python("aovs.AOVInterface().addAOV('diffuse_indirect', aovType='rgb')");
+    }    
+    
+    if(`objExists "aiAOV_shadow_matte"`!=1)//shadow_matte
+    {
+        python("aovs.AOVInterface().addAOV('shadow_matte', aovType='rgba')");
+    }
+    
+    if(`objExists "aiAOV_specular"`!=1)//specular
+    {
+        python("aovs.AOVInterface().addAOV('specular', aovType='rgb')");
+    }
+    if(`objExists "aiAOV_specular_direct"`!=1)//specular_direct
+    {
+        python("aovs.AOVInterface().addAOV('specular_direct', aovType='rgb')");
+    }
+    if(`objExists "aiAOV_specular_indirect"`!=1)//specular_indirect
+    {
+        python("aovs.AOVInterface().addAOV('specular_indirect', aovType='rgb')");
+    }
+    
+    
+    
+    if(`objExists "aiAOV_sss"`!=1)//sss
+    {
+        python("aovs.AOVInterface().addAOV('sss', aovType='rgb')");
+    }
+    if(`objExists "aiAOV_transmission"`!=1)//transmission
+    {
+        python("aovs.AOVInterface().addAOV('transmission', aovType='rgb')");
+    }
+setAttr "defaultArnoldRenderOptions.outputVarianceAOVs" 1;
+}
+autoAdd_AOV();
+//setAttr "defaultRenderGlobals.imageFormat" 23;
+
+
+
+
+
+
+
+
+
+

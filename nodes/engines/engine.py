@@ -9,9 +9,9 @@
 
 import os
 import re
-import main.utilities as utilities
-import main.dbif
-import main.swif as swif
+import utilities
+import dbif
+import swif
 
 # ================================= Global Values =================================
 CONFIG_PATH = os.path.join(os.environ.get('XSYH_ROOT_PATH'), "data/config.yaml")
@@ -24,7 +24,7 @@ def getConfigs():
     得到 configs 的内容
     @return:
     '''
-    config_data = main.utilities.load_yaml(CONFIG_PATH)
+    config_data = utilities.load_yaml(CONFIG_PATH)
     return config_data
 
 
@@ -90,7 +90,7 @@ def getStepConfig(step, level, project=''):
 def _localSettingsPath():
     user_path = user_path = '{0}/{1}'.format(os.path.dirname(os.path.expanduser('~')), '.pltk.')
     if not os.path.exists(user_path):
-        main.utilities.makeFolder(user_path)
+        utilities.makeFolder(user_path)
     return user_path
 
 
@@ -122,7 +122,7 @@ def getTaskPath(item_data, path_typ="work_path"):
     kwargs['shot'] = item_data.get('shot')
     kwargs['tag'] = tag.format(step=item_data.get('step'))
     # print kwargs
-    return main.dbif.CGT().getPathFromTag(**kwargs)
+    return dbif.CGT().getPathFromTag(**kwargs)
 
 
 def taskFileInfo(path):
@@ -132,17 +132,17 @@ def taskFileInfo(path):
     @return: list
     '''
     file_extension = getConfigs().get("global").get("workfile_format").get("maya")
-    file_ls = main.utilities.getFilesInFolder(path)
+    file_ls = utilities.getFilesInFolder(path)
     result = list()
     for f in file_ls:
         f = os.path.join(path, f)
-        file_type = main.utilities.getBaseName(f).split(".")[1]
+        file_type = utilities.getBaseName(f).split(".")[1]
         if file_type in file_extension:
             kwargs = dict()
-            kwargs['file_name'] = main.utilities.getBaseName(f).split(".")[0]
+            kwargs['file_name'] = utilities.getBaseName(f).split(".")[0]
             kwargs['file_type'] = file_type
-            kwargs['modified_Time'] = main.utilities.getFileModifyTime(f)
-            kwargs['size'] = main.utilities.getFileSize(f)
+            kwargs['modified_Time'] = utilities.getFileModifyTime(f)
+            kwargs['size'] = utilities.getFileSize(f)
             kwargs['path'] = path
             kwargs['description'] = ''
             # kwargs['artist']
@@ -237,7 +237,7 @@ class ActionEngine(object):
 
     @staticmethod
     def database():
-        return main.dbif.CGT()
+        return dbif.CGT()
 
     @classmethod
     def step(cls):
@@ -252,7 +252,7 @@ class ActionEngine(object):
         '''
         返回当前软件名称
         '''
-        return main.swif.software()
+        return swif.software()
 
     @staticmethod
     def getGlobalConfigs():

@@ -7,9 +7,6 @@
 #  @Create Time: 2019/12/30 15:15
 # ==============================================================
 
-from PySide import QtGui
-from PySide import QtCore
-
 import window
 reload(window)
 

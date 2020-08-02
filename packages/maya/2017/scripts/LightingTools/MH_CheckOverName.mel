@@ -1,0 +1,208 @@
+global proc sg_checkOverNameObjWin ()
+{
+
+	//删除显示结果窗口
+	if (`window -ex ReO`) deleteUI -window ReO;
+	
+	int $checkOption =  `optionVar -q sg_checkOverNameObjOption`;
+
+	//列出所有的节点
+	string $allNodes[];
+	switch ($checkOption){
+		case 0 :{
+		$allNodes = `ls`;
+		break;
+		}
+		case 1 :{
+		string $geoShape[] = `ls -ni -type "mesh" -type "nurbsSurface"`;
+		$allNodes = stringArrayCatenate($geoShape,`listRelatives -p -f $geoShape`);
+		break;
+		}
+		case 2 :{
+		string $geoShape[] = `ls -ni -type "nurbsCurve"`;
+		$allNodes = stringArrayCatenate($geoShape,`listRelatives -p -f $geoShape`);
+		break;
+		}		
+	}
+	string $allName[];
+	clear $allName;
+	string $overName[];
+	clear $overName;
+
+	progressWindow -title "正在检查重名节点，请稍等..." -progress 0 -ii 1 -status "开始..";
+	int $progress = $p = 0;
+	int $num = `size $allNodes`;
+
+	for($node in $allNodes){
+	
+		string $buffer[];
+		$numTokens=`tokenize $node "|" $buffer`;
+		if(stringArrayContains($buffer[$numTokens-1],$allName))
+		  $overName[size($overName)]=$buffer[$numTokens-1];
+		else
+		  $allName[size($allName)]=$buffer[$numTokens-1];
+		  
+		++$p;
+		$progress = $p * 50/$num;
+		progressWindow -e -progress $progress -status ("完成:" + $progress + "%  (" +  $p + " objects checked)");
+		if ( `progressWindow -query -isCancelled` ) break;
+	}
+	
+	//print $overName;
+	string $addShapesCommand = "textScrollList -edit "; 	
+	
+	for($node in $allNodes)
+	{
+		string $buffer[];
+		$numTokens=`tokenize $node "|" $buffer`;
+		if(stringArrayContains($buffer[$numTokens-1],$overName))
+		$addShapesCommand = ($addShapesCommand + "-append \"" + $node + "\"   ");
+		//print ("\n"+$node);
+		++$p;
+		$progress = $p * 50/$num;
+		progressWindow -e -progress $progress -status ("完成:" + $progress + "%  (" +  $p + " objects checked)");
+		if ( `progressWindow -query -isCancelled` ) break;
+	}
+
+	$addShapesCommand = $addShapesCommand + "overNameObjectTxtScrollList;";
+	progressWindow -e -endProgress;
+
+	if  (`size $overName`)  
+	{
+		if (`window -ex ReO`) deleteUI -window ReO;
+		string $win=`window -t "Rename Object" -rtf 1 -mnb 0 -mxb 0 -h 80 -w 220 -s 1 -i 0 ReO`;
+		formLayout overNameObjMianForm;
+			string $lay =  `paneLayout -ps 1 60 40  -cn vertical2 `;
+			textScrollList -bgc 0 0 0 -sc "sg_overNameObjSelCmd" -allowMultiSelection true overNameObjectTxtScrollList;
+			formLayout overNameObjForm;
+		setParent overNameObjMianForm;
+		string $form = `formLayout overNameBtForm`;
+			string $check1 = `checkBox -l "过滤名称中含Shape的节点" -onc "sgOverNameFilterShapeCmd" overNameFilterCheck1`;
+			string $b1 = `button -l "重新扫描" -c "sg_checkOverNameObjWin"`;
+		formLayout -e
+			-af $check1 "top" 7
+			-af $check1 "left" 0
+			-af $b1 "top" 0
+			-ac $b1 "left" 2 $check1
+		$form;
+			
+		formLayout -e
+			-af $lay "top" 0
+			-af $lay "left" 0
+			-af $lay "right" 0
+			-ac $lay "bottom" 2 $form
+			-af $form "bottom" 2
+
+		overNameObjMianForm;
+		
+		window -e -wh 400 400 $win; 
+		showWindow $win;
+		eval $addShapesCommand;
+	}
+	else{confirmDialog -m "没有检测到重名节点" -t "Check Result" -button "Ok" -defaultButton "Ok" ;}
+
+
+}
+
+global proc sg_overNameObjSelCmd()
+
+{
+	string  $selectedName[] = `textScrollList -q -si overNameObjectTxtScrollList`;
+	select -r $selectedName; 
+
+	setParent overNameObjForm;
+	if (`formLayout -q -ex sg_overNameFormLayout`)
+	deleteUI sg_overNameFormLayout;
+	formLayout sg_overNameFormLayout;
+	string $tx1 = `text -label "Name"`;
+	string $col = `columnLayout -cat "left" 10 sg_overNameColumnLayout`;
+	for ($sel in $selectedName){
+		string $buffer[];
+		$numTokens=`tokenize $sel "|" $buffer`;	
+		textField -tx $buffer[$numTokens-1] -w 100;
+	}
+	setParent..;
+	string $t2 = `text -label ""`;
+	string $b1 = `button -l "Rename" -w 100 -c "sg_overNameObjRenameCmd"`;
+
+	
+	formLayout -e
+		-af $tx1 "top" 0
+		-af $tx1 "left" 5
+		-ac $col "top" 2 $tx1
+		-af $col "left" 5
+		-ac $t2 "top" 2 $col
+		-af $t2 "left" 5
+		-ac $b1 "top" 2 $t2
+		-af $b1 "left" 15
+		
+	sg_overNameFormLayout;
+	
+	
+}
+
+global proc sg_overNameObjRenameCmd()
+
+{
+	string  $selectedName[] = `textScrollList -q -si overNameObjectTxtScrollList`;
+	string  $reName[] = `columnLayout -q -ca sg_overNameColumnLayout`;
+	int $i;
+	for ($i=0;$i<`size $selectedName`;$i++){
+		string $newName = `textField -q -tx $reName[$i]`;
+		if ($newName != $selectedName[$i]){
+		
+			rename $selectedName[$i] $newName ;
+			textScrollList -e -ri $selectedName[$i] overNameObjectTxtScrollList;
+			textScrollList -e -a $newName overNameObjectTxtScrollList;
+			textScrollList -e -si $newName overNameObjectTxtScrollList;
+		}
+
+	}
+
+}
+
+global proc sgOverNameFilterShapeCmd()
+
+{
+	string  $allName[] = `textScrollList -q -ai overNameObjectTxtScrollList`;
+	for ($name in $allName){
+		if (`gmatch $name "*Shape*"` == 1){
+			textScrollList -e -ri $name overNameObjectTxtScrollList;
+		}
+	}
+	checkBox -e -en 0  overNameFilterCheck1;
+}
+
+global proc sg_checkOverNameObjOption()
+
+{
+	int $checkOption =  `optionVar -q sg_checkOverNameObjOption`;
+	if (`window -ex checkOverNameOption`)
+	      deleteUI -window checkOverNameOption;
+	      window -title "Check Name Option" -widthHeight 433 307 checkOverNameOption;
+	      string $form = `formLayout`;
+	      string $rb = `radioButtonGrp -sl ($checkOption + 1) -numberOfRadioButtons 3 
+	      			-on1 "optionVar -iv sg_checkOverNameObjOption 0;"
+	      			-on2 "optionVar -iv sg_checkOverNameObjOption 1;"
+	      			-on3 "optionVar -iv sg_checkOverNameObjOption 2;"	      			
+	      			-label "Check Option" -labelArray3 "All" "Geo" "Curve"`;
+
+	      button -l "Check" -c "sg_checkOverNameObjWin" createBtn;
+	      button -l "Apply" -c "sg_checkOverNameObjWin" alpyBtn;
+		button -l "Close" -c "deleteUI checkOverNameOption" closeBtn;
+		formLayout -e
+		      -af $rb top 5		
+		      -af $rb left 15
+		      -af createBtn left 0
+		      -ap createBtn right 0 33
+		      -af createBtn bottom 0
+		      -ac alpyBtn left 0 createBtn
+		      -ap alpyBtn right 0 67
+		      -af alpyBtn bottom 0
+		      -af closeBtn right 0
+		      -ac closeBtn left 0 alpyBtn
+		      -af closeBtn bottom 0
+
+		$form;
+	 showWindow checkOverNameOption;
+}sg_checkOverNameObjWin;

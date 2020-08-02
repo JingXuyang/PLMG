@@ -15,7 +15,7 @@ import re
 import shutil
 import sys
 import time
-from PySide import QtGui
+from qtlb.Qt import QtWidgets
 
 sys.path.append("C:/cgteamwork/bin/base")
 
@@ -96,11 +96,11 @@ def current_file_basename():
     return os.path.basename(swif.software().filepath()).split('.')[0]
 
 
-class Tip(QtGui.QWidget):
+class Tip(QtWidgets.QWidget):
     def __init__(self, message, parent=None):
         super(Tip, self).__init__(parent)
 
-        QtGui.QMessageBox.information(self, "Tip", message, QtGui.QMessageBox.Yes)
+        QtWidgets.QMessageBox.information(self, "Tip", message, QtWidgets.QMessageBox.Yes)
 
 
 class IsSceneUntitled(Action):
@@ -1530,7 +1530,7 @@ class CreateSceneHierachy(Action):
             # data = self.parm('hierachy')
             data = engine.getStepConfig(self.task()['step'], 'hierachy')
             if data:
-                task_name = engine.getTaskFromEnv()['task']
+                task_name = engine.getTaskFromEnv()['task_name']
                 name_list = ["model", "Model", "Texture", "Rig", "rig", "charEffects"]
                 if task_name in name_list:
                     data[0]['name'] = data[0]['name'].format(shot=self.task()['shot'])
@@ -2222,9 +2222,9 @@ class GetPathFromTag(Action):
         kwargs['type'] = task.get('type')
         kwargs['sequence'] = task.get('sequence')
         kwargs['shot'] = task.get('shot')
-        kwargs['step'] = task.get('step')
+        # kwargs['step'] = task.get('step')
         kwargs['tag'] = self.parm('input')
-        r = self.database().getTaskFromTag(**kwargs)
+        r = self.database().getPathFromTag(**kwargs)
         if r:
             return r
         else:
@@ -2247,7 +2247,7 @@ class charEffectsNclothTag(Action):
         kwargs['step'] = self.step()
         kwargs['tag'] = 'charEffects_cloth_work'
 
-        r = self.database().getTaskFromTag(**kwargs)
+        r = self.database().getPathFromTag(**kwargs)
 
         if r:
             return r
@@ -2272,7 +2272,7 @@ class charEffectsNhairTag(Action):
         kwargs['step'] = self.step()
         kwargs['tag'] = 'charEffects_hair_work'
 
-        r = self.database().getTaskFromTag(**kwargs)
+        r = self.database().getPathFromTag(**kwargs)
 
         if r:
             return r
